@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: Scaffold(
+          body: MyFirstWidget(),
+        ),
+        title: 'Title');
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -75,6 +88,8 @@ class _MySecondWidgetState extends State<MySecondWidget> {
 
   var _rerendedingCount2 = 0;
 
+  getContextRuntime() => print(context.runtimeType);
+
   @override
   void didUpdateWidget(covariant MySecondWidget oldWidget) {
     _rerendedingCount2 += 1;
@@ -100,10 +115,12 @@ class MyFirstWidget extends StatelessWidget {
 
   var _rerendiringCount = 0;
 
+  // getContextRuntime() => print(context.runtimeType);
+
   @override
   Widget build(BuildContext context) {
     _rerendiringCount += 1;
     print('rerendeding count: $_rerendiringCount');
-    return Container(child: Center(child: Text('Hello!')));
+    return Container(child: Center(child: Text('Hel2lo!')));
   }
 }
