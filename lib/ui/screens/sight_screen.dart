@@ -26,6 +26,7 @@ class _SightListScreenState extends State<SightListScreen> {
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
+            // Решил не делать вложенность, чтобы не дублировать стили
             children: [
               TextSpan(text: 'С', style: TextStyle(color: Colors.green)),
               TextSpan(text: 'писок\n'),
