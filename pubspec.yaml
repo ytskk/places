@@ -18,6 +18,8 @@ dependencies:
 
 
 dev_dependencies:
+  dart_code_metrics: ^4.7.0
+  analyzer: ^2.7.0
   flutter_test:
     sdk: flutter
 
