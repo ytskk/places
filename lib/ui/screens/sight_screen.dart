@@ -14,19 +14,16 @@ class _SightListScreenState extends State<SightListScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        // Посмотрел высоту RichText в Widget Inspector
         toolbarHeight: 72,
         title: RichText(
           textAlign: TextAlign.left,
           text: TextSpan(
-            // Решил задать «родительский» стиль для компонентов
             style: TextStyle(
               fontSize: 32,
               height: 1.12,
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
-            // Решил не делать вложенность, чтобы не дублировать стили
             children: [
               TextSpan(text: 'С', style: TextStyle(color: Colors.green)),
               TextSpan(text: 'писок\n'),

@@ -6,30 +6,32 @@ class Test extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double basicSize = 50;
-
     return Scaffold(
       body: Center(
-        child: Container(
-          color: Colors.yellow,
-          width: double.infinity,
-          height: basicSize,
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              text: 'Text span',
-              style: TextStyle(fontWeight: FontWeight.bold),
-              children: [
-                TextSpan(
-                  text: 'Nested',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ],
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: AlignmentDirectional.topStart,
+          children: [
+            Container(
+              height: 500,
+              width: 200,
+              color: Colors.red,
             ),
-          ),
+            Positioned.fill(
+              left: -50,
+              child: Container(
+                margin: EdgeInsets.all(16),
+                height: 400,
+                width: 100,
+                color: Colors.green,
+              ),
+            ),
+            Container(
+              height: 200,
+              width: 50,
+              color: Colors.blue,
+            ),
+          ],
         ),
       ),
     );
