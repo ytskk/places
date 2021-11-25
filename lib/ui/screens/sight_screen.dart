@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:places/mocks.dart';
+import 'package:places/ui/screens/sight_card.dart';
 
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -34,10 +36,12 @@ class _SightListScreenState extends State<SightListScreen> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Text('Hello'), TextField()],
+      body: ListView.builder(
+        padding: EdgeInsets.all(16),
+        itemCount: mocks.length,
+        itemBuilder: (context, index) {
+          return SightCard(mocks[index]);
+        },
       ),
     );
   }
