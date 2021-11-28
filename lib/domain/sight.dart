@@ -1,3 +1,4 @@
+// Sight Details model.
 class Sight {
   String name;
   double lat, lon;

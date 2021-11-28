@@ -1,6 +1,7 @@
 // For test purposes only
 import 'package:flutter/material.dart';
 
+// Widget for testings UI
 class Test extends StatelessWidget {
   const Test({Key? key}) : super(key: key);
 

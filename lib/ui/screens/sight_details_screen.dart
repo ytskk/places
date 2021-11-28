@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_strings.dart';
 import 'package:places/domain/sight.dart';
 
 class SightDetails extends StatelessWidget {
@@ -74,6 +75,7 @@ class SightDetails extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 16),
                           child: Text(
+                            // temp
                             'Закрыто до 09:00',
                             style: TextStyle(
                               color: Color(0xFF7C7E92),
@@ -104,7 +106,7 @@ class SightDetails extends StatelessWidget {
                         color: Color(0xFF4CAF50),
                       ),
                       child: Text(
-                        'Построить маршрут'.toUpperCase(),
+                        AppStrings.sightDetailsGetDirections.toUpperCase(),
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -136,7 +138,7 @@ class SightDetails extends StatelessWidget {
                                   height: 24,
                                 ),
                                 Text(
-                                  'Запланировать',
+                                  AppStrings.sightDetailsSchedule,
                                   style: TextStyle(
                                     color: Color.fromRGBO(124, 126, 146, .56),
                                   ),
@@ -161,7 +163,7 @@ class SightDetails extends StatelessWidget {
                                   height: 24,
                                 ),
                                 Text(
-                                  'В Избранное',
+                                  AppStrings.sightDetailsAddToWishlist,
                                   style: TextStyle(
                                     color: Color(0xFF3B3E5B),
                                   ),

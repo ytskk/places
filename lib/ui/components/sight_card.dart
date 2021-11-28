@@ -56,28 +56,42 @@ class SightCard extends StatelessWidget {
             constraints: BoxConstraints(minWidth: double.infinity),
             padding: EdgeInsets.all(16),
             color: Color(0xFFF5F5F5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  sight.name,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF3B3E5B),
-                  ),
-                ),
-                if (sight.details.length > 0)
-                  Padding(
-                    padding: EdgeInsets.only(top: 2),
-                    child: Text(
-                      sight.details,
-                      style: TextStyle(
-                        color: Color(0xFF7C7E92),
-                      ),
+            // Придумал только такой способ, чтобы Column занимал ровно половину места, правда, в таком случае, ConstrainedBox не требуется.
+            //Или здесь имеется ввиду задать какое-то ограничение, например, в 100?
+            child: ConstrainedBox(
+              constraints: BoxConstraints(),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          sight.name,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF3B3E5B),
+                          ),
+                        ),
+                        if (sight.details.length > 0)
+                          Padding(
+                            padding: EdgeInsets.only(top: 2),
+                            child: Text(
+                              sight.details,
+                              style: TextStyle(
+                                color: Color(0xFF7C7E92),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-              ],
+                  Expanded(
+                    child: Container(),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
