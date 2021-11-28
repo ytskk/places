@@ -13,25 +13,28 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
-        toolbarHeight: 72,
-        title: RichText(
-          textAlign: TextAlign.left,
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 32,
-              height: 1.12,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(120),
+        child: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+          toolbarHeight: double.infinity,
+          title: RichText(
+            textAlign: TextAlign.left,
+            text: TextSpan(
+              style: TextStyle(
+                fontSize: 32,
+                height: 1.12,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+              children: [
+                TextSpan(text: 'С', style: TextStyle(color: Colors.green)),
+                TextSpan(text: 'писок\n'),
+                TextSpan(text: 'И', style: TextStyle(color: Colors.yellow)),
+                TextSpan(text: 'нтересных мест'),
+              ],
             ),
-            children: [
-              TextSpan(text: 'С', style: TextStyle(color: Colors.green)),
-              TextSpan(text: 'писок\n'),
-              TextSpan(text: 'И', style: TextStyle(color: Colors.yellow)),
-              TextSpan(text: 'нтересных мест'),
-            ],
           ),
         ),
       ),
