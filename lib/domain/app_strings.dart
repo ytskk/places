@@ -9,6 +9,7 @@
  * ```
  */
 class AppStrings {
+  // SightDetails screen
   static const sightDetailsGetDirections = 'Построить маршрут';
   static const sightDetailsSchedule = 'Запланировать';
   static const sightDetailsAddToWishlist = 'В избранное';

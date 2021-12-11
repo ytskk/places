@@ -1,38 +1,23 @@
 // For test purposes only
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_strings.dart';
 
-// Widget for testings UI
+// Widget for UI testings
 class Test extends StatelessWidget {
+  /// Testing some elements.
   const Test({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: AlignmentDirectional.topStart,
-          children: [
-            Container(
-              height: 500,
-              width: 200,
-              color: Colors.red,
-            ),
-            Positioned.fill(
-              left: -50,
-              child: Container(
-                margin: EdgeInsets.all(16),
-                height: 400,
-                width: 100,
-                color: Colors.green,
-              ),
-            ),
-            Container(
-              height: 200,
-              width: 50,
-              color: Colors.blue,
-            ),
-          ],
+      body: Container(
+        width: 300,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: ExactAssetImage('assets/images/castell.jpg'),
+          ),
         ),
       ),
     );

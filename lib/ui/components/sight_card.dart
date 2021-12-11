@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 
@@ -20,8 +21,51 @@ class SightCard extends StatelessWidget {
             children: [
               // photo
               Container(
-                color: Colors.blue.shade300,
                 height: 96,
+                width: double.infinity,
+                child: Stack(
+                  // нашёл только такой способ наложения градиента на изображение, правда есть ещё ShaderMask
+                  // подскажите, пожалуйста, как лучше было бы реализовать данный момент?
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      sight.url,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+
+                        return Center(
+                          child: CupertinoActivityIndicator.partiallyRevealed(
+                            progress: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : 1,
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.blue,
+                        );
+                      },
+                    ),
+                    Opacity(
+                      opacity: 0.4,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xff252849),
+                              Color.fromRGBO(59, 62, 91, 0.08),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               // text + action buttons
               Container(
@@ -43,7 +87,11 @@ class SightCard extends StatelessWidget {
                         Container(
                           width: 24,
                           height: 24,
-                          color: Colors.red.shade400,
+                          // color: Colors.red.shade400,
+                          child: Image.asset(
+                            'assets/icons/heart.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ],
                     ),
@@ -56,42 +104,28 @@ class SightCard extends StatelessWidget {
             constraints: BoxConstraints(minWidth: double.infinity),
             padding: EdgeInsets.all(16),
             color: Color(0xFFF5F5F5),
-            // Придумал только такой способ, чтобы Column занимал ровно половину места, правда, в таком случае, ConstrainedBox не требуется.
-            //Или здесь имеется ввиду задать какое-то ограничение, например, в 100?
-            child: ConstrainedBox(
-              constraints: BoxConstraints(),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          sight.name,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF3B3E5B),
-                          ),
-                        ),
-                        if (sight.details.length > 0)
-                          Padding(
-                            padding: EdgeInsets.only(top: 2),
-                            child: Text(
-                              sight.details,
-                              style: TextStyle(
-                                color: Color(0xFF7C7E92),
-                              ),
-                            ),
-                          ),
-                      ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  sight.name,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF3B3E5B),
+                  ),
+                ),
+                if (sight.details.length > 0)
+                  Padding(
+                    padding: EdgeInsets.only(top: 2),
+                    child: Text(
+                      sight.details,
+                      style: TextStyle(
+                        color: Color(0xFF7C7E92),
+                      ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(),
-                  ),
-                ],
-              ),
+              ],
             ),
           ),
         ],
