@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/domain/sight.dart';
@@ -41,7 +42,51 @@ class SightDetails extends StatelessWidget {
               children: [
                 Container(
                   height: 360,
-                  color: Colors.blue.shade300,
+                  // color: Colors.blue.shade300,
+                  child: Stack(
+                    // нашёл только такой способ наложения градиента на изображение, правда есть ещё ShaderMask
+                    // подскажите, пожалуйста, как лучше было бы реализовать данный момент?
+                    fit: StackFit.expand,
+                    children: [
+                      Image.network(
+                        sight.url,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+
+                          return Center(
+                            child: CupertinoActivityIndicator.partiallyRevealed(
+                              progress:
+                                  loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : 1,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.blue,
+                          );
+                        },
+                      ),
+                      Opacity(
+                        opacity: 0.4,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xff252849),
+                                Color.fromRGBO(59, 62, 91, 0.08),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -131,16 +176,26 @@ class SightDetails extends StatelessWidget {
                             child: Row(
                               children: [
                                 // icon
-                                Container(
-                                  margin: EdgeInsets.only(right: 8),
-                                  color: Colors.red.shade100,
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                Text(
-                                  AppStrings.sightDetailsSchedule,
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(124, 126, 146, .56),
+                                Opacity(
+                                  opacity: 0.4,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 8),
+                                        width: 24,
+                                        height: 24,
+                                        child: Image.asset(
+                                          'assets/icons/calendar.png',
+                                          color: Color(0xff3b3e5b),
+                                        ),
+                                      ),
+                                      Text(
+                                        AppStrings.sightDetailsSchedule,
+                                        style: TextStyle(
+                                          color: Color(0xff3b3e5b),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -158,9 +213,13 @@ class SightDetails extends StatelessWidget {
                                 // icon
                                 Container(
                                   margin: EdgeInsets.only(right: 8),
-                                  color: Colors.red,
+                                  // color: Colors.red,
                                   width: 24,
                                   height: 24,
+                                  child: Image.asset(
+                                    'assets/icons/heart.png',
+                                    color: Color(0xff3b3e5b),
+                                  ),
                                 ),
                                 Text(
                                   AppStrings.sightDetailsAddToWishlist,
