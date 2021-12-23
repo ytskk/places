@@ -44,8 +44,6 @@ class SightDetails extends StatelessWidget {
                   height: 360,
                   // color: Colors.blue.shade300,
                   child: Stack(
-                    // нашёл только такой способ наложения градиента на изображение, правда есть ещё ShaderMask
-                    // подскажите, пожалуйста, как лучше было бы реализовать данный момент?
                     fit: StackFit.expand,
                     children: [
                       Image.network(
@@ -72,7 +70,7 @@ class SightDetails extends StatelessWidget {
                       ),
                       Opacity(
                         opacity: 0.4,
-                        child: Container(
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [

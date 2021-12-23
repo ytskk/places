@@ -1,16 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/sight.dart';
 
-import 'icon_container.dart';
-
-class SightCard extends StatelessWidget {
-  const SightCard(Sight this.sight, {Key? key}) : super(key: key);
+/// Model for sight card in visiting screen
+class VisitingCard extends StatelessWidget {
+  /// [actions] - List of buttons.
+  ///
+  /// [scheduledAt] - Depends on [isVisited]
+  const VisitingCard(
+    Sight this.sight, {
+    Key? key,
+    this.actions = const [],
+    this.scheduledAt = '',
+    this.workingStatus = '',
+    this.isVisited = false,
+  }) : super(key: key);
 
   final Sight sight;
+  final List<Widget> actions;
+  final String scheduledAt;
+  final String workingStatus;
+  final bool isVisited;
 
   @override
   Widget build(BuildContext context) {
+    Color scheduledAtColor =
+        isVisited ? AppColors.whiteInactiveBlack : AppColors.green;
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       clipBehavior: Clip.hardEdge,
@@ -80,13 +97,14 @@ class SightCard extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    // сделал на будущее, чтобы можно было добавить ещё кнопок (как actions у Appbar)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconContainer(
-                          icon: 'heart',
-                        ),
+                        for (var action in actions)
+                          Padding(
+                            padding: EdgeInsets.only(left: 16),
+                            child: action,
+                          ),
                       ],
                     ),
                   ],
@@ -109,13 +127,23 @@ class SightCard extends StatelessWidget {
                     color: Color(0xFF3B3E5B),
                   ),
                 ),
-                if (sight.details.length > 0)
+                if (scheduledAt.length > 0)
                   Padding(
                     padding: EdgeInsets.only(top: 2),
                     child: Text(
-                      sight.details,
+                      scheduledAt,
                       style: TextStyle(
-                        color: Color(0xFF7C7E92),
+                        color: scheduledAtColor,
+                      ),
+                    ),
+                  ),
+                if (workingStatus.length > 0)
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text(
+                      workingStatus,
+                      style: TextStyle(
+                        color: AppColors.whiteInactiveBlack,
                       ),
                     ),
                   ),
