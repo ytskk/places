@@ -19,12 +19,14 @@ class IconContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('icon: $icon');
+
     return Container(
       width: width,
       height: height,
       // color: Colors.red.shade400,
       child: Image.asset(
-        'assets/icons/$icon.png',
+        icon,
         fit: BoxFit.contain,
         color: color,
       ),

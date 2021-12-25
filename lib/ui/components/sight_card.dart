@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/sight.dart';
 
 import 'icon_container.dart';
@@ -85,7 +86,7 @@ class SightCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconContainer(
-                          icon: 'heart',
+                          icon: AppIcons.heart,
                         ),
                       ],
                     ),

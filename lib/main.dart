@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:places/advanced_tab_demo.dart';
+import 'package:places/base_tab_demo.dart';
 import 'package:places/domain/app_colors.dart';
+import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_container.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
-
 import 'ui/screens/sight_details_screen.dart';
 
 void main() {
@@ -39,8 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
     {
       'icon': {
         'name': {
-          'selected': 'list-fill',
-          'unselected': 'list',
+          'selected': AppIcons.list_fill,
+          'unselected': AppIcons.list,
         },
         'color': {
           'selected': AppColors.whiteMain,
@@ -52,8 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
     {
       'icon': {
         'name': {
-          'selected': 'map-fill',
-          'unselected': 'map',
+          'selected': AppIcons.map_fill,
+          'unselected': AppIcons.map,
         },
         'color': {
           'selected': AppColors.whiteMain,
@@ -65,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
     {
       'icon': {
         'name': {
-          'selected': 'heart-fill',
-          'unselected': 'heart',
+          'selected': AppIcons.heart_fill,
+          'unselected': AppIcons.heart,
         },
         'color': {
           'selected': AppColors.whiteMain,
@@ -78,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
     {
       'icon': {
         'name': {
-          'selected': 'settings-fill',
-          'unselected': 'settings',
+          'selected': AppIcons.settings_fill,
+          'unselected': AppIcons.settings,
         },
         'color': {
           'selected': AppColors.whiteMain,

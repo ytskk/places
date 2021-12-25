@@ -29,16 +29,18 @@ class _VisitingScreenState extends State<VisitingScreen> {
               fontSize: 18,
             ),
           ),
-          //  Вопрос. Не очень придумал, как сделать изменение состояния таба
+          // bottom: TabBar(
+          //   tabs: [
+
+          //   ],
+          // ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: VisitingTabIndicator(),
+            child: VisitingTabBar(),
           ),
         ),
         body: TabBarView(
           children: [
-            //  Так же, при пустом списке сообщение выравнивается не по центру, как сделать
-            // правильно, пока не придумал
             VisitingWantToVisitScreen(),
             VisitingVisitedScreen(),
           ],
@@ -48,26 +50,32 @@ class _VisitingScreenState extends State<VisitingScreen> {
   }
 }
 
-class VisitingTabIndicator extends StatelessWidget {
-  final int activeTabIndex;
-
-  VisitingTabIndicator({Key? key, this.activeTabIndex = 0}) : super(key: key);
+class VisitingTabBar extends StatelessWidget {
+  VisitingTabBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double defaultBorderRadius = 40;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(defaultBorderRadius),
           color: AppColors.grayBackground,
         ),
-        child: Row(
-          children: [
+        child: TabBar(
+          unselectedLabelColor: AppColors.whiteInactiveBlack,
+          labelColor: Colors.white,
+          // indicatorSize: TabBarIndicatorSize.label,
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(defaultBorderRadius),
+            color: AppColors.whiteMain,
+          ),
+          tabs: [
             for (int i = 0; i < AppStrings.visitingTabTitles.length; i += 1)
               Expanded(
                 child: TabItem(
-                  isActive: i == activeTabIndex,
                   text: AppStrings.visitingTabTitles[i],
                 ),
               ),

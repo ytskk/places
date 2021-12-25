@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/domain/sight.dart';
 
@@ -183,7 +184,7 @@ class SightDetails extends StatelessWidget {
                                         width: 24,
                                         height: 24,
                                         child: Image.asset(
-                                          'assets/icons/calendar.png',
+                                          AppIcons.calendar,
                                           color: Color(0xff3b3e5b),
                                         ),
                                       ),
@@ -215,7 +216,7 @@ class SightDetails extends StatelessWidget {
                                   width: 24,
                                   height: 24,
                                   child: Image.asset(
-                                    'assets/icons/heart.png',
+                                    AppIcons.heart,
                                     color: Color(0xff3b3e5b),
                                   ),
                                 ),
