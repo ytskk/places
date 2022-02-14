@@ -24,7 +24,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
           title: Text(
             AppStrings.visitingAppBarTitle,
             style: TextStyle(
-              color: AppColors.whiteMain,
+              color: AppColors.textLabel,
               fontWeight: FontWeight.w500,
               fontSize: 18,
             ),
@@ -65,12 +65,12 @@ class VisitingTabBar extends StatelessWidget {
           color: AppColors.grayBackground,
         ),
         child: TabBar(
-          unselectedLabelColor: AppColors.whiteInactiveBlack,
+          unselectedLabelColor: AppColors.textLabelSecondary,
           labelColor: Colors.white,
           // indicatorSize: TabBarIndicatorSize.label,
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(defaultBorderRadius),
-            color: AppColors.whiteMain,
+            color: AppColors.textLabel,
           ),
           tabs: [
             for (int i = 0; i < AppStrings.visitingTabTitles.length; i += 1)

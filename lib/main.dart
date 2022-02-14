@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/advanced_tab_demo.dart';
-import 'package:places/base_tab_demo.dart';
 import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/components/icon_container.dart';
+import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
 import 'ui/screens/sight_details_screen.dart';
@@ -45,8 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
           'unselected': AppIcons.list,
         },
         'color': {
-          'selected': AppColors.whiteMain,
-          'unselected': AppColors.whiteMain,
+          'selected': AppColors.textLabel,
+          'unselected': AppColors.textLabel,
         },
       },
       'label': 'Sight List',
@@ -58,8 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
           'unselected': AppIcons.map,
         },
         'color': {
-          'selected': AppColors.whiteMain,
-          'unselected': AppColors.whiteMain,
+          'selected': AppColors.textLabel,
+          'unselected': AppColors.textLabel,
         },
       },
       'label': 'Map',
@@ -71,8 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
           'unselected': AppIcons.heart,
         },
         'color': {
-          'selected': AppColors.whiteMain,
-          'unselected': AppColors.whiteMain,
+          'selected': AppColors.textLabel,
+          'unselected': AppColors.textLabel,
         },
       },
       'label': 'Favorites',
@@ -84,8 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
           'unselected': AppIcons.settings,
         },
         'color': {
-          'selected': AppColors.whiteMain,
-          'unselected': AppColors.whiteMain,
+          'selected': AppColors.textLabel,
+          'unselected': AppColors.textLabel,
         },
       },
       'label': 'Settings',

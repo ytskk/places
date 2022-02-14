@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/ui/components/icon_container.dart';
-import 'package:places/ui/components/visiting_card.dart';
+import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/components/card/visiting_card.dart';
 
 import '../../../mocks.dart';
 
@@ -43,7 +43,7 @@ class VisitingVisitedScreen extends StatelessWidget {
                     children: [
                       IconContainer(
                         icon: AppIcons.go,
-                        color: AppColors.whiteInactiveBlack,
+                        color: AppColors.textLabelSecondary,
                         width: 64,
                         height: 64,
                       ),
@@ -52,7 +52,7 @@ class VisitingVisitedScreen extends StatelessWidget {
                         child: Text(
                           AppStrings.visitingEmpty,
                           style: TextStyle(
-                            color: AppColors.whiteInactiveBlack,
+                            color: AppColors.textLabelSecondary,
                             fontWeight: FontWeight.w500,
                             fontSize: 18,
                           ),
@@ -64,7 +64,7 @@ class VisitingVisitedScreen extends StatelessWidget {
                           AppStrings.visitingVisitedEmpty,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: AppColors.whiteInactiveBlack,
+                            color: AppColors.textLabelSecondary,
                           ),
                         ),
                       ),

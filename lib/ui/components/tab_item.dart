@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 
 class TabItem extends StatelessWidget {
   final String text;

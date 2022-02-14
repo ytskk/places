@@ -3,15 +3,15 @@ import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/components/icon_container.dart';
-import 'package:places/ui/components/visiting_card.dart';
+import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/components/card/visiting_card.dart';
 
 class VisitingWantToVisitScreen extends StatelessWidget {
   const VisitingWantToVisitScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var li = [];
+    var li = mocks;
     var content;
 
     content = li.isNotEmpty
@@ -42,7 +42,7 @@ class VisitingWantToVisitScreen extends StatelessWidget {
                     children: [
                       IconContainer(
                         icon: AppIcons.card,
-                        color: AppColors.whiteInactiveBlack,
+                        color: AppColors.textLabelSecondary,
                         width: 64,
                         height: 64,
                       ),
@@ -51,7 +51,7 @@ class VisitingWantToVisitScreen extends StatelessWidget {
                         child: Text(
                           AppStrings.visitingEmpty,
                           style: TextStyle(
-                            color: AppColors.whiteInactiveBlack,
+                            color: AppColors.textLabelSecondary,
                             fontWeight: FontWeight.w500,
                             fontSize: 18,
                           ),
@@ -63,7 +63,7 @@ class VisitingWantToVisitScreen extends StatelessWidget {
                           AppStrings.visitingWantToVisitEmpty,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: AppColors.whiteInactiveBlack,
+                            color: AppColors.textLabelSecondary,
                           ),
                         ),
                       ),

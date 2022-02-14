@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AdvancedTabDemoState extends State with SingleTickerProviderStateMixin {
@@ -52,7 +51,7 @@ class AdvancedTabDemoState extends State with SingleTickerProviderStateMixin {
 }
 
 class CustomTabIndicator extends StatelessWidget {
-  TabController tabController;
+  final TabController tabController;
 
   CustomTabIndicator({
     Key? key,

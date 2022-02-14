@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/domain/sight.dart';
+import 'package:places/ui/components/icon_box.dart';
+
+import '../components/horizontal_divider.dart';
 
 class SightDetails extends StatelessWidget {
   final Sight sight;
@@ -13,87 +17,17 @@ class SightDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Container(
-          margin: EdgeInsets.only(top: 16),
-          alignment: Alignment.topCenter,
-          child: Container(
-            height: 32,
-            width: 32,
-            // margin: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: Text(
-                '<',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              children: [
-                Container(
-                  height: 360,
-                  // color: Colors.blue.shade300,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.network(
-                        sight.url,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-
-                          return Center(
-                            child: CupertinoActivityIndicator.partiallyRevealed(
-                              progress:
-                                  loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : 1,
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.blue,
-                          );
-                        },
-                      ),
-                      Opacity(
-                        opacity: 0.4,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xff252849),
-                                Color.fromRGBO(59, 62, 91, 0.08),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            _buildImage(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // sight name
                   Padding(
                     padding: const EdgeInsets.only(bottom: 2),
                     child: Text(
@@ -105,131 +39,29 @@ class SightDetails extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: Row(
-                      children: [
-                        Text(
-                          sight.type,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF3B3E5B),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Text(
-                            // temp
-                            'Закрыто до 09:00',
-                            style: TextStyle(
-                              color: Color(0xFF7C7E92),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (sight.details.length > 0)
+                  _buildSightSubtitle(),
+                  if (sight.details.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: Text(
                         sight.details,
-                        style: TextStyle(color: Color(0xFF3B3E5B)),
+                        style: TextStyle(color: AppColors.textLabel),
                       ),
                     ),
                   // button
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: Container(
-                      alignment: Alignment.center,
-                      constraints: BoxConstraints(
-                        minHeight: 48,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Color(0xFF4CAF50),
-                      ),
-                      child: Text(
-                        AppStrings.sightDetailsGetDirections.toUpperCase(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Divider(
-                      height: 0.8,
-                      color: Color.fromRGBO(124, 126, 146, 0.24),
-                    ),
-                  ),
+                  _buildDirectionButton(),
+                  HorizontalDivider(),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                // icon
-                                Opacity(
-                                  opacity: 0.4,
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(right: 8),
-                                        width: 24,
-                                        height: 24,
-                                        child: Image.asset(
-                                          AppIcons.calendar,
-                                          color: Color(0xff3b3e5b),
-                                        ),
-                                      ),
-                                      Text(
-                                        AppStrings.sightDetailsSchedule,
-                                        style: TextStyle(
-                                          color: Color(0xff3b3e5b),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      _buildSightManipulationButton(
+                        iconName: AppIcons.calendar,
+                        text: AppStrings.sightDetailsSchedule,
+                        isActive: false,
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                // icon
-                                Container(
-                                  margin: EdgeInsets.only(right: 8),
-                                  // color: Colors.red,
-                                  width: 24,
-                                  height: 24,
-                                  child: Image.asset(
-                                    AppIcons.heart,
-                                    color: Color(0xff3b3e5b),
-                                  ),
-                                ),
-                                Text(
-                                  AppStrings.sightDetailsAddToWishlist,
-                                  style: TextStyle(
-                                    color: Color(0xFF3B3E5B),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      _buildSightManipulationButton(
+                        iconName: AppIcons.heart,
+                        text: AppStrings.sightDetailsAddToWishlist,
                       ),
                     ],
                   ),
@@ -237,6 +69,170 @@ class SightDetails extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Expanded _buildSightManipulationButton({
+    required String iconName,
+    String? text,
+    bool isActive = true,
+  }) {
+    Widget buttonContent = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconContainer(
+            icon: iconName,
+            color: AppColors.textLabel,
+          ),
+        ),
+        if (text != null)
+          Text(
+            text,
+            style: TextStyle(
+              color: AppColors.textLabel,
+            ),
+          ),
+      ],
+    );
+    Widget child = isActive
+        ? buttonContent
+        : Opacity(
+            opacity: 0.4,
+            child: buttonContent,
+          );
+
+    return Expanded(
+      child: Center(
+        child: child,
+      ),
+    );
+  }
+
+  Padding _buildDirectionButton() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      // cos using alignment, constraints and decoration
+      child: Container(
+        alignment: Alignment.center,
+        constraints: BoxConstraints(
+          minHeight: 48,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: AppColors.green,
+        ),
+        child: Text(
+          AppStrings.sightDetailsGetDirections.toUpperCase(),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _buildSightSubtitle() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Text(
+            sight.type,
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: AppColors.textLabel,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: Text(
+              // temp
+              'Закрыто до 09:00',
+              style: TextStyle(
+                color: AppColors.textLabelSecondary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  SizedBox _buildImage() {
+    return SizedBox(
+      height: 360,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.network(
+            sight.url,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+
+              return Center(
+                child: CupertinoActivityIndicator.partiallyRevealed(
+                  progress: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : 1,
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return DecoratedBox(
+                decoration: BoxDecoration(color: Colors.red),
+              );
+            },
+          ),
+          Opacity(
+            opacity: 0.4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xff252849),
+                    Color.fromRGBO(59, 62, 91, 0.08),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: Container(
+        margin: EdgeInsets.only(top: 16),
+        alignment: Alignment.topCenter,
+        child: SizedBox(
+          height: 32,
+          width: 32,
+          // margin: EdgeInsets.all(12),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Icon(
+                CupertinoIcons.back,
+                color: AppColors.textLabel,
+              ),
+            ),
+          ),
         ),
       ),
     );
