@@ -3,8 +3,8 @@ import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
+import 'package:places/ui/components/icon_box.dart';
 
 class VisitingWantToVisitScreen extends StatelessWidget {
   const VisitingWantToVisitScreen({Key? key}) : super(key: key);

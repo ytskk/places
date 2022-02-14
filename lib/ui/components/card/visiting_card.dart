@@ -4,10 +4,6 @@ import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/ui/components/card/card.dart';
 
-import 'card_header.dart';
-import 'card_info.dart';
-import 'card_photo.dart';
-
 /// Model for sight card in visiting screen
 class VisitingCard extends StatelessWidget {
   /// [actions] - List of buttons.

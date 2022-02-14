@@ -5,6 +5,7 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
+
 import 'ui/screens/sight_details_screen.dart';
 
 void main() {
