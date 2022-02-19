@@ -12,30 +12,34 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
 
-  flutter_svg: ^0.22.0
+  flutter_svg: ^1.0.3
 
 
 dev_dependencies:
+  dart_code_metrics: ^4.10.1
+  analyzer: ^3.2.0
   flutter_test:
     sdk: flutter
 
 flutter:
+  assets:
+    - assets/icons/
   uses-material-design: true
 
   fonts:
-  - family: Roboto
-    fonts:
-    - asset: assets/res/fonts/Roboto-Black.ttf
-    - asset: assets/res/fonts/Roboto-BlackItalic.ttf
-    - asset: assets/res/fonts/Roboto-Bold.ttf
-    - asset: assets/res/fonts/Roboto-BoldItalic.ttf
-    - asset: assets/res/fonts/Roboto-Italic.ttf
-    - asset: assets/res/fonts/Roboto-Light.ttf
-    - asset: assets/res/fonts/Roboto-LightItalic.ttf
-    - asset: assets/res/fonts/Roboto-Medium.ttf
-    - asset: assets/res/fonts/Roboto-MediumItalic.ttf
-    - asset: assets/res/fonts/Roboto-Regular.ttf
-    - asset: assets/res/fonts/Roboto-Thin.ttf
-    - asset: assets/res/fonts/Roboto-ThinItalic.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/res/fonts/Roboto-Black.ttf
+        - asset: assets/res/fonts/Roboto-BlackItalic.ttf
+        - asset: assets/res/fonts/Roboto-Bold.ttf
+        - asset: assets/res/fonts/Roboto-BoldItalic.ttf
+        - asset: assets/res/fonts/Roboto-Italic.ttf
+        - asset: assets/res/fonts/Roboto-Light.ttf
+        - asset: assets/res/fonts/Roboto-LightItalic.ttf
+        - asset: assets/res/fonts/Roboto-Medium.ttf
+        - asset: assets/res/fonts/Roboto-MediumItalic.ttf
+        - asset: assets/res/fonts/Roboto-Regular.ttf
+        - asset: assets/res/fonts/Roboto-Thin.ttf
+        - asset: assets/res/fonts/Roboto-ThinItalic.ttf
