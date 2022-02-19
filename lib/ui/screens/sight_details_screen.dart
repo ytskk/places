@@ -18,11 +18,11 @@ class SightDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            NetworkImageBox(sight.url, height: 420),
+            NetworkImageBox(sight.url, height: 420, context: context),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: Column(
@@ -30,37 +30,38 @@ class SightDetails extends StatelessWidget {
                 children: [
                   // sight name
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 2),
+                    padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
                       sight.name,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textLabel,
-                      ),
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                          ),
                     ),
                   ),
-                  _buildSightSubtitle(),
+                  _buildSightSubtitle(context),
                   if (sight.details.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: Text(
                         sight.details,
-                        style: TextStyle(color: AppColors.textLabel),
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ),
                   // button
-                  _buildDirectionButton(),
+                  _buildDirectionButton(context),
                   HorizontalDivider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildSightManipulationButton(
+                        context,
                         iconName: AppIcons.calendar,
                         text: AppStrings.sightDetailsSchedule,
                         isActive: false,
                       ),
                       _buildSightManipulationButton(
+                        context,
                         iconName: AppIcons.heart,
                         text: AppStrings.sightDetailsAddToWishlist,
                       ),
@@ -75,7 +76,8 @@ class SightDetails extends StatelessWidget {
     );
   }
 
-  Expanded _buildSightManipulationButton({
+  Expanded _buildSightManipulationButton(
+    BuildContext context, {
     required String iconName,
     String? text,
     bool isActive = true,
@@ -87,14 +89,14 @@ class SightDetails extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: IconBox(
             icon: iconName,
-            color: AppColors.textLabel,
+            color: Theme.of(context).textTheme.bodyText2!.color,
           ),
         ),
         if (text != null)
           Text(
             text,
             style: TextStyle(
-              color: AppColors.textLabel,
+              color: Theme.of(context).textTheme.bodyText2!.color,
             ),
           ),
       ],
@@ -113,7 +115,7 @@ class SightDetails extends StatelessWidget {
     );
   }
 
-  Padding _buildDirectionButton() {
+  Padding _buildDirectionButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       // cos using alignment, constraints and decoration
@@ -124,7 +126,7 @@ class SightDetails extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: AppColors.green,
+          color: Theme.of(context).cardColor,
         ),
         child: Text(
           AppStrings.sightDetailsGetDirections.toUpperCase(),
@@ -137,26 +139,24 @@ class SightDetails extends StatelessWidget {
     );
   }
 
-  Padding _buildSightSubtitle() {
+  Padding _buildSightSubtitle(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
           Text(
             sight.type,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: AppColors.textLabel,
-            ),
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1!
+                .copyWith(fontWeight: FontWeight.w700),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Text(
               // temp
               'Закрыто до 09:00',
-              style: TextStyle(
-                color: AppColors.textLabelSecondary,
-              ),
+              style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
         ],
@@ -165,7 +165,7 @@ class SightDetails extends StatelessWidget {
   }
 
   // transparent appBar with rounded back button
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -176,13 +176,13 @@ class SightDetails extends StatelessWidget {
           width: 32,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).backgroundColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
               child: Icon(
                 CupertinoIcons.back,
-                color: AppColors.textLabel,
+                color: Theme.of(context).textTheme.bodyText2!.color,
               ),
             ),
           ),

@@ -3,9 +3,9 @@ import 'package:places/domain/app_colors.dart';
 
 import 'card.dart';
 
-Widget buildCardInfo(CardInfo cardInfo) {
+Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
   return DecoratedBox(
-    decoration: BoxDecoration(color: AppColors.grayBackground),
+    decoration: BoxDecoration(color: Theme.of(context).backgroundColor),
     child: Padding(
       padding: const EdgeInsets.all(16),
       child: ConstrainedBox(
@@ -19,7 +19,6 @@ Widget buildCardInfo(CardInfo cardInfo) {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textLabel,
               ),
             ),
 
@@ -30,8 +29,8 @@ Widget buildCardInfo(CardInfo cardInfo) {
                 child: Text(
                   cardInfo.subtitle!,
                   style: TextStyle(
-                    color:
-                        cardInfo.subtitleColor ?? AppColors.textLabelSecondary,
+                    color: cardInfo.subtitleColor ??
+                        Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
               ),
@@ -42,7 +41,7 @@ Widget buildCardInfo(CardInfo cardInfo) {
                 child: Text(
                   cardInfo.text!,
                   style: TextStyle(
-                    color: AppColors.textLabelSecondary,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
               ),

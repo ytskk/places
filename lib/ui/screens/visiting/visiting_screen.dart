@@ -24,11 +24,10 @@ class _VisitingScreenState extends State<VisitingScreen> {
           shadowColor: Colors.transparent,
           title: Text(
             AppStrings.visitingAppBarTitle,
-            style: TextStyle(
-              color: AppColors.textLabel,
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-            ),
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),

@@ -18,7 +18,7 @@ class SlidingTabBar extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(defaultBorderRadius),
-          color: AppColors.grayBackground,
+          color: Theme.of(context).backgroundColor,
         ),
         child: TabBar(
           tabs: [

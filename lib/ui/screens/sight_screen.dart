@@ -35,21 +35,22 @@ class _SightListScreenState extends State<SightListScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       toolbarHeight: 72,
-      title: RichText(
-        textAlign: TextAlign.left,
-        text: TextSpan(
-          style: TextStyle(
-            fontSize: 32,
-            height: 1.12,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
+      title: SizedBox(
+        width: double.infinity,
+        child: RichText(
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.fade,
+          text: TextSpan(
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  fontSize: 32,
+                  height: 1.12,
+                  fontWeight: FontWeight.w700,
+                ),
+            children: [
+              TextSpan(text: 'Список\n'),
+              TextSpan(text: 'Интересных мест'),
+            ],
           ),
-          children: [
-            TextSpan(text: 'С', style: TextStyle(color: Colors.green)),
-            TextSpan(text: 'писок\n'),
-            TextSpan(text: 'И', style: TextStyle(color: Colors.yellow)),
-            TextSpan(text: 'нтересных мест'),
-          ],
         ),
       ),
     );

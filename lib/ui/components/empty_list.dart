@@ -32,7 +32,7 @@ class EmptyList extends StatelessWidget {
                 if (iconName != null)
                   IconBox(
                     icon: iconName!,
-                    color: AppColors.textLabelSecondary,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                     width: 64,
                     height: 64,
                   ),
@@ -40,11 +40,10 @@ class EmptyList extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 24),
                   child: Text(
                     title,
-                    style: TextStyle(
-                      color: AppColors.textLabelSecondary,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                 ),
                 if (subtitle != null)
@@ -53,9 +52,7 @@ class EmptyList extends StatelessWidget {
                     child: Text(
                       subtitle!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: AppColors.textLabelSecondary,
-                      ),
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
               ],
