@@ -1,8 +1,8 @@
 /**
  * Строковые константы.
- * 
+ *
  * Struct: `screen/component/widget name` + `Element`
- * 
+ *
  * Example
  * ```dart
  *  Text(AppStrings.sightDetailsGetDirections)

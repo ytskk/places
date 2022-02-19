@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/ui/components/card/card_header.dart';
 import 'package:places/ui/components/card/card_info.dart';
-import 'package:places/ui/components/card/card_photo.dart';
+import 'package:places/ui/components/image/network_image_box.dart';
 
 class CardInfo {
   final String title;
@@ -46,7 +46,7 @@ class MyCard extends StatelessWidget {
             Stack(
               children: [
                 // photo
-                buildCardPhoto(sight.url),
+                NetworkImageBox(sight.url, height: 240),
                 // text + action buttons
                 buildCardHeader(sight.type, actions: actions),
               ],

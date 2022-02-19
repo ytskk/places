@@ -4,6 +4,7 @@ import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
+import 'package:places/ui/components/empty_list.dart';
 import 'package:places/ui/components/icon_box.dart';
 
 class VisitingWantToVisitScreen extends StatelessWidget {
@@ -22,8 +23,8 @@ class VisitingWantToVisitScreen extends StatelessWidget {
                 VisitingCard(
                   sight,
                   actions: [
-                    IconContainer(icon: AppIcons.calendar),
-                    IconContainer(icon: AppIcons.close),
+                    IconBox(icon: AppIcons.calendar),
+                    IconBox(icon: AppIcons.close),
                   ],
                   isVisited: false,
                   scheduledAt: 'Запланировано на 12 окт. 2020',
@@ -31,47 +32,10 @@ class VisitingWantToVisitScreen extends StatelessWidget {
                 ),
             ]),
           )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 1.7,
-                  constraints: BoxConstraints(maxWidth: 400),
-                  child: Column(
-                    children: [
-                      IconContainer(
-                        icon: AppIcons.card,
-                        color: AppColors.textLabelSecondary,
-                        width: 64,
-                        height: 64,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 32),
-                        child: Text(
-                          AppStrings.visitingEmpty,
-                          style: TextStyle(
-                            color: AppColors.textLabelSecondary,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          AppStrings.visitingWantToVisitEmpty,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppColors.textLabelSecondary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+        : EmptyList(
+            iconName: AppIcons.card,
+            title: AppStrings.visitingEmpty,
+            subtitle: AppStrings.visitingWantToVisitEmpty,
           );
 
     return content;

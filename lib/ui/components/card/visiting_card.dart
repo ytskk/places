@@ -9,6 +9,10 @@ class VisitingCard extends StatelessWidget {
   /// [actions] - List of buttons.
   ///
   /// [scheduledAt] - Depends on [isVisited]
+  ///
+  /// [isVisited] – controls [MyCard] subtitle color
+  ///
+  /// ```isVisited ? AppColors.textLabelSecondary : AppColors.green```
   const VisitingCard(
     Sight this.sight, {
     Key? key,

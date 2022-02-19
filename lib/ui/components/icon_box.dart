@@ -13,7 +13,7 @@ import 'package:flutter_svg/svg.dart';
 ///     color: AppColors.whiteMain,
 ///   ),
 /// ```
-class IconContainer extends StatelessWidget {
+class IconBox extends StatelessWidget {
   final String icon;
   final Color? color;
   final double width;
@@ -23,7 +23,7 @@ class IconContainer extends StatelessWidget {
   /// The [width] and [height] is optional parameters can be null.
   ///
   /// Default `color` [Colors.white]
-  const IconContainer({
+  const IconBox({
     Key? key,
     required this.icon,
     this.color,

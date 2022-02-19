@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 Widget buildCardHeader(String title, {List<Widget> actions = const []}) {
-  print("received actions: $actions");
-
   return Padding(
     padding: const EdgeInsets.all(16),
     child: Row(

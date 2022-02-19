@@ -5,6 +5,7 @@ import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/components/image/network_image_box.dart';
 
 import '../components/horizontal_divider.dart';
 
@@ -21,7 +22,7 @@ class SightDetails extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildImage(),
+            NetworkImageBox(sight.url, height: 420),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: Column(
@@ -35,7 +36,7 @@ class SightDetails extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF3B3E5B),
+                        color: AppColors.textLabel,
                       ),
                     ),
                   ),
@@ -84,7 +85,7 @@ class SightDetails extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: IconContainer(
+          child: IconBox(
             icon: iconName,
             color: AppColors.textLabel,
           ),
@@ -163,64 +164,16 @@ class SightDetails extends StatelessWidget {
     );
   }
 
-  SizedBox _buildImage() {
-    return SizedBox(
-      height: 360,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.network(
-            sight.url,
-            fit: BoxFit.cover,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-
-              return Center(
-                child: CupertinoActivityIndicator.partiallyRevealed(
-                  progress: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : 1,
-                ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return DecoratedBox(
-                decoration: BoxDecoration(color: Colors.red),
-              );
-            },
-          ),
-          Opacity(
-            opacity: 0.4,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xff252849),
-                    Color.fromRGBO(59, 62, 91, 0.08),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
+  // transparent appBar with rounded back button
   AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: Container(
-        margin: EdgeInsets.only(top: 16),
-        alignment: Alignment.topCenter,
+      leading: Padding(
+        padding: const EdgeInsets.all(10.0),
         child: SizedBox(
           height: 32,
           width: 32,
-          // margin: EdgeInsets.all(12),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Colors.white,

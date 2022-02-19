@@ -7,21 +7,21 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "30.0.0"
+    version: "34.0.0"
   analyzer:
     dependency: "direct dev"
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.7.0"
+    version: "3.2.0"
   analyzer_plugin:
     dependency: transitive
     description:
       name: analyzer_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.0"
+    version: "0.9.0"
   ansicolor:
     dependency: transitive
     description:
@@ -112,21 +112,21 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   dart_code_metrics:
     dependency: "direct dev"
     description:
       name: dart_code_metrics
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.7.0"
+    version: "4.10.1"
   dart_style:
     dependency: transitive
     description:
       name: dart_style
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   fake_async:
     dependency: transitive
     description:
@@ -152,7 +152,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.22.0"
+    version: "1.0.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -213,21 +213,21 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.1"
+    version: "1.0.0"
   path_parsing:
     dependency: transitive
     description:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.1"
+    version: "1.0.0"
   petitparser:
     dependency: transitive
     description:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.4.0"
   pub_semver:
     dependency: transitive
     description:
@@ -309,7 +309,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.2"
+    version: "5.3.1"
   yaml:
     dependency: transitive
     description:
@@ -319,4 +319,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.14.0 <3.0.0"
-  flutter: ">=1.24.0-7.0"
+  flutter: ">=2.4.0-0.0.pre"

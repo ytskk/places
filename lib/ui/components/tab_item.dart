@@ -7,22 +7,7 @@ class TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget result = Tab(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
-        ),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-          ),
-        ),
-      ),
-    );
+    Widget result = Tab(text: text);
 
     return result;
   }

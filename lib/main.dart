@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
+import 'package:places/themes.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: lightTheme,
       home: MyHomePage(),
     );
   }
@@ -31,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget> pages = [
     SightListScreen(),
-    SightDetails(mocks[0]),
+    SightDetails(mocks[3]),
     VisitingScreen(),
   ];
   int activePageIndex = 0;
@@ -108,33 +110,18 @@ class _MyHomePageState extends State<MyHomePage> {
         items: [
           for (var barItem in bottomNavigationBarItemsData)
             BottomNavigationBarItem(
-              activeIcon: IconContainer(
+              activeIcon: IconBox(
                 icon: barItem['icon']['name']['selected'],
                 color: barItem['icon']['color']['selected'],
               ),
-              icon: IconContainer(
+              icon: IconBox(
                 icon: barItem['icon']['name']['unselected'],
-                color: barItem['icon']['color']['selected'],
+                color: barItem['icon']['color']['unselected'],
               ),
               label: barItem['label'],
             ),
         ],
       ),
-      // home: SightListScreen(),
-      // home: VisitingScreen(),
-      // home: MyHomePage(),
-      // home: SightDetails(mocks[0]),
-      // home: Test(),
     );
   }
 }
-
-// class MyHomePage extends StatefulWidget {
-//   final String? title;
-
-//   MyHomePage({Key? key, this.title}) : super(key: key);
-//   @override
-//   State<StatefulWidget> createState() {
-//     return AdvancedTabDemoState();
-//   }
-// }
