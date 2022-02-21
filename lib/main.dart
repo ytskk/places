@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: lightTheme,
+      theme: AppThemeData.dark(),
       home: MyHomePage(),
     );
   }
@@ -79,10 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: pages[activePageIndex % pages.length],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: theme.backgroundColor,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: activePageIndex,
@@ -97,11 +98,11 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(
               activeIcon: IconBox(
                 icon: barItem['icon']['name']['selected'],
-                color: Theme.of(context).textTheme.bodyText2!.color,
+                color: theme.textTheme.bodyText2!.color,
               ),
               icon: IconBox(
                 icon: barItem['icon']['name']['unselected'],
-                color: Theme.of(context).textTheme.bodyText1!.color,
+                color: theme.textTheme.bodyText1!.color,
               ),
               label: barItem['label'],
             ),

@@ -5,11 +5,13 @@ class HorizontalDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dividerColor = Theme.of(context).textTheme.bodyText1!.color;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Divider(
         height: 0.8,
-        color: Theme.of(context).textTheme.bodyText1!.color,
+        color: dividerColor,
       ),
     );
   }

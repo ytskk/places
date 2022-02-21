@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
+import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -31,8 +32,10 @@ class _SightListScreenState extends State<SightListScreen> {
   }
 
   AppBar _buildAppBar(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AppBar(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       toolbarHeight: 72,
       title: SizedBox(
@@ -41,14 +44,10 @@ class _SightListScreenState extends State<SightListScreen> {
           textAlign: TextAlign.left,
           overflow: TextOverflow.fade,
           text: TextSpan(
-            style: Theme.of(context).textTheme.headline4!.copyWith(
-                  fontSize: 32,
-                  height: 1.12,
-                  fontWeight: FontWeight.w700,
-                ),
+            style: theme.textTheme.headline4,
             children: [
-              TextSpan(text: 'Список\n'),
-              TextSpan(text: 'Интересных мест'),
+              TextSpan(text: AppStrings.sightTitleList),
+              TextSpan(text: AppStrings.sightTitleInterestingPlaces),
             ],
           ),
         ),

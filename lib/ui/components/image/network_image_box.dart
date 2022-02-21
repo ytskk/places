@@ -10,7 +10,7 @@ Widget NetworkImageBox(
   required BuildContext context,
 }) {
   // check is dark mode to dim images TEMP
-  bool isDark = Theme.of(context).backgroundColor == AppColorsDark.background;
+  bool isDark = Theme.of(context).backgroundColor == AppColorsDark().background;
   Opacity imageOpacity = Opacity(
     opacity: isDark ? 0.6 : 0.5,
     child: DecoratedBox(

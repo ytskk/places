@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 
 import 'card.dart';
 
 Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
+  final theme = Theme.of(context);
+
   return DecoratedBox(
-    decoration: BoxDecoration(color: Theme.of(context).backgroundColor),
+    decoration: BoxDecoration(color: theme.backgroundColor),
     child: Padding(
       padding: const EdgeInsets.all(16),
       child: ConstrainedBox(
@@ -30,7 +31,7 @@ Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
                   cardInfo.subtitle!,
                   style: TextStyle(
                     color: cardInfo.subtitleColor ??
-                        Theme.of(context).textTheme.bodyText1!.color,
+                        theme.textTheme.bodyText1!.color,
                   ),
                 ),
               ),
@@ -40,9 +41,7 @@ Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
                   cardInfo.text!,
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
-                  ),
+                  style: theme.textTheme.bodyText1,
                 ),
               ),
           ],
