@@ -15,7 +15,7 @@ class SightDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bodyText2 = Theme.of(context).textTheme.bodyText2;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -34,10 +34,7 @@ class SightDetails extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
                       sight.name,
-                      style: bodyText2!.copyWith(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: textTheme.headline3,
                     ),
                   ),
                   _buildSightSubtitle(context, sight.type),
@@ -46,7 +43,7 @@ class SightDetails extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 24),
                       child: Text(
                         sight.details,
-                        style: bodyText2,
+                        style: textTheme.bodyText2,
                       ),
                     ),
                   // button

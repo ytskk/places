@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'card.dart';
 
 Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
-  final theme = Theme.of(context);
+  final bgColor = Theme.of(context).backgroundColor;
+  final textTheme = Theme.of(context).textTheme;
 
   return DecoratedBox(
-    decoration: BoxDecoration(color: theme.backgroundColor),
+    decoration: BoxDecoration(color: bgColor),
     child: Padding(
       padding: const EdgeInsets.all(16),
       child: ConstrainedBox(
@@ -17,10 +18,7 @@ Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
             // title
             Text(
               cardInfo.title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              style: textTheme.headline4,
             ),
 
             // subtitle
@@ -30,8 +28,7 @@ Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
                 child: Text(
                   cardInfo.subtitle!,
                   style: TextStyle(
-                    color: cardInfo.subtitleColor ??
-                        theme.textTheme.bodyText1!.color,
+                    color: cardInfo.subtitleColor ?? textTheme.bodyText1!.color,
                   ),
                 ),
               ),
@@ -41,7 +38,7 @@ Widget buildCardInfo(CardInfo cardInfo, BuildContext context) {
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
                   cardInfo.text!,
-                  style: theme.textTheme.bodyText1,
+                  style: textTheme.bodyText1,
                 ),
               ),
           ],

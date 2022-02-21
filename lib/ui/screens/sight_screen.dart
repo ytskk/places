@@ -44,7 +44,7 @@ class _SightListScreenState extends State<SightListScreen> {
           textAlign: TextAlign.left,
           overflow: TextOverflow.fade,
           text: TextSpan(
-            style: theme.textTheme.headline4,
+            style: theme.textTheme.headline2,
             children: [
               TextSpan(text: AppStrings.sightTitleList),
               TextSpan(text: AppStrings.sightTitleInterestingPlaces),
