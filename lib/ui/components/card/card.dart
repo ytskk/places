@@ -46,13 +46,13 @@ class MyCard extends StatelessWidget {
             Stack(
               children: [
                 // photo
-                NetworkImageBox(sight.url, height: 240),
+                NetworkImageBox(sight.url, height: 240, context: context),
                 // text + action buttons
                 buildCardHeader(sight.type, actions: actions),
               ],
             ),
             // card info
-            buildCardInfo(cardInfo),
+            buildCardInfo(cardInfo, context),
           ],
         ),
       ),

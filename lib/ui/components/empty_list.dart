@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/app_colors.dart';
 import 'icon_box.dart';
 
 class EmptyList extends StatelessWidget {
@@ -17,6 +16,8 @@ class EmptyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bodyText1 = Theme.of(context).textTheme.bodyText1;
+
     const double maxBoxWidth = 300;
     final double maxContentWidth = MediaQuery.of(context).size.width / 1.75;
 
@@ -32,7 +33,7 @@ class EmptyList extends StatelessWidget {
                 if (iconName != null)
                   IconBox(
                     icon: iconName!,
-                    color: AppColors.textLabelSecondary,
+                    color: bodyText1!.color,
                     width: 64,
                     height: 64,
                   ),
@@ -40,10 +41,9 @@ class EmptyList extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 24),
                   child: Text(
                     title,
-                    style: TextStyle(
-                      color: AppColors.textLabelSecondary,
-                      fontWeight: FontWeight.w500,
+                    style: bodyText1!.copyWith(
                       fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -53,9 +53,7 @@ class EmptyList extends StatelessWidget {
                     child: Text(
                       subtitle!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: AppColors.textLabelSecondary,
-                      ),
+                      style: bodyText1,
                     ),
                   ),
               ],

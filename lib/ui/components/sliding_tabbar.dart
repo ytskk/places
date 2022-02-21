@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/app_colors.dart';
-import '../../domain/app_strings.dart';
 import 'tab_item.dart';
 
 class SlidingTabBar extends StatelessWidget {
@@ -11,14 +9,16 @@ class SlidingTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     double defaultBorderRadius = 40;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(defaultBorderRadius),
-          color: AppColors.grayBackground,
+          color: theme.backgroundColor,
         ),
         child: TabBar(
           tabs: [

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/screens/visiting/visiting_visited_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_want_to_visit_screen.dart';
@@ -16,18 +15,19 @@ class VisitingScreen extends StatefulWidget {
 class _VisitingScreenState extends State<VisitingScreen> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DefaultTabController(
       length: AppStrings.visitingTabTitles.length,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shadowColor: Colors.transparent,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          elevation: 0,
           title: Text(
             AppStrings.visitingAppBarTitle,
-            style: TextStyle(
-              color: AppColors.textLabel,
-              fontWeight: FontWeight.w500,
+            style: theme.textTheme.bodyText2!.copyWith(
               fontSize: 18,
+              fontWeight: FontWeight.w500,
             ),
           ),
           bottom: PreferredSize(

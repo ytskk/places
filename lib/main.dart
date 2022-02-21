@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
-import 'package:places/themes.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: lightTheme,
+      theme: AppThemeData.dark(),
       home: MyHomePage(),
     );
   }
@@ -45,10 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
           'selected': AppIcons.list_fill,
           'unselected': AppIcons.list,
         },
-        'color': {
-          'selected': AppColors.textLabel,
-          'unselected': AppColors.textLabel,
-        },
       },
       'label': 'Sight List',
     },
@@ -57,10 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
         'name': {
           'selected': AppIcons.map_fill,
           'unselected': AppIcons.map,
-        },
-        'color': {
-          'selected': AppColors.textLabel,
-          'unselected': AppColors.textLabel,
         },
       },
       'label': 'Map',
@@ -71,10 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
           'selected': AppIcons.heart_fill,
           'unselected': AppIcons.heart,
         },
-        'color': {
-          'selected': AppColors.textLabel,
-          'unselected': AppColors.textLabel,
-        },
       },
       'label': 'Favorites',
     },
@@ -84,10 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
           'selected': AppIcons.settings_fill,
           'unselected': AppIcons.settings,
         },
-        'color': {
-          'selected': AppColors.textLabel,
-          'unselected': AppColors.textLabel,
-        },
       },
       'label': 'Settings',
     },
@@ -95,9 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: pages[activePageIndex % pages.length],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: theme.backgroundColor,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: activePageIndex,
@@ -112,11 +98,11 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(
               activeIcon: IconBox(
                 icon: barItem['icon']['name']['selected'],
-                color: barItem['icon']['color']['selected'],
+                color: theme.textTheme.bodyText2!.color,
               ),
               icon: IconBox(
                 icon: barItem['icon']['name']['unselected'],
-                color: barItem['icon']['color']['unselected'],
+                color: theme.textTheme.bodyText1!.color,
               ),
               label: barItem['label'],
             ),

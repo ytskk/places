@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
-Widget HorizontalDivider() {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: Divider(
-      height: 0.8,
-      color: Color.fromRGBO(124, 126, 146, 0.24),
-    ),
-  );
+class HorizontalDivider extends StatelessWidget {
+  const HorizontalDivider({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final dividerColor = Theme.of(context).textTheme.bodyText1!.color;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Divider(
+        height: 0.8,
+        color: dividerColor,
+      ),
+    );
+  }
 }

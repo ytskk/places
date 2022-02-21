@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/ui/components/card/card.dart';
 
@@ -30,8 +28,11 @@ class VisitingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color scheduledAtColor =
-        isVisited ? AppColors.textLabelSecondary : AppColors.green;
+    final theme = Theme.of(context);
+
+    Color scheduledAtColor = isVisited
+        ? theme.textTheme.bodyText1!.color!
+        : theme.cardColor;
 
     return MyCard(
       sight,

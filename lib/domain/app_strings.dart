@@ -8,7 +8,12 @@
  *  Text(AppStrings.sightDetailsGetDirections)
  * ```
  */
+
 class AppStrings {
+  // Sight Screen
+  static const sightTitleList = "Список\n";
+  static const sightTitleInterestingPlaces = "Интересных мест";
+
   // SightDetails screen
   static const sightDetailsGetDirections = 'Построить маршрут';
   static const sightDetailsSchedule = 'Запланировать';

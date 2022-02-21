@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
