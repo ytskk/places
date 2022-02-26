@@ -75,7 +75,7 @@ class SightDetails extends StatelessWidget {
   }
 }
 
-Expanded _buildSightManipulationButton(
+Widget _buildSightManipulationButton(
   BuildContext context, {
   required String iconName,
   String? text,
@@ -114,7 +114,7 @@ Expanded _buildSightManipulationButton(
   );
 }
 
-Padding _buildDirectionButton(BuildContext context) {
+Widget _buildDirectionButton(BuildContext context) {
   final themeColor = Theme.of(context);
 
   return Padding(
@@ -140,7 +140,7 @@ Padding _buildDirectionButton(BuildContext context) {
   );
 }
 
-Padding _buildSightSubtitle(BuildContext context, String sightType) {
+Widget _buildSightSubtitle(BuildContext context, String sightType) {
   final bodyText1 = Theme.of(context).textTheme.bodyText1;
 
   return Padding(
@@ -165,7 +165,7 @@ Padding _buildSightSubtitle(BuildContext context, String sightType) {
 }
 
 // transparent appBar with rounded back button
-AppBar _buildAppBar(BuildContext context) {
+PreferredSizeWidget _buildAppBar(BuildContext context) {
   final theme = Theme.of(context);
 
   return AppBar(

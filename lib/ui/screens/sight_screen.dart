@@ -31,7 +31,7 @@ class _SightListScreenState extends State<SightListScreen> {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final theme = Theme.of(context);
 
     return AppBar(
