@@ -24,7 +24,16 @@ class _SightListScreenState extends State<SightListScreen> {
         itemBuilder: (context, index) {
           return SightCard(
             mocks[index],
-            actions: [IconBox(icon: AppIcons.heart)],
+            actions: [
+              IconButton(
+                onPressed: () {
+                  print("Heart icon clicked");
+                },
+                icon: IconBox(
+                  icon: AppIcons.heart,
+                ),
+              ),
+            ],
           );
         },
       ),

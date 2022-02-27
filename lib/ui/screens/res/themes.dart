@@ -21,9 +21,15 @@ class AppThemeData {
     return ThemeData(
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
-      backgroundColor: appColors.background,
-      scaffoldBackgroundColor: appColors.backgroundSecondary,
+      backgroundColor: appColors.backgroundSecondary,
+      scaffoldBackgroundColor: appColors.background,
       cardColor: appColors.green,
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.resolveWith((states) => 0),
+          splashFactory: NoSplash.splashFactory,
+        ),
+      ),
       textTheme: TextTheme(
         bodyText1: TextStyle(color: appColors.textLabelSecondary),
         bodyText2: TextStyle(color: appColors.textLabel),

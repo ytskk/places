@@ -23,8 +23,20 @@ class VisitingVisitedScreen extends StatelessWidget {
                 VisitingCard(
                   sight,
                   actions: [
-                    IconBox(icon: AppIcons.share),
-                    IconBox(icon: AppIcons.close),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        print("Share icon clicked");
+                      },
+                      icon: IconBox(icon: AppIcons.share),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        print("Close icon clicked");
+                      },
+                      icon: IconBox(icon: AppIcons.close),
+                    ),
                   ],
                   isVisited: true,
                   scheduledAt: 'Цель достигнута 12 окт. 2020',

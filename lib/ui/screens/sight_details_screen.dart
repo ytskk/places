@@ -47,7 +47,12 @@ class SightDetails extends StatelessWidget {
                       ),
                     ),
                   // button
-                  _buildDirectionButton(context),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: _buildDirectionButton(context, () {
+                      print("Direction button clicked");
+                    }),
+                  ),
                   HorizontalDivider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -56,12 +61,18 @@ class SightDetails extends StatelessWidget {
                         context,
                         iconName: AppIcons.calendar,
                         text: AppStrings.sightDetailsSchedule,
+                        onPressed: () {
+                          print("Plan button clicked");
+                        },
                         isActive: false,
                       ),
                       _buildSightManipulationButton(
                         context,
                         iconName: AppIcons.heart,
                         text: AppStrings.sightDetailsAddToWishlist,
+                        onPressed: () {
+                          print("To Wishlist button clicked");
+                        },
                       ),
                     ],
                   ),
@@ -77,29 +88,27 @@ class SightDetails extends StatelessWidget {
 
 Widget _buildSightManipulationButton(
   BuildContext context, {
-  required String iconName,
-  String? text,
+  String? iconName,
+  required String text,
+  required Function() onPressed,
   bool isActive = true,
 }) {
   final bodyText2 = Theme.of(context).textTheme.bodyText2;
 
-  Widget buttonContent = Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: IconBox(
-          icon: iconName,
-          color: bodyText2!.color,
-        ),
-      ),
-      if (text != null)
-        Text(
-          text,
-          style: bodyText2,
-        ),
-    ],
-  );
+  Widget buttonContent = iconName != null
+      ? TextButton.icon(
+          onPressed: isActive ? onPressed : null,
+          icon: IconBox(icon: iconName, color: bodyText2!.color),
+          label: Text(text, style: bodyText2),
+        )
+      : TextButton(
+          onPressed: isActive ? onPressed : null,
+          child: Text(
+            text,
+            style: bodyText2,
+          ),
+        );
+
   Widget child = isActive
       ? buttonContent
       : Opacity(
@@ -114,30 +123,47 @@ Widget _buildSightManipulationButton(
   );
 }
 
-Widget _buildDirectionButton(BuildContext context) {
-  final themeColor = Theme.of(context);
+Widget _buildDirectionButton(BuildContext context, Function() onPressed) {
+  final theme = Theme.of(context);
 
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 16),
-    // cos using alignment, constraints and decoration
-    child: Container(
-      alignment: Alignment.center,
-      constraints: BoxConstraints(
-        minHeight: 48,
-      ),
-      decoration: BoxDecoration(
+  return TextButton.icon(
+    onPressed: onPressed,
+    style: TextButton.styleFrom(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        color: themeColor.cardColor,
       ),
-      child: Text(
-        AppStrings.sightDetailsGetDirections.toUpperCase(),
-        style: TextStyle(
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-        ),
-      ),
+      backgroundColor: theme.cardColor,
+      padding: EdgeInsets.all(16),
+    ),
+    label: Text(
+      AppStrings.sightDetailsGetDirections,
+      style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
+    ),
+    icon: IconBox(
+      icon: AppIcons.go,
     ),
   );
+  // return Padding(
+  //   padding: const EdgeInsets.only(bottom: 16),
+  //   // cos using alignment, constraints and decoration
+  //   child: Container(
+  //     alignment: Alignment.center,
+  //     constraints: BoxConstraints(
+  //       minHeight: 48,
+  //     ),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(12),
+  //       color: themeColor.cardColor,
+  //     ),
+  //     child: Text(
+  //       AppStrings.sightDetailsGetDirections.toUpperCase(),
+  //       style: TextStyle(
+  //         fontWeight: FontWeight.w700,
+  //         color: Colors.white,
+  //       ),
+  //     ),
+  //   ),
+  // );
 }
 
 Widget _buildSightSubtitle(BuildContext context, String sightType) {
@@ -173,20 +199,22 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
     elevation: 0,
     leading: Padding(
       padding: const EdgeInsets.all(10.0),
-      child: SizedBox(
-        height: 32,
-        width: 32,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: theme.backgroundColor,
-            borderRadius: BorderRadius.circular(10),
+      child: ElevatedButton(
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          alignment: Alignment.center,
+          backgroundColor: theme.backgroundColor,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(
-            child: Icon(
-              CupertinoIcons.back,
-              color: theme.textTheme.bodyText2!.color,
-            ),
-          ),
+        ),
+        onPressed: () {
+          print("Back button clicked");
+        },
+        child: Icon(
+          CupertinoIcons.back,
+          color: theme.textTheme.bodyText2!.color,
         ),
       ),
     ),

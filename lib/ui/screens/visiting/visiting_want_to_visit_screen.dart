@@ -22,8 +22,20 @@ class VisitingWantToVisitScreen extends StatelessWidget {
                 VisitingCard(
                   sight,
                   actions: [
-                    IconBox(icon: AppIcons.calendar),
-                    IconBox(icon: AppIcons.close),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        print("Calendar icon clicked");
+                      },
+                      icon: IconBox(icon: AppIcons.calendar),
+                    ),
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () {
+                        print("Close icon clicked");
+                      },
+                      icon: IconBox(icon: AppIcons.close),
+                    ),
                   ],
                   isVisited: false,
                   scheduledAt: 'Запланировано на 12 окт. 2020',

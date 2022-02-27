@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class AppColors {
   late final Color fillColor;
@@ -15,8 +14,8 @@ class AppColorsLight extends AppColors {
   final Color fillColor = Color(0xffffffff);
   final Color textLabel = Color(0xff252849);
   final Color textLabelSecondary = Color.fromRGBO(134, 136, 156, 0.96);
-  final Color backgroundSecondary = Color(0xfff5f5f5);
-  final Color background = Color(0xffF5F5F5);
+  final Color backgroundSecondary = Color(0xffF5F5F5);
+  final Color background = Color(0xffffffff);
   final Color green = Color(0xff4caf50);
   final Color red = CupertinoColors.destructiveRed;
 }
