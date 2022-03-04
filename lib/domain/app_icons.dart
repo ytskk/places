@@ -12,4 +12,8 @@ class AppIcons {
   static const map_fill = 'assets/icons/map-fill.svg';
   static const list = 'assets/icons/list.svg';
   static const list_fill = 'assets/icons/list-fill.svg';
+  static const coffee = 'assets/icons/coffee.svg';
+  static const tour = 'assets/icons/tour.svg';
+  static const shoppingBag = 'assets/icons/shopping_bag.svg';
+  static const error = 'assets/icons/error.svg';
 }

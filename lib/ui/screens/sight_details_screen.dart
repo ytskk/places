@@ -49,7 +49,7 @@ class SightDetails extends StatelessWidget {
                   // button
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24),
-                    child: _buildDirectionButton(context, () {
+                    child: _buildDirectionButton(() {
                       print("Direction button clicked");
                     }),
                   ),
@@ -123,47 +123,16 @@ Widget _buildSightManipulationButton(
   );
 }
 
-Widget _buildDirectionButton(BuildContext context, Function() onPressed) {
-  final theme = Theme.of(context);
-
-  return TextButton.icon(
+Widget _buildDirectionButton(Function() onPressed) {
+  return ElevatedButton.icon(
     onPressed: onPressed,
-    style: TextButton.styleFrom(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      backgroundColor: theme.cardColor,
-      padding: EdgeInsets.all(16),
-    ),
     label: Text(
       AppStrings.sightDetailsGetDirections,
-      style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
     ),
     icon: IconBox(
       icon: AppIcons.go,
     ),
   );
-  // return Padding(
-  //   padding: const EdgeInsets.only(bottom: 16),
-  //   // cos using alignment, constraints and decoration
-  //   child: Container(
-  //     alignment: Alignment.center,
-  //     constraints: BoxConstraints(
-  //       minHeight: 48,
-  //     ),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(12),
-  //       color: themeColor.cardColor,
-  //     ),
-  //     child: Text(
-  //       AppStrings.sightDetailsGetDirections.toUpperCase(),
-  //       style: TextStyle(
-  //         fontWeight: FontWeight.w700,
-  //         color: Colors.white,
-  //       ),
-  //     ),
-  //   ),
-  // );
 }
 
 Widget _buildSightSubtitle(BuildContext context, String sightType) {

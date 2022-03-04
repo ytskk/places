@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/screens/filter/filter_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
+import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
+import 'package:provider/provider.dart';
 
+import 'controllers/filter_controller.dart';
+import 'controllers/settings_controller.dart';
 import 'ui/screens/sight_details_screen.dart';
 
 void main() {
@@ -17,9 +22,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppThemeData.light(),
-      home: MyHomePage(),
+    return MultiProvider(
+      providers: [
+        ListenableProvider(create: (_) => Settings()),
+        ChangeNotifierProvider(create: (_) => Filter()),
+      ],
+      child: Consumer(
+        builder: (BuildContext context, value, Widget? child) {
+          return MaterialApp(
+            theme: context.watch<Settings>().isDarkTheme
+                ? AppThemeData.dark()
+                : AppThemeData.light(),
+            home: FilterScreen(),
+            // home: MyHomePage(),
+          );
+        },
+      ),
     );
   }
 }
@@ -34,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     SightListScreen(),
     SightDetails(mocks[3]),
     VisitingScreen(),
+    SettingsScreen(),
   ];
   int activePageIndex = 0;
 

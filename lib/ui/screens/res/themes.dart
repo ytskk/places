@@ -19,18 +19,46 @@ class AppThemeData {
 
   static ThemeData _themeData(AppColors appColors) {
     return ThemeData(
+      primaryColor: appColors.green,
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
       backgroundColor: appColors.backgroundSecondary,
       scaffoldBackgroundColor: appColors.background,
       cardColor: appColors.green,
+      canvasColor: appColors.greenOnSurface,
+      iconTheme: IconThemeData(
+        color: appColors.green,
+      ),
+      listTileTheme: ListTileThemeData(
+        textColor: appColors.textLabel,
+      ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          elevation: MaterialStateProperty.resolveWith((states) => 0),
           splashFactory: NoSplash.splashFactory,
         ),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          textStyle: MaterialStateProperty.resolveWith((states) =>
+              TextStyle(fontWeight: FontWeight.w700, color: Colors.white)),
+          elevation: MaterialStateProperty.resolveWith((states) => 0),
+          backgroundColor:
+              MaterialStateProperty.resolveWith((states) => appColors.green),
+          shape: MaterialStateProperty.resolveWith(
+            (states) => RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          padding: MaterialStateProperty.resolveWith(
+            (states) => EdgeInsets.all(16),
+          ),
+        ),
+      ),
       textTheme: TextTheme(
+        caption: ThemeData().textTheme.caption!.copyWith(
+              fontSize: 11,
+              color: appColors.textLabelSecondary,
+            ),
         bodyText1: TextStyle(color: appColors.textLabelSecondary),
         bodyText2: TextStyle(color: appColors.textLabel),
         headline2: headline2.copyWith(
@@ -51,6 +79,13 @@ class AppThemeData {
           color: appColors.textLabel,
         ),
       ),
+      sliderTheme: SliderThemeData(
+        activeTrackColor: appColors.green,
+        overlayColor: Colors.transparent,
+        thumbColor: appColors.backgroundSecondary,
+        trackHeight: 2,
+        minThumbSeparation: 20,
+      ),
     );
   }
 
@@ -62,6 +97,12 @@ class AppThemeData {
     return _themeData(AppColorsDark());
   }
 
+  /**
+   * Returns theme-based color from [AppColors]
+   * 
+   * **Attributes**
+   * - `isDark` — controls theme (light or dark). Default false.
+   */
   static AppColors selectColor({isDark = false}) {
     return isDark ? AppColorsDark() : AppColorsLight();
   }
