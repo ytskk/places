@@ -6,7 +6,6 @@ import 'package:places/domain/sight.dart';
 import 'package:places/ui/components/card/card_header.dart';
 import 'package:places/ui/components/card/card_info.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
-import 'package:places/ui/screens/res/themes.dart';
 
 class CardInfo {
   final String title;
@@ -53,7 +52,7 @@ class MyCard extends StatelessWidget {
               Stack(
                 children: [
                   // photo
-                  NetworkImageBox(sight.url, height: 240, context: context),
+                  NetworkImageBox(sight.url, height: 96, context: context),
                   // text + action buttons
                   buildCardHeader(sight.type, actions: actions),
                 ],

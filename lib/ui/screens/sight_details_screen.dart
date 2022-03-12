@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/domain/sight.dart';
-import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/button.dart';
+import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
-
-import '../components/horizontal_divider.dart';
 
 class SightDetails extends StatelessWidget {
   final Sight sight;
@@ -19,7 +19,10 @@ class SightDetails extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: _buildAppBar(context),
+      appBar: CustomAppBar(
+        background: Colors.transparent,
+        leading: _RoundedBackButton(),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -49,30 +52,35 @@ class SightDetails extends StatelessWidget {
                   // button
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24),
-                    child: _buildDirectionButton(() {
-                      print("Direction button clicked");
-                    }),
+                    child: Button.icon(
+                      buttonPadding: ButtonPadding.Wide,
+                      text: AppStrings.sightDetailsGetDirections,
+                      onPressed: () {
+                        print("Direction button clicked");
+                      },
+                      icon: AppIcons.go,
+                    ),
                   ),
-                  HorizontalDivider(),
+                  const HorizontalDivider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildSightManipulationButton(
-                        context,
-                        iconName: AppIcons.calendar,
-                        text: AppStrings.sightDetailsSchedule,
-                        onPressed: () {
-                          print("Plan button clicked");
-                        },
-                        isActive: false,
+                      Expanded(
+                        child: Button.icon(
+                          icon: AppIcons.calendar,
+                          text: AppStrings.sightDetailsSchedule,
+                          background: Colors.transparent,
+                        ),
                       ),
-                      _buildSightManipulationButton(
-                        context,
-                        iconName: AppIcons.heart,
-                        text: AppStrings.sightDetailsAddToWishlist,
-                        onPressed: () {
-                          print("To Wishlist button clicked");
-                        },
+                      Expanded(
+                        child: Button.icon(
+                          icon: AppIcons.heart,
+                          text: AppStrings.sightDetailsAddToWishlist,
+                          background: Colors.transparent,
+                          onPressed: () {
+                            print("To Wishlist button clicked");
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -84,55 +92,6 @@ class SightDetails extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _buildSightManipulationButton(
-  BuildContext context, {
-  String? iconName,
-  required String text,
-  required Function() onPressed,
-  bool isActive = true,
-}) {
-  final bodyText2 = Theme.of(context).textTheme.bodyText2;
-
-  Widget buttonContent = iconName != null
-      ? TextButton.icon(
-          onPressed: isActive ? onPressed : null,
-          icon: IconBox(icon: iconName, color: bodyText2!.color),
-          label: Text(text, style: bodyText2),
-        )
-      : TextButton(
-          onPressed: isActive ? onPressed : null,
-          child: Text(
-            text,
-            style: bodyText2,
-          ),
-        );
-
-  Widget child = isActive
-      ? buttonContent
-      : Opacity(
-          opacity: 0.4,
-          child: buttonContent,
-        );
-
-  return Expanded(
-    child: Center(
-      child: child,
-    ),
-  );
-}
-
-Widget _buildDirectionButton(Function() onPressed) {
-  return ElevatedButton.icon(
-    onPressed: onPressed,
-    label: Text(
-      AppStrings.sightDetailsGetDirections,
-    ),
-    icon: IconBox(
-      icon: AppIcons.go,
-    ),
-  );
 }
 
 Widget _buildSightSubtitle(BuildContext context, String sightType) {
@@ -159,14 +118,14 @@ Widget _buildSightSubtitle(BuildContext context, String sightType) {
   );
 }
 
-// transparent appBar with rounded back button
-PreferredSizeWidget _buildAppBar(BuildContext context) {
-  final theme = Theme.of(context);
+class _RoundedBackButton extends StatelessWidget {
+  const _RoundedBackButton({Key? key}) : super(key: key);
 
-  return AppBar(
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-    leading: Padding(
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton(
         style: OutlinedButton.styleFrom(
@@ -186,6 +145,6 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
           color: theme.textTheme.bodyText2!.color,
         ),
       ),
-    ),
-  );
+    );
+  }
 }

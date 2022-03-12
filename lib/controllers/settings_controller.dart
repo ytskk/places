@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class Settings extends ChangeNotifier {
   bool _isDarkTheme = false;

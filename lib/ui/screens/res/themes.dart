@@ -32,9 +32,19 @@ class AppThemeData {
       listTileTheme: ListTileThemeData(
         textColor: appColors.textLabel,
       ),
+      dividerTheme: DividerThemeData(
+        color: appColors.textLabelSecondary,
+      ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           splashFactory: NoSplash.splashFactory,
+          foregroundColor:
+              MaterialStateProperty.resolveWith((states) => appColors.green),
+          textStyle: MaterialStateProperty.resolveWith(
+            (states) => TextStyle(
+              fontSize: 16,
+            ),
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -60,7 +70,7 @@ class AppThemeData {
               color: appColors.textLabelSecondary,
             ),
         bodyText1: TextStyle(color: appColors.textLabelSecondary),
-        bodyText2: TextStyle(color: appColors.textLabel),
+        bodyText2: TextStyle(color: appColors.textLabel, fontSize: 16),
         headline2: headline2.copyWith(
           color: appColors.textLabel,
         ),

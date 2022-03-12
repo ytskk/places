@@ -21,8 +21,6 @@ class RangeSelector extends StatefulWidget {
 class _RangeSelectorState extends State<RangeSelector> {
   @override
   Widget build(BuildContext context) {
-    // RangeValues _searchDistanceValues = context.watch<Filter>().rangeValues;
-
     return RangeSlider(
       min: widget.rangeValues.start,
       max: widget.rangeValues.end,

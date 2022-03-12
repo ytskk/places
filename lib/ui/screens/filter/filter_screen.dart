@@ -5,6 +5,7 @@ import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/coordinates.dart';
 import 'package:places/models/filter_option.dart';
+import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/filter_button.dart';
 import 'package:places/ui/components/range_selector.dart';
 import 'package:places/ui/components/row_group.dart';
@@ -17,24 +18,20 @@ class FilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final bodyText2 = Theme.of(context).textTheme.bodyText2;
 
     return Scaffold(
-      appBar: _buildAppBar(
-        context,
+      appBar: CustomAppBar(
+        leading: BackButton(
+          color: bodyText2!.color,
+        ),
         actions: [
           TextButton(
             onPressed: () {
               print("Clear action clicked");
               context.read<Filter>().clearFilterOptions();
             },
-            child: Text(
-              AppStrings.filterScreenActionClear,
-              style: TextStyle(
-                fontSize: 16,
-                color: theme.cardColor,
-              ),
-            ),
+            child: Text(AppStrings.filterScreenActionClear),
           ),
         ],
       ),
@@ -43,13 +40,13 @@ class FilterScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RowGroup(
-              title: Text(AppStrings.filterScreenFilterTitle),
-              child: _buildFilterButtons(context),
+              title: Text(AppStrings.filterScreenFilterTitle.toUpperCase()),
+              child: _FilterButtonsTable(),
             ),
             RowGroup(
               title: Text(
                 AppStrings.filterScreenRangeSelectionGroupTitle,
-                style: theme.textTheme.bodyText2,
+                style: bodyText2,
               ),
               titleAfter: Text(
                 getRangeValuesString(context.watch<Filter>().rangeValues),
@@ -66,55 +63,17 @@ class FilterScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: _buildFilterShowResultsButton(context),
+      bottomNavigationBar: _FilterShowResultButton(),
     );
   }
+}
 
-  Padding _buildFilterShowResultsButton(BuildContext context) {
-    final List<Sight> results = _getMatchedResults(context);
+/// Returns [FilterOption] buttons from parsed sight types from mock.dart.
+class _FilterButtonsTable extends StatelessWidget {
+  const _FilterButtonsTable({Key? key}) : super(key: key);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 44, left: 16, right: 16, top: 8),
-      child: ElevatedButton(
-        onPressed: () {
-          print("Filter show button clicked. Data saved");
-          print("Founded: $results");
-        },
-        child: Text(
-          "${AppStrings.filterScreenFilterShow} ${"(${results.length})"}",
-        ),
-      ),
-    );
-  }
-
-  List<Sight> _getMatchedResults(BuildContext context) {
-    // Moscow standard coordinates
-    // https://www.latlong.net/place/red-square-moscow-russia-90.html
-    final Coordinates _coordinates = Coordinates(55.754093, 37.620407);
-    final filterController = context.watch<Filter>();
-
-    final nearbyPlaces = mocks.where((sight) {
-      return isPointInBetween(
-            Coordinates(sight.lat, sight.lon),
-            _coordinates,
-            filterController.rangeValues.start,
-            filterController.rangeValues.end,
-          ) &&
-          filterController.selectedCategories.contains(sight.type);
-    }).toList();
-
-    // Outputs only if nearby places are in the area
-    if (nearbyPlaces.length > 0) {
-      print(
-        "\n${nearbyPlaces.map((e) => e.toString())}",
-      );
-    }
-
-    return nearbyPlaces;
-  }
-
-  /// Returns [FilterOption] buttons from parsed sight types from mock.dart.
-  Widget _buildFilterButtons(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     // get all categories
     final List<FilterOption> categories = context.read<Filter>().filterOptions;
 
@@ -134,20 +93,52 @@ class FilterScreen extends StatelessWidget {
       children: categoriesButtons,
     );
   }
+}
 
-  PreferredSizeWidget _buildAppBar(
-    BuildContext context, {
-    List<Widget>? actions,
-  }) {
-    final theme = Theme.of(context);
+class _FilterShowResultButton extends StatelessWidget {
+  const _FilterShowResultButton({Key? key}) : super(key: key);
 
-    return AppBar(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      elevation: 0,
-      leading: BackButton(
-        color: theme.textTheme.bodyText2!.color,
+  @override
+  Widget build(BuildContext context) {
+    final List<Sight> sights = _getMatchedResults(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 44, left: 16, right: 16, top: 8),
+      child: ElevatedButton(
+        onPressed: () {
+          print("Filter show button clicked. Data saved");
+          print("Founded $sights");
+        },
+        child: Text(
+          "${AppStrings.filterScreenFilterShow} ${"(${sights.length})"}",
+        ),
       ),
-      actions: actions,
     );
   }
+}
+
+List<Sight> _getMatchedResults(BuildContext context) {
+  // Moscow standard coordinates
+  // https://www.latlong.net/place/red-square-moscow-russia-90.html
+  final Coordinates _coordinates = Coordinates(55.754093, 37.620407);
+  final filterController = context.watch<Filter>();
+
+  final nearbyPlaces = mocks.where((sight) {
+    return isPointInBetween(
+          Coordinates(sight.lat, sight.lon),
+          _coordinates,
+          filterController.rangeValues.start,
+          filterController.rangeValues.end,
+        ) &&
+        filterController.selectedCategories.contains(sight.type);
+  }).toList();
+
+  // Outputs only if nearby places are in the area
+  if (nearbyPlaces.length > 0) {
+    print(
+      "\n${nearbyPlaces.map((e) => e.toString())}",
+    );
+  }
+
+  return nearbyPlaces;
 }

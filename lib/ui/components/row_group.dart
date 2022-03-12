@@ -26,7 +26,7 @@ class RowGroup extends StatelessWidget {
             children: [
               if (title.data!.length > 0)
                 Text(
-                  title.data!.toUpperCase(),
+                  title.data!,
                   style: textTheme.bodyText1!
                       .copyWith(
                         fontSize: 12,

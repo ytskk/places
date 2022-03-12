@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:places/ui/components/app_bar.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -11,24 +12,12 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
-      body: SettingsTable(),
-    );
-  }
-
-  AppBar _buildAppBar(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return AppBar(
-      title: Text(
-        AppStrings.settingsScreenAppTitle,
-        style: theme.textTheme.bodyText2!.copyWith(
-          fontSize: 18,
+      appBar: CustomAppBar(
+        title: Text(
+          AppStrings.settingsScreenAppTitle,
         ),
       ),
-      centerTitle: true,
-      elevation: 0,
-      backgroundColor: theme.scaffoldBackgroundColor,
+      body: SettingsTable(),
     );
   }
 }
