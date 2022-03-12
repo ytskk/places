@@ -79,7 +79,7 @@ class _FilterButtonsTable extends StatelessWidget {
 
     final List<Widget> categoriesButtons = categories
         .map((category) => Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: FilterButton(
                 category: category,
                 onTap: () {

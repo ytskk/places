@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/ui/components/card/card_header.dart';
@@ -37,30 +34,43 @@ class MyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final splashColor =
+        Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.2);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: InkWell(
-        onTap: () {
-          log("Card clicked");
-        },
-        child: ClipRRect(
-          clipBehavior: Clip.hardEdge,
-          borderRadius: BorderRadius.circular(16),
-          child: Column(
-            children: [
-              // header + photo
-              Stack(
-                children: [
-                  // photo
-                  NetworkImageBox(sight.url, height: 96, context: context),
-                  // text + action buttons
-                  buildCardHeader(sight.type, actions: actions),
-                ],
+      child: ClipRRect(
+        clipBehavior: Clip.hardEdge,
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                // header + photo
+                Stack(
+                  children: [
+                    // photo
+                    NetworkImageBox(sight.url, height: 96, context: context),
+                  ],
+                ),
+                // card info
+                buildCardInfo(cardInfo, context),
+              ],
+            ),
+            Positioned.fill(
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  splashColor: splashColor,
+                  onTap: () {
+                    print("Card clicked");
+                  },
+                ),
               ),
-              // card info
-              buildCardInfo(cardInfo, context),
-            ],
-          ),
+            ),
+            // text + action buttons
+            buildCardHeader(sight.type, actions: actions),
+          ],
         ),
       ),
     );
