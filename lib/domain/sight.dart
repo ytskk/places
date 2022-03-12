@@ -34,4 +34,10 @@ class SightCategories {
   static const sightseeing = "Достопримечательность";
   static const historicalBuilding = "Памятник, мемориал";
   static const coffeeShop = "Кофейня";
+  static const hotel = "Отель";
+  static const restaurant = "Ресторан";
+  static const poi = "Особое место";
+  static const park = "Парк";
+  static const museum = "Музей";
+  static const cafe = "Кафе";
 }

@@ -16,4 +16,12 @@ class AppIcons {
   static const tour = 'assets/icons/tour.svg';
   static const shoppingBag = 'assets/icons/shopping_bag.svg';
   static const error = 'assets/icons/error.svg';
+
+  //  filter categories icons
+  static const hotel = "assets/icons/hotel.svg";
+  static const restaurant = "assets/icons/restaurant.svg";
+  static const poi = "assets/icons/poi.svg";
+  static const park = "assets/icons/park.svg";
+  static const museum = "assets/icons/museum.svg";
+  static const cafe = "assets/icons/cafe.svg";
 }

@@ -16,37 +16,34 @@ class RowGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (title.data!.length > 0)
-                Text(
-                  title.data!,
-                  style: textTheme.bodyText1!
-                      .copyWith(
-                        fontSize: 12,
-                      )
-                      .merge(title.style),
-                ),
-              if (titleAfter.data!.length > 0)
-                Text(
-                  titleAfter.data!,
-                  style: textTheme.bodyText1!
-                      .copyWith(
-                        fontSize: 12,
-                      )
-                      .merge(titleAfter.style),
-                ),
-            ],
-          ),
-          child,
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (title.data!.length > 0)
+              Text(
+                title.data!,
+                style: textTheme.bodyText1!
+                    .copyWith(
+                      fontSize: 12,
+                    )
+                    .merge(title.style),
+              ),
+            if (titleAfter.data!.length > 0)
+              Text(
+                titleAfter.data!,
+                style: textTheme.bodyText1!
+                    .copyWith(
+                      fontSize: 12,
+                    )
+                    .merge(titleAfter.style),
+              ),
+          ],
+        ),
+        child,
+      ],
     );
   }
 }

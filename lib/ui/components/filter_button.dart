@@ -68,14 +68,14 @@ class _FilterButtonState extends State<FilterButton> {
     if (name.split(" ").length > 1) {
       final result = [];
       for (var word in name.split(" ")) {
-        result.add(word.length > 7 ? "${word.substring(0, 4)}." : word);
+        result.add(word.length > 8 ? "${word.substring(0, 4)}." : word);
       }
 
       return result.join(" ");
     }
 
-    return name.length > 10
-        ? "${name.substring(0, 4)}-${name.substring(name.length - 2, name.length)}"
+    return name.length > 15
+        ? "${name.substring(0, 5)}-${name.substring(name.length - 4, name.length)}"
         : name;
   }
 
@@ -89,7 +89,18 @@ class _FilterButtonState extends State<FilterButton> {
         return AppIcons.shoppingBag;
       case SightCategories.sightseeing:
         return AppIcons.map_fill;
-
+      case SightCategories.hotel:
+        return AppIcons.hotel;
+      case SightCategories.restaurant:
+        return AppIcons.restaurant;
+      case SightCategories.park:
+        return AppIcons.park;
+      case SightCategories.museum:
+        return AppIcons.museum;
+      case SightCategories.cafe:
+        return AppIcons.cafe;
+      case SightCategories.poi:
+        return AppIcons.poi;
       default:
         return AppIcons.error;
     }
