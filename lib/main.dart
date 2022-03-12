@@ -5,6 +5,7 @@ import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/screens/filter/filter_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -33,8 +34,8 @@ class MyApp extends StatelessWidget {
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()
                 : AppThemeData.light(),
-            // home: FilterScreen(),
-            home: MyHomePage(),
+            home: FilterScreen(),
+            // home: MyHomePage(),
           );
         },
       ),
