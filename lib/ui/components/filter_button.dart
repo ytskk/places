@@ -33,21 +33,27 @@ class _FilterButtonState extends State<FilterButton> {
       },
       child: Column(
         children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? theme.canvasColor
-                  : theme.canvasColor.withAlpha(40),
-              shape: BoxShape.circle,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: IconBox(
-                icon: _getCategoryIcon(widget.category.name),
-                color: theme.cardColor,
-                size: 32,
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.canvasColor
+                      : theme.canvasColor.withAlpha(40),
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: IconBox(
+                    icon: _getCategoryIcon(widget.category.name),
+                    color: theme.cardColor,
+                    size: 32,
+                  ),
+                ),
               ),
-            ),
+              if (isSelected) _SelectedBadge(),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -104,5 +110,29 @@ class _FilterButtonState extends State<FilterButton> {
       default:
         return AppIcons.error;
     }
+  }
+}
+
+class _SelectedBadge extends StatelessWidget {
+  const _SelectedBadge({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.dialogBackgroundColor,
+        shape: BoxShape.circle,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: IconBox(
+          icon: AppIcons.check,
+          color: Colors.white,
+          size: 12,
+        ),
+      ),
+    );
   }
 }

@@ -25,7 +25,8 @@ class AppThemeData {
       backgroundColor: appColors.backgroundSecondary,
       scaffoldBackgroundColor: appColors.background,
       cardColor: appColors.green,
-      canvasColor: appColors.greenOnSurface,
+      canvasColor: appColors.greenSurface,
+      dialogBackgroundColor: appColors.blueSurface,
       iconTheme: IconThemeData(
         color: appColors.green,
       ),

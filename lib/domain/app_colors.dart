@@ -7,7 +7,8 @@ class AppColors {
   late final Color background;
   late final Color backgroundSecondary;
   late final Color green;
-  late final Color greenOnSurface;
+  late final Color greenSurface;
+  late final Color blueSurface;
   late final Color red;
 }
 
@@ -18,7 +19,8 @@ class AppColorsLight extends AppColors {
   final Color backgroundSecondary = Color(0xffF5F5F5);
   final Color background = Color(0xffffffff);
   final Color green = Color(0xff4caf50);
-  final Color greenOnSurface = Color(0xFFD9ECDA);
+  final Color greenSurface = Color(0xFFD9ECDA);
+  final Color blueSurface = Color(0xff252849);
   final Color red = CupertinoColors.destructiveRed;
 }
 
@@ -29,6 +31,7 @@ class AppColorsDark extends AppColors {
   final Color background = Color(0xff1A1A20);
   final Color backgroundSecondary = Color(0xff21222C);
   final Color green = Color(0xff6ADA6F);
-  final Color greenOnSurface = Color(0xFF2F362F);
+  final Color greenSurface = Color(0xFF2F362F);
+  final Color blueSurface = Color(0xff373f8e);
   final Color red = CupertinoColors.destructiveRed;
 }

@@ -1,4 +1,5 @@
 class AppIcons {
+  static const check = "assets/icons/check.svg";
   static const calendar = 'assets/icons/calendar.svg';
   static const heart = 'assets/icons/heart.svg';
   static const heart_fill = 'assets/icons/heart-fill.svg';

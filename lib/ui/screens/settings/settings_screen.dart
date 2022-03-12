@@ -34,6 +34,8 @@ class SettingsTableState extends State<SettingsTable> {
   Widget build(BuildContext context) {
     final iconColor = Theme.of(context).iconTheme.color;
     bool isDarkTheme = context.read<Settings>().isDarkTheme;
+    final splashColor =
+        Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.2);
 
     return ListView(
       children: ListTile.divideTiles(
@@ -54,6 +56,9 @@ class SettingsTableState extends State<SettingsTable> {
           ListTile(
             title: Text(AppStrings.settingsScreenTutorialTitle),
             trailing: IconButton(
+              splashColor: splashColor,
+              padding: EdgeInsets.zero,
+              splashRadius: 24,
               color: iconColor,
               onPressed: () {
                 log("Info button pressed");
