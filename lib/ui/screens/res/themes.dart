@@ -50,6 +50,9 @@ class AppThemeData {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
+          overlayColor: MaterialStateProperty.resolveWith(
+            (states) => Colors.black12.withOpacity(0.2),
+          ),
           textStyle: MaterialStateProperty.resolveWith((states) =>
               TextStyle(fontWeight: FontWeight.w700, color: Colors.white)),
           elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -61,7 +64,7 @@ class AppThemeData {
             ),
           ),
           padding: MaterialStateProperty.resolveWith(
-            (states) => EdgeInsets.all(16),
+                (states) => EdgeInsets.all(16),
           ),
         ),
       ),

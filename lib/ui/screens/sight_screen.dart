@@ -3,8 +3,8 @@ import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
-import 'package:places/ui/components/icon_box.dart';
 
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -44,13 +44,13 @@ class _SightListScreenState extends State<SightListScreen> {
           return SightCard(
             mocks[index],
             actions: [
-              IconButton(
+              Button.icon(
+                icon: AppIcons.heart,
+                iconColor: Colors.white,
+                background: Colors.transparent,
                 onPressed: () {
-                  print("Heart icon clicked");
+                  print("Close icon clicked");
                 },
-                icon: IconBox(
-                  icon: AppIcons.heart,
-                ),
               ),
             ],
           );

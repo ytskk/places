@@ -8,7 +8,7 @@ enum IconAlignment {
 }
 
 class ButtonPadding {
-  static const Narrow = const EdgeInsets.symmetric(vertical: 6, horizontal: 8);
+  static const Narrow = const EdgeInsets.symmetric(vertical: 4, horizontal: 8);
   static const Wide = const EdgeInsets.symmetric(vertical: 12, horizontal: 16);
 }
 
@@ -17,6 +17,7 @@ class ButtonPadding {
 class Button extends StatelessWidget {
   final String? text;
   final String? icon;
+  final Color? iconColor;
   final IconAlignment? iconAlignment;
   final EdgeInsets? padding;
   final double gap;
@@ -36,7 +37,9 @@ class Button extends StatelessWidget {
     Function()? this.onPressed,
     Color? this.background,
     EdgeInsets? buttonPadding,
-  })  : icon = null,
+  })
+      : icon = null,
+        iconColor = null,
         iconAlignment = null,
         gap = 0,
         padding = buttonPadding ?? ButtonPadding.Narrow,
@@ -55,6 +58,7 @@ class Button extends StatelessWidget {
   const Button.icon({
     Key? key,
     required String this.icon,
+    Color? this.iconColor,
     String? this.text,
     Function()? this.onPressed,
     Color? this.background,
@@ -100,8 +104,8 @@ class Button extends StatelessWidget {
     final buttonText = text != null ? Text(text!) : null;
     final buttonIcon = icon != null
         ? IconBox(
-            icon: icon!,
-            color: onPrimary,
+      icon: icon!,
+            color: iconColor ?? onPrimary,
           )
         : null;
 

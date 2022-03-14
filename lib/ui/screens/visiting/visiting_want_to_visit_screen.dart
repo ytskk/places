@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
 import 'package:places/ui/components/empty_list.dart';
-import 'package:places/ui/components/icon_box.dart';
 
 class VisitingWantToVisitScreen extends StatelessWidget {
   const VisitingWantToVisitScreen({Key? key}) : super(key: key);
@@ -22,19 +22,21 @@ class VisitingWantToVisitScreen extends StatelessWidget {
                 VisitingCard(
                   sight,
                   actions: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
+                    Button.icon(
+                      icon: AppIcons.calendar,
+                      iconColor: Colors.white,
+                      background: Colors.transparent,
                       onPressed: () {
                         print("Calendar icon clicked");
                       },
-                      icon: IconBox(icon: AppIcons.calendar),
                     ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
+                    Button.icon(
+                      icon: AppIcons.close,
+                      iconColor: Colors.white,
+                      background: Colors.transparent,
                       onPressed: () {
                         print("Close icon clicked");
                       },
-                      icon: IconBox(icon: AppIcons.close),
                     ),
                   ],
                   isVisited: false,
