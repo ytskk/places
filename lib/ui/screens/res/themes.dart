@@ -19,14 +19,62 @@ class AppThemeData {
 
   static ThemeData _themeData(AppColors appColors) {
     return ThemeData(
+      primaryColor: appColors.green,
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
-      backgroundColor: appColors.background,
-      scaffoldBackgroundColor: appColors.backgroundSecondary,
+      backgroundColor: appColors.backgroundSecondary,
+      scaffoldBackgroundColor: appColors.background,
       cardColor: appColors.green,
+      canvasColor: appColors.greenSurface,
+      dialogBackgroundColor: appColors.blueSurface,
+      iconTheme: IconThemeData(
+        color: appColors.green,
+      ),
+      listTileTheme: ListTileThemeData(
+        textColor: appColors.textLabel,
+      ),
+      dividerTheme: DividerThemeData(
+        color: appColors.textLabelSecondary,
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          splashFactory: NoSplash.splashFactory,
+          foregroundColor:
+              MaterialStateProperty.resolveWith((states) => appColors.green),
+          textStyle: MaterialStateProperty.resolveWith(
+            (states) => TextStyle(
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.resolveWith(
+            (states) => Colors.black12.withOpacity(0.2),
+          ),
+          textStyle: MaterialStateProperty.resolveWith((states) =>
+              TextStyle(fontWeight: FontWeight.w700, color: Colors.white)),
+          elevation: MaterialStateProperty.resolveWith((states) => 0),
+          backgroundColor:
+              MaterialStateProperty.resolveWith((states) => appColors.green),
+          shape: MaterialStateProperty.resolveWith(
+            (states) => RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          padding: MaterialStateProperty.resolveWith(
+                (states) => EdgeInsets.all(16),
+          ),
+        ),
+      ),
       textTheme: TextTheme(
+        caption: ThemeData().textTheme.caption!.copyWith(
+              fontSize: 11,
+              color: appColors.textLabelSecondary,
+            ),
         bodyText1: TextStyle(color: appColors.textLabelSecondary),
-        bodyText2: TextStyle(color: appColors.textLabel),
+        bodyText2: TextStyle(color: appColors.textLabel, fontSize: 16),
         headline2: headline2.copyWith(
           color: appColors.textLabel,
         ),
@@ -45,6 +93,13 @@ class AppThemeData {
           color: appColors.textLabel,
         ),
       ),
+      sliderTheme: SliderThemeData(
+        activeTrackColor: appColors.green,
+        overlayColor: Colors.transparent,
+        thumbColor: appColors.backgroundSecondary,
+        trackHeight: 2,
+        minThumbSeparation: 20,
+      ),
     );
   }
 
@@ -56,6 +111,12 @@ class AppThemeData {
     return _themeData(AppColorsDark());
   }
 
+  /**
+   * Returns theme-based color from [AppColors]
+   * 
+   * **Attributes**
+   * - `isDark` — controls theme (light or dark). Default false.
+   */
   static AppColors selectColor({isDark = false}) {
     return isDark ? AppColorsDark() : AppColorsLight();
   }

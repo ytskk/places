@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
-import 'package:places/ui/components/icon_box.dart';
 
 import '../../components/empty_list.dart';
 
@@ -23,8 +23,22 @@ class VisitingVisitedScreen extends StatelessWidget {
                 VisitingCard(
                   sight,
                   actions: [
-                    IconBox(icon: AppIcons.share),
-                    IconBox(icon: AppIcons.close),
+                    Button.icon(
+                      icon: AppIcons.share,
+                      iconColor: Colors.white,
+                      background: Colors.transparent,
+                      onPressed: () {
+                        print("Share icon clicked");
+                      },
+                    ),
+                    Button.icon(
+                      icon: AppIcons.close,
+                      iconColor: Colors.white,
+                      background: Colors.transparent,
+                      onPressed: () {
+                        print("Close icon clicked");
+                      },
+                    ),
                   ],
                   isVisited: true,
                   scheduledAt: 'Цель достигнута 12 окт. 2020',

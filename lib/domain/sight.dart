@@ -22,4 +22,22 @@ class Sight {
     this.details = '',
     this.type = '',
   });
+
+  @override
+  String toString() {
+    return "${name}";
+  }
+}
+
+class SightCategories {
+  static const shoppingCentre = "Торговый центр";
+  static const sightseeing = "Достопримечательность";
+  static const historicalBuilding = "Памятник, мемориал";
+  static const coffeeShop = "Кофейня";
+  static const hotel = "Отель";
+  static const restaurant = "Ресторан";
+  static const poi = "Особое место";
+  static const park = "Парк";
+  static const museum = "Музей";
+  static const cafe = "Кафе";
 }

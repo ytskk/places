@@ -18,6 +18,7 @@ class SightCard extends StatelessWidget {
     return MyCard(
       sight,
       actions: actions,
+      cardInfo: CardInfo(subtitle: "закрыто до 09:00", title: sight.name),
     );
   }
 }

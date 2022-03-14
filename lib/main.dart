@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:places/controllers/filter_controller.dart';
+import 'package:places/controllers/navigation_controller.dart';
+import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/screens/res/themes.dart';
+import 'package:places/ui/screens/settings/settings_screen.dart';
+import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
-
-import 'ui/screens/sight_details_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,9 +21,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppThemeData.dark(),
-      home: MyHomePage(),
+    return MultiProvider(
+      providers: [
+        ListenableProvider(create: (_) => Settings()),
+        ListenableProvider(create: (_) => Navigation()),
+        ChangeNotifierProvider(create: (_) => Filter()),
+      ],
+      child: Consumer(
+        builder: (BuildContext context, value, Widget? child) {
+          return MaterialApp(
+            theme: context.watch<Settings>().isDarkTheme
+                ? AppThemeData.dark()
+                : AppThemeData.light(),
+            // home: FilterScreen(),
+            home: MyHomePage(),
+          );
+        },
+      ),
     );
   }
 }
@@ -34,10 +52,20 @@ class _MyHomePageState extends State<MyHomePage> {
     SightListScreen(),
     SightDetails(mocks[3]),
     VisitingScreen(),
+    SettingsScreen(),
   ];
-  int activePageIndex = 0;
 
-  List bottomNavigationBarItemsData = [
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: pages[context.watch<Navigation>().selectedPageIndex % pages.length],
+      bottomNavigationBar: NavigationBar(),
+    );
+  }
+}
+
+class NavigationBar extends StatelessWidget {
+  static const List _bottomNavigationBarItemsData = const [
     {
       'icon': {
         'name': {
@@ -76,38 +104,35 @@ class _MyHomePageState extends State<MyHomePage> {
     },
   ];
 
+  const NavigationBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      body: pages[activePageIndex % pages.length],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: theme.backgroundColor,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        currentIndex: activePageIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: (value) {
-          setState(() {
-            activePageIndex = value;
-          });
-        },
-        items: [
-          for (var barItem in bottomNavigationBarItemsData)
-            BottomNavigationBarItem(
-              activeIcon: IconBox(
-                icon: barItem['icon']['name']['selected'],
-                color: theme.textTheme.bodyText2!.color,
-              ),
-              icon: IconBox(
-                icon: barItem['icon']['name']['unselected'],
-                color: theme.textTheme.bodyText1!.color,
-              ),
-              label: barItem['label'],
+    return BottomNavigationBar(
+      backgroundColor: theme.backgroundColor,
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+      currentIndex: context.watch<Navigation>().selectedPageIndex,
+      type: BottomNavigationBarType.fixed,
+      onTap: (int value) {
+        context.read<Navigation>().setSelectedPageIndex(value);
+      },
+      items: [
+        for (var barItem in _bottomNavigationBarItemsData)
+          BottomNavigationBarItem(
+            activeIcon: IconBox(
+              icon: barItem['icon']['name']['selected'],
+              color: theme.textTheme.bodyText2!.color,
             ),
-        ],
-      ),
+            icon: IconBox(
+              icon: barItem['icon']['name']['unselected'],
+              color: theme.textTheme.bodyText1!.color,
+            ),
+            label: barItem['label'],
+          ),
+      ],
     );
   }
 }

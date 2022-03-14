@@ -1,7 +1,7 @@
 name: places
 description: A new Flutter project.
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -13,9 +13,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.4
-
   flutter_svg: ^1.0.3
-
+  provider: ^6.0.2
 
 dev_dependencies:
   dart_code_metrics: ^4.10.1

@@ -16,8 +16,7 @@ import 'package:flutter_svg/svg.dart';
 class IconBox extends StatelessWidget {
   final String icon;
   final Color? color;
-  final double width;
-  final double height;
+  final double size;
 
   /// Creates a fixed size box with provided svg icon.
   /// The [width] and [height] is optional parameters can be null.
@@ -27,15 +26,14 @@ class IconBox extends StatelessWidget {
     Key? key,
     required this.icon,
     this.color,
-    this.width = 24,
-    this.height = 24,
+    this.size = 24,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
-      height: height,
+      width: size,
+      height: size,
       child: SvgPicture.asset(
         icon,
         fit: BoxFit.contain,

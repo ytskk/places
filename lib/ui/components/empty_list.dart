@@ -34,8 +34,7 @@ class EmptyList extends StatelessWidget {
                   IconBox(
                     icon: iconName!,
                     color: bodyText1!.color,
-                    width: 64,
-                    height: 64,
+                    size: 64,
                   ),
                 Padding(
                   padding: const EdgeInsets.only(top: 24),

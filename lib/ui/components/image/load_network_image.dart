@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:places/domain/app_colors.dart';
 import 'package:places/ui/screens/res/themes.dart';
 
 Image loadNetworkImage(imageUrl) {
