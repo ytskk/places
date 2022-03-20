@@ -35,6 +35,10 @@ class _AddSightScreenState extends State<AddSightScreen> {
         leading: Button(
           background: Colors.transparent,
           text: AppStrings.addSightScreenAppLeading,
+          onPressed: () {
+            context.read<AddSight>().clearFields();
+            Navigator.pop(context);
+          },
         ),
         title: Text(AppStrings.addSightScreenAppTitle),
       ),
@@ -209,7 +213,9 @@ class _SightCreateButton extends StatelessWidget {
         // onPressed: isDisabled ? null : () {},
         onPressed: context.watch<AddSight>().validateFields()
             ? () {
-                mocks.add(context.read<AddSight>().createSight());
+          mocks.add(context.read<AddSight>().createSight());
+                context.read<AddSight>().clearFields();
+                Navigator.pop(context);
               }
             : null,
         buttonPadding: ButtonPadding.UltraWide,

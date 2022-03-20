@@ -90,6 +90,15 @@ class AddSight extends ChangeNotifier {
       type: _sightCategory.value!,
     );
   }
+
+  void clearFields() {
+    _sightCategory = ValidationModel(null, null);
+    _sightName = ValidationModel(null, null);
+    _sightCoordinatesLat = ValidationModel(null, null);
+    _sightCoordinatesLon = ValidationModel(null, null);
+    _sightDescription = ValidationModel(null, null);
+    print("cleared");
+  }
 }
 
 /**
@@ -108,7 +117,7 @@ class ValidationModel {
 
 class FieldsErrors {
   static const invalidCategory = "";
-  static const invalidName = "Name is too short";
+  static const invalidName = "";
   static const invalidCoordinates = "";
   static const invalidDescription = "";
 }

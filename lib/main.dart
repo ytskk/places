@@ -53,7 +53,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget> pages = [
     SightListScreen(),
-    SightDetails(mocks[3]),
+    SightDetails(mocks[mocks.length - 1]),
     VisitingScreen(),
     SettingsScreen(),
   ];
