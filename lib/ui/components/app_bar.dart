@@ -36,6 +36,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final Color backgroundColor = background ?? theme.scaffoldBackgroundColor;
 
     return AppBar(
+      leadingWidth: 80,
       titleTextStyle: titleTextStyle,
       title: title,
       actions: actions,

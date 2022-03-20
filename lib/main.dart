@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/controllers/filter_controller.dart';
 import 'package:places/controllers/navigation_controller.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/screens/add_sight/add_sight_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
         ListenableProvider(create: (_) => Settings()),
         ListenableProvider(create: (_) => Navigation()),
         ChangeNotifierProvider(create: (_) => Filter()),
+        ChangeNotifierProvider(create: (_) => AddSight()),
       ],
       child: Consumer(
         builder: (BuildContext context, value, Widget? child) {
@@ -34,7 +37,8 @@ class MyApp extends StatelessWidget {
                 ? AppThemeData.dark()
                 : AppThemeData.light(),
             // home: FilterScreen(),
-            home: MyHomePage(),
+            home: AddSightScreen(),
+            // home: MyHomePage(),
           );
         },
       ),

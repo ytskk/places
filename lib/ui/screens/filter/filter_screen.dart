@@ -48,7 +48,9 @@ class FilterScreen extends StatelessWidget {
                 getRangeValuesString(context.watch<Filter>().rangeValues),
                 style: TextStyle(fontSize: 16),
               ),
-              child: _RangeSelection(),
+              child: _RangeSelection(
+                rangeValues: RangeValues(100, 20000),
+              ),
             ),
             // _RangeSelection(),
           ],
@@ -118,7 +120,7 @@ class _FilterButtonsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // get all categories
-    final List<FilterOption> categories = context.watch<Filter>().filterOptions;
+    final List<FilterOption> categories = context.read<Filter>().filterOptions;
 
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -143,12 +145,16 @@ class _FilterButtonsTable extends StatelessWidget {
 }
 
 class _RangeSelection extends StatelessWidget {
-  const _RangeSelection({Key? key}) : super(key: key);
+  final RangeValues _values;
+
+  const _RangeSelection({Key? key, required RangeValues rangeValues})
+      : _values = rangeValues,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return RangeSelector(
-      rangeValues: RangeValues(100, 10000),
+      rangeValues: _values,
       values: context.watch<Filter>().rangeValues,
       onChanged: (newValues) {
         context.read<Filter>().setRangeValues(newValues);

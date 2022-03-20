@@ -10,6 +10,8 @@ enum IconAlignment {
 class ButtonPadding {
   static const Narrow = const EdgeInsets.symmetric(vertical: 4, horizontal: 8);
   static const Wide = const EdgeInsets.symmetric(vertical: 12, horizontal: 16);
+  static const UltraWide =
+      const EdgeInsets.symmetric(vertical: 16, horizontal: 24);
 }
 
 /// A custom button that allows you to create both a regular text button and an icon.
@@ -37,8 +39,7 @@ class Button extends StatelessWidget {
     Function()? this.onPressed,
     Color? this.background,
     EdgeInsets? buttonPadding,
-  })
-      : icon = null,
+  })  : icon = null,
         iconColor = null,
         iconAlignment = null,
         gap = 0,
@@ -76,12 +77,10 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     late final Color onPrimary;
-    late final Color primary;
+    late final Color? primary;
 
     if (isTransparent) {
       primary = Colors.transparent;
-    } else {
-      onPrimary = Colors.white;
     }
 
     // It is decided which background (primary) and content color (onPrimary) to use,
@@ -90,14 +89,17 @@ class Button extends StatelessWidget {
       if (isTransparent) {
         onPrimary = theme.textTheme.bodyText2!.color!.withOpacity(0.4);
       } else {
-        primary = background?.withOpacity(0.4) ??
-            theme.buttonTheme.colorScheme!.surface.withOpacity(0.4);
+        primary = background?.withOpacity(0.4);
+        onPrimary = theme.textTheme.bodyText2!.color!.withOpacity(0.4);
+        // primary = background?.withOpacity(0.4) ??
+        //     theme.buttonTheme.colorScheme!.surface.withOpacity(0.4);
       }
     } else {
       if (isTransparent) {
         onPrimary = theme.textTheme.bodyText2!.color!;
       } else {
         primary = background ?? theme.buttonTheme.colorScheme!.surface;
+        onPrimary = Colors.white;
       }
     }
 

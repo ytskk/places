@@ -39,4 +39,18 @@ class AppStrings {
   static const settingsScreenAppTitle = "Настройки";
   static const settingsScreenDarkThemeTitle = "Тёмная тема";
   static const settingsScreenTutorialTitle = "Смотреть туториал";
+
+  // add sight screen
+  static const addSightScreenAppTitle = "Новое место";
+  static const addSightScreenAppLeading = "Отмена";
+  static const addSightScreenCategoryTitle = "Категория";
+  static const addSightScreenCategoryLabel = "Не выбрано";
+  static const addSightScreenSightNameTitle = "название";
+  static const addSightScreenSightCoordinatesLat = "широта";
+  static const addSightScreenSightCoordinatesLon = "долгота";
+  static const addSightScreenSightShowOnMap = "Указать на карте";
+  static const addSightScreenSightDescription = "описание";
+  static const addSightScreenSightDescriptionHint = "Введите текст";
+  static const addSightScreenSightCreate = "создать";
+  static const addSightScreenSightSave = "сохранить";
 }

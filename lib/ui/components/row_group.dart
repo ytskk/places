@@ -19,28 +19,31 @@ class RowGroup extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (title.data!.length > 0)
-              Text(
-                title.data!,
-                style: textTheme.bodyText1!
-                    .copyWith(
-                      fontSize: 12,
-                    )
-                    .merge(title.style),
-              ),
-            if (titleAfter.data!.length > 0)
-              Text(
-                titleAfter.data!,
-                style: textTheme.bodyText1!
-                    .copyWith(
-                      fontSize: 12,
-                    )
-                    .merge(titleAfter.style),
-              ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top: 24, bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (title.data!.length > 0)
+                Text(
+                  title.data!,
+                  style: textTheme.bodyText1!
+                      .copyWith(
+                        fontSize: 12,
+                      )
+                      .merge(title.style),
+                ),
+              if (titleAfter.data!.length > 0)
+                Text(
+                  titleAfter.data!,
+                  style: textTheme.bodyText1!
+                      .copyWith(
+                        fontSize: 12,
+                      )
+                      .merge(titleAfter.style),
+                ),
+            ],
+          ),
         ),
         child,
       ],
