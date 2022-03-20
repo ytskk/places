@@ -121,9 +121,15 @@ class AppThemeData {
           borderRadius: BorderRadius.circular(8),
         ),
         errorBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: appColors.red.withOpacity(0.4), width: 2),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: appColors.red.withOpacity(0.4)),
           borderRadius: BorderRadius.circular(8),
         ),
+        errorStyle: TextStyle(height: 0),
         focusedBorder: OutlineInputBorder(
           borderSide:
               BorderSide(color: appColors.green.withOpacity(0.4), width: 2),

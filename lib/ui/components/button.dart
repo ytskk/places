@@ -106,7 +106,7 @@ class Button extends StatelessWidget {
     final buttonText = text != null ? Text(text!) : null;
     final buttonIcon = icon != null
         ? IconBox(
-      icon: icon!,
+            icon: icon!,
             color: iconColor ?? onPrimary,
           )
         : null;

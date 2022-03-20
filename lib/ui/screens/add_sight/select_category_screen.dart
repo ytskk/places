@@ -22,7 +22,7 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
     super.initState();
 
     selectedCategory =
-        TextEditingController(text: context.read<AddSight>().category);
+        TextEditingController(text: context.read<AddSight>().category.value);
     // to update the root value
     selectedCategory.addListener(() => setState(() {}));
   }
@@ -108,7 +108,9 @@ class _SightCategorySelectButton extends StatelessWidget {
         onPressed: isDisabled
             ? null
             : () {
-                context.read<AddSight>().setCategory(selectedCategory.text);
+                context
+                    .read<AddSight>()
+                    .validateCategory(selectedCategory.text);
                 Navigator.of(context).pop();
               },
         buttonPadding: ButtonPadding.UltraWide,

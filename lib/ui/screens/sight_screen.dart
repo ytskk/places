@@ -37,6 +37,10 @@ class _SightListScreenState extends State<SightListScreen> {
         ),
       ),
       resizeToAvoidBottomInset: false,
+      floatingActionButton: _FloatingActionButton(
+        onPressed: () {},
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView.builder(
         padding: EdgeInsets.all(16),
         itemCount: mocks.length,
@@ -56,6 +60,32 @@ class _SightListScreenState extends State<SightListScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+class _FloatingActionButton extends StatelessWidget {
+  final void Function()? onPressed;
+
+  const _FloatingActionButton({Key? key, void Function()? this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        padding: MaterialStateProperty.resolveWith(
+          (states) => EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+        ),
+        shape: MaterialStateProperty.resolveWith(
+          (states) => RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ),
+      ),
+      label: Text(AppStrings.sightFloatingButtonLabel.toUpperCase()),
+      icon: Icon(Icons.add),
     );
   }
 }

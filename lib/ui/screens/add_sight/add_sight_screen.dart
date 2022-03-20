@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_text_field.dart';
@@ -18,15 +19,12 @@ class AddSightScreen extends StatefulWidget {
 
 class _AddSightScreenState extends State<AddSightScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  late final FocusNode _sightCoordinatesNode;
   late final FocusNode _sightDescriptionNode;
 
   @override
   void initState() {
     super.initState();
 
-    _sightCoordinatesNode = FocusNode();
     _sightDescriptionNode = FocusNode();
   }
 
@@ -49,11 +47,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _CategorySelection(),
-                _SightName(nextFocus: _sightCoordinatesNode),
-                _SightCoordinates(
-                  focusNode: _sightCoordinatesNode,
-                  nextNode: _sightDescriptionNode,
-                ),
+                _SightName(),
+                _SightCoordinates(nextFocus: _sightDescriptionNode),
                 _ShowOnMap(),
                 _SightDescription(focusNode: _sightDescriptionNode),
               ],
@@ -61,7 +56,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _SightCreateButton(formKey: _formKey),
+      bottomNavigationBar: _SightCreateButton(),
     );
   }
 }
@@ -72,7 +67,7 @@ class _CategorySelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryController =
-        TextEditingController(text: context.watch<AddSight>().category);
+        TextEditingController(text: context.watch<AddSight>().category.value);
 
     return RowGroup(
       title: Text(AppStrings.addSightScreenCategoryTitle.toUpperCase()),
@@ -89,10 +84,7 @@ class _CategorySelection extends StatelessWidget {
 }
 
 class _SightName extends StatelessWidget {
-  final FocusNode nextFocus;
-
-  const _SightName({Key? key, required FocusNode this.nextFocus})
-      : super(key: key);
+  const _SightName({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,33 +92,26 @@ class _SightName extends StatelessWidget {
       title: Text(AppStrings.addSightScreenSightNameTitle.toUpperCase()),
       child: CustomTextField(
         onChanged: (value) {
-          context.read<AddSight>().setName(value);
+          context.read<AddSight>().validateName(value);
         },
-        onEditingComplete: () {
-          nextFocus.requestFocus();
-        },
+        validator: (value) => context.read<AddSight>().name.error,
+        onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
       ),
     );
   }
 }
 
 class _SightCoordinates extends StatefulWidget {
-  final FocusNode focusNode;
-  final FocusNode nextNode;
+  final FocusNode nextFocus;
 
-  const _SightCoordinates({
-    Key? key,
-    required FocusNode this.focusNode,
-    required FocusNode this.nextNode,
-  }) : super(key: key);
+  const _SightCoordinates({Key? key, required FocusNode this.nextFocus})
+      : super(key: key);
 
   @override
   State<_SightCoordinates> createState() => _SightCoordinatesState();
 }
 
 class _SightCoordinatesState extends State<_SightCoordinates> {
-  final FocusNode _sightCoordinatesLonNode = FocusNode();
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -138,18 +123,12 @@ class _SightCoordinatesState extends State<_SightCoordinates> {
             ),
             child: CustomTextField(
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)')),
+                FilteringTextInputFormatter.allow(FieldsPatterns.doublePattern),
               ],
-              onChanged: (value) {
-                context
-                    .read<AddSight>()
-                    .setCoordinatesLat(double.tryParse(value) ?? 0.0);
-              },
-              focusNode: widget.focusNode,
+              onChanged: (value) =>
+                  context.read<AddSight>().validateCoordinatesLat(value),
+              onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onEditingComplete: () {
-                _sightCoordinatesLonNode.requestFocus();
-              },
             ),
           ),
         ),
@@ -161,19 +140,13 @@ class _SightCoordinatesState extends State<_SightCoordinates> {
             ),
             child: CustomTextField(
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)')),
+                FilteringTextInputFormatter.allow(FieldsPatterns.doublePattern),
               ],
-              onChanged: (value) {
-                context
-                    .read<AddSight>()
-                    .setCoordinatesLon(double.tryParse(value) ?? 0.0);
-                print("coord: ${double.tryParse(value)}");
-              },
-              focusNode: _sightCoordinatesLonNode,
+              onChanged: (value) =>
+                  context.read<AddSight>().validateCoordinatesLon(value),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onEditingComplete: () {
-                widget.nextNode.requestFocus();
-              },
+              onFieldSubmitted: (_) =>
+                  FocusScope.of(context).requestFocus(widget.nextFocus),
             ),
           ),
         ),
@@ -213,9 +186,8 @@ class _SightDescription extends StatelessWidget {
     return RowGroup(
       title: Text(AppStrings.addSightScreenSightDescription.toUpperCase()),
       child: CustomTextField(
-        onChanged: (value) {
-          context.read<AddSight>().setDescription(value);
-        },
+        onChanged: (value) =>
+            context.read<AddSight>().validateDescription(value),
         focusNode: focusNode,
         hint: AppStrings.addSightScreenSightDescriptionHint,
         maxLines: 3,
@@ -226,26 +198,20 @@ class _SightDescription extends StatelessWidget {
 }
 
 class _SightCreateButton extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
-
-  const _SightCreateButton({
-    Key? key,
-    required GlobalKey<FormState> this.formKey,
-  }) : super(key: key);
+  const _SightCreateButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool isDisabled = !context
-        .watch<AddSight>()
-        .validateFields()
-        .every((el) => el.toString().length > 0);
-    // print(isDisabled);
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 44, left: 16, right: 16, top: 8),
       child: Button(
         text: AppStrings.addSightScreenSightCreate.toUpperCase(),
-        onPressed: isDisabled ? null : () {},
+        // onPressed: isDisabled ? null : () {},
+        onPressed: context.watch<AddSight>().validateFields()
+            ? () {
+                mocks.add(context.read<AddSight>().createSight());
+              }
+            : null,
         buttonPadding: ButtonPadding.UltraWide,
       ),
     );

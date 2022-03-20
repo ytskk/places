@@ -13,6 +13,7 @@ class AppStrings {
   // Sight Screen
   static const sightTitleList = "Список\n";
   static const sightTitleInterestingPlaces = "Интересных мест";
+  static const sightFloatingButtonLabel = "новое место";
 
   // SightDetails screen
   static const sightDetailsGetDirections = 'Построить маршрут';

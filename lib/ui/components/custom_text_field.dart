@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:places/ui/screens/res/themes.dart';
+import 'package:provider/provider.dart';
 
 class CustomTextField extends StatefulWidget {
   final FocusNode? focusNode;
@@ -9,10 +12,11 @@ class CustomTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputAction textInputAction;
-  final void Function()? onEditingComplete;
   final void Function(String)? onChanged;
   final int? maxLines;
   final String? hint;
+  final void Function(String)? onFieldSubmitted;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     Key? key,
@@ -21,8 +25,9 @@ class CustomTextField extends StatefulWidget {
     TextInputType this.keyboardType = TextInputType.text,
     TextInputAction this.textInputAction = TextInputAction.next,
     List<TextInputFormatter>? this.inputFormatters,
-    void Function()? this.onEditingComplete,
     void Function(String)? this.onChanged,
+    void Function(String)? this.onFieldSubmitted,
+    String? Function(String?)? this.validator,
     int? this.maxLines = 1,
     String? this.hint,
   }) : super(key: key);
@@ -65,8 +70,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       inputFormatters: widget.inputFormatters,
       maxLines: widget.maxLines,
       keyboardType: widget.keyboardType,
-      onEditingComplete: widget.onEditingComplete,
+      onFieldSubmitted: widget.onFieldSubmitted,
       textInputAction: widget.textInputAction,
+      validator: widget.validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       onChanged: widget.onChanged,
       focusNode: _focusNode,
       controller: _controller,
@@ -132,31 +139,52 @@ class UnderlinedTextField extends StatefulWidget {
 class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
 
-    return TextField(
+    return TextFormField(
       readOnly: true,
       onTap: widget.onTap,
-      style: textTheme.bodyText2,
+      style: theme.textTheme.bodyText2,
       controller: widget.controller,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "";
+        }
+
+        return null;
+      },
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: textTheme.bodyText1!.color!,
+            color: theme.textTheme.bodyText1!.color!,
           ),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: textTheme.bodyText1!.color!,
+            color: theme.textTheme.bodyText1!.color!,
+          ),
+        ),
+        focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: AppThemeData.selectColor(
+              isDark: context.read<Settings>().isDarkTheme,
+            ).red,
+          ),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: AppThemeData.selectColor(
+              isDark: context.read<Settings>().isDarkTheme,
+            ).red,
           ),
         ),
         suffixIcon: Icon(
           CupertinoIcons.chevron_forward,
-          color: textTheme.bodyText2!.color,
+          color: theme.textTheme.bodyText2!.color,
         ),
         hintText: AppStrings.addSightScreenCategoryLabel,
-        hintStyle: textTheme.bodyText1,
+        hintStyle: theme.textTheme.bodyText1,
       ),
     );
   }
