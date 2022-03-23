@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
+import 'package:places/models/dialog.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_text_field.dart';
+import 'package:places/ui/components/dialog/dialog.dart';
 import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/screens/add_sight/select_category_screen.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +38,10 @@ class _AddSightScreenState extends State<AddSightScreen> {
           background: Colors.transparent,
           text: AppStrings.addSightScreenAppLeading,
           onPressed: () {
-            context.read<AddSight>().clearFields();
-            Navigator.pop(context);
+            showAlertDialog(
+              context,
+              _AddSightCloseButtonDialog(),
+            );
           },
         ),
         title: Text(AppStrings.addSightScreenAppTitle),
@@ -210,16 +214,89 @@ class _SightCreateButton extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 44, left: 16, right: 16, top: 8),
       child: Button(
         text: AppStrings.addSightScreenSightCreate.toUpperCase(),
-        // onPressed: isDisabled ? null : () {},
         onPressed: context.watch<AddSight>().validateFields()
             ? () {
-          mocks.add(context.read<AddSight>().createSight());
-                context.read<AddSight>().clearFields();
-                Navigator.pop(context);
+                showAlertDialog(
+                  context,
+                  _AddSightCreateButtonDialog(),
+                );
               }
             : null,
         buttonPadding: ButtonPadding.UltraWide,
       ),
+    );
+  }
+}
+
+Future<void> showAlertDialog(BuildContext context, Widget dialog) async {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return dialog;
+    },
+  );
+}
+
+class _AddSightCloseButtonDialog extends StatelessWidget {
+  const _AddSightCloseButtonDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DialogWidget(
+      dialogState: DialogState.Alert,
+      content: Text(
+        AppStrings.addSightScreenSightDialogCloseContent,
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            context.read<AddSight>().clearFields();
+            Navigator.of(context)
+              ..pop()
+              ..pop();
+          },
+          child: Text(
+            AppStrings.addSightScreenSightDialogCloseActionClose,
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            AppStrings.addSightScreenSightDialogCloseActionStay,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AddSightCreateButtonDialog extends StatelessWidget {
+  const _AddSightCreateButtonDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DialogWidget(
+      content: Text(
+        AppStrings.addSightScreenSightDialogCreateContent,
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            mocks.add(context.read<AddSight>().createSight());
+            context.read<AddSight>().clearFields();
+            Navigator.of(context)
+              ..pop()
+              ..pop();
+          },
+          child: Text(
+            AppStrings.addSightScreenSightDialogCreateActionTitle,
+          ),
+        ),
+      ],
     );
   }
 }

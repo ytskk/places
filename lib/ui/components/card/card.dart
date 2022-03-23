@@ -50,7 +50,7 @@ class MyCard extends StatelessWidget {
                 Stack(
                   children: [
                     // photo
-                    NetworkImageBox(sight.url, height: 96, context: context),
+                    NetworkImageBox(sight.url, height: 96),
                   ],
                 ),
                 // card info

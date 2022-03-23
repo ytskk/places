@@ -17,6 +17,8 @@ class AppIcons {
   static const tour = 'assets/icons/tour.svg';
   static const shoppingBag = 'assets/icons/shopping_bag.svg';
   static const error = 'assets/icons/error.svg';
+  static const search = 'assets/icons/search.svg';
+  static const filter = 'assets/icons/filter.svg';
 
   //  filter categories icons
   static const hotel = "assets/icons/hotel.svg";

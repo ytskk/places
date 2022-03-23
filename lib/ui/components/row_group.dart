@@ -4,12 +4,18 @@ class RowGroup extends StatelessWidget {
   final Widget child;
   final Text title;
   final Text titleAfter;
+  final double paddingLeft;
+  final double paddingTop;
+  final double paddingBottom;
 
   const RowGroup({
     Key? key,
     required Widget this.child,
     Text this.title = const Text(""),
     Text this.titleAfter = const Text(""),
+    double this.paddingLeft = 0,
+    double this.paddingTop = 24,
+    double this.paddingBottom = 8,
   }) : super(key: key);
 
   @override
@@ -18,9 +24,14 @@ class RowGroup extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 24, bottom: 8),
+          padding: EdgeInsets.only(
+            top: paddingTop,
+            bottom: paddingBottom,
+            left: paddingLeft,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

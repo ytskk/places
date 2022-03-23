@@ -21,70 +21,74 @@ class SightDetails extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
         background: Colors.transparent,
-        leading: _RoundedBackButton(),
+        leading: Navigator.canPop(context) ? _RoundedBackButton() : null,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            NetworkImageBox(sight.url, height: 420, context: context),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // sight name
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                      sight.name,
-                      style: textTheme.headline3,
+            NetworkImageBox(sight.url, height: 420),
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // sight name
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        sight.name,
+                        style: textTheme.headline3,
+                      ),
                     ),
-                  ),
-                  _buildSightSubtitle(context, sight.type),
-                  if (sight.details.isNotEmpty)
+                    _buildSightSubtitle(context, sight.type),
+                    if (sight.details.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: Text(
+                          sight.details,
+                          style: textTheme.bodyText2,
+                        ),
+                      ),
+                    // button
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
-                      child: Text(
-                        sight.details,
-                        style: textTheme.bodyText2,
+                      child: Button.icon(
+                        buttonPadding: ButtonPadding.Wide,
+                        text: AppStrings.sightDetailsGetDirections,
+                        onPressed: () {
+                          print("Direction button clicked");
+                        },
+                        icon: AppIcons.go,
                       ),
                     ),
-                  // button
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: Button.icon(
-                      buttonPadding: ButtonPadding.Wide,
-                      text: AppStrings.sightDetailsGetDirections,
-                      onPressed: () {
-                        print("Direction button clicked");
-                      },
-                      icon: AppIcons.go,
+                    const HorizontalDivider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Button.icon(
+                            icon: AppIcons.calendar,
+                            text: AppStrings.sightDetailsSchedule,
+                            background: Colors.transparent,
+                          ),
+                        ),
+                        Expanded(
+                          child: Button.icon(
+                            icon: AppIcons.heart,
+                            text: AppStrings.sightDetailsAddToWishlist,
+                            background: Colors.transparent,
+                            onPressed: () {
+                              print("To Wishlist button clicked");
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const HorizontalDivider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Button.icon(
-                          icon: AppIcons.calendar,
-                          text: AppStrings.sightDetailsSchedule,
-                          background: Colors.transparent,
-                        ),
-                      ),
-                      Expanded(
-                        child: Button.icon(
-                          icon: AppIcons.heart,
-                          text: AppStrings.sightDetailsAddToWishlist,
-                          background: Colors.transparent,
-                          onPressed: () {
-                            print("To Wishlist button clicked");
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -139,6 +143,7 @@ class _RoundedBackButton extends StatelessWidget {
         ),
         onPressed: () {
           print("Back button clicked");
+          Navigator.pop(context);
         },
         child: Icon(
           CupertinoIcons.back,

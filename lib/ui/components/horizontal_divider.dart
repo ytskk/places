@@ -6,7 +6,19 @@ class HorizontalDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(
-      height: 1,
+      height: 16,
+    );
+  }
+}
+
+class HorizontalDividerInset extends StatelessWidget {
+  const HorizontalDividerInset({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Divider(
+      height: 16,
+      indent: 88,
     );
   }
 }

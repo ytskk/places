@@ -53,4 +53,21 @@ class AppStrings {
   static const addSightScreenSightDescriptionHint = "Введите текст";
   static const addSightScreenSightCreate = "создать";
   static const addSightScreenSightSave = "сохранить";
+  static const addSightScreenSightDialogCreateContent =
+      "Место успешно добавлено!";
+  static const addSightScreenSightDialogCloseContent =
+      "Уверены что хотите закрыть? Вы потеряете введённые данные.";
+  static const addSightScreenSightDialogCloseActionClose = "Да";
+  static const addSightScreenSightDialogCloseActionStay = "Нет";
+
+  static const addSightScreenSightDialogCreateActionTitle = "Закрыть";
+
+  // search field
+  static const searchFieldHint = "Поиск";
+  static const searchScreenNotFoundTitle = "Ничего не найдено.";
+  static const searchScreenNotFoundSubtitle =
+      "Попробуйте изменить параметры поиска";
+  static const searchScreenRecentActivity = "вы искали";
+  static const searchScreenRecentActivityRecommendations = "Рекомендации";
+  static const searchScreenRecentActivityClear = "Очистить историю";
 }

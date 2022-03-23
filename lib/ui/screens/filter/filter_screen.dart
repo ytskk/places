@@ -37,9 +37,9 @@ class FilterScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            _FilterCategoryHeader(),
+            FilterCategoryHeader(),
             _FilterButtonsTable(),
-            _FilterRowGroup(
+            FilterRowGroup(
               title: Text(
                 AppStrings.filterScreenRangeSelectionGroupTitle,
                 style: bodyText2,
@@ -61,8 +61,8 @@ class FilterScreen extends StatelessWidget {
   }
 }
 
-class _FilterCategoryHeader extends StatelessWidget {
-  const _FilterCategoryHeader({Key? key}) : super(key: key);
+class FilterCategoryHeader extends StatelessWidget {
+  const FilterCategoryHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -185,12 +185,12 @@ class _FilterShowResultButton extends StatelessWidget {
   }
 }
 
-class _FilterRowGroup extends StatelessWidget {
+class FilterRowGroup extends StatelessWidget {
   final Widget child;
   final Text title;
   final Text titleAfter;
 
-  const _FilterRowGroup({
+  const FilterRowGroup({
     Key? key,
     required Widget this.child,
     required Text this.title,

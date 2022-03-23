@@ -31,13 +31,15 @@ class IconBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = color ?? Theme.of(context).iconTheme.color;
+
     return SizedBox(
       width: size,
       height: size,
       child: SvgPicture.asset(
         icon,
         fit: BoxFit.contain,
-        color: color,
+        color: iconColor,
       ),
     );
   }

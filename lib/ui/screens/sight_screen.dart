@@ -5,7 +5,11 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
+import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/components/searchbar.dart';
 import 'package:places/ui/screens/add_sight/add_sight_screen.dart';
+import 'package:places/ui/screens/filter/filter_screen.dart';
+import 'package:places/ui/screens/sight_search/sight_search_screen.dart';
 
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -20,6 +24,29 @@ class _SightListScreenState extends State<SightListScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: Text(AppStrings.sightTitle),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(52),
+          child: SearchBar(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (builder) => SightSearchScreen(),
+                ),
+              );
+            },
+            suffix: IconButton(
+              padding: EdgeInsets.zero,
+              icon: IconBox(
+                icon: AppIcons.filter,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (builder) => FilterScreen()),
+                );
+              },
+            ),
+          ),
+        ),
       ),
       resizeToAvoidBottomInset: false,
       floatingActionButton: _FloatingActionButton(
@@ -33,29 +60,31 @@ class _SightListScreenState extends State<SightListScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: ListView.builder(
-        padding: EdgeInsets.only(
-          top: 16,
-          left: 16,
-          bottom: 72,
-          right: 16,
+      body: SafeArea(
+        child: ListView.builder(
+          padding: EdgeInsets.only(
+            top: 16,
+            left: 16,
+            bottom: 72,
+            right: 16,
+          ),
+          itemCount: mocks.length,
+          itemBuilder: (context, index) {
+            return SightCard(
+              mocks[index],
+              actions: [
+                Button.icon(
+                  icon: AppIcons.heart,
+                  iconColor: Colors.white,
+                  background: Colors.transparent,
+                  onPressed: () {
+                    print("Close icon clicked");
+                  },
+                ),
+              ],
+            );
+          },
         ),
-        itemCount: mocks.length,
-        itemBuilder: (context, index) {
-          return SightCard(
-            mocks[index],
-            actions: [
-              Button.icon(
-                icon: AppIcons.heart,
-                iconColor: Colors.white,
-                background: Colors.transparent,
-                onPressed: () {
-                  print("Close icon clicked");
-                },
-              ),
-            ],
-          );
-        },
       ),
     );
   }

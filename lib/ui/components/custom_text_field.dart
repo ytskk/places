@@ -83,7 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         hintText: widget.hint,
         hintStyle: theme.textTheme.bodyText1,
         suffixIcon: _focusNode.hasFocus
-            ? _ClearButton(
+            ? ClearButton(
                 controller: _controller,
                 onChanged: _onChanged,
               )
@@ -93,15 +93,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 }
 
-class _ClearButton extends StatelessWidget {
+class ClearButton extends StatelessWidget {
   final TextEditingController controller;
 
-  final void Function(String value) onChanged;
+  final void Function(String value)? onChanged;
 
-  const _ClearButton({
+  const ClearButton({
     Key? key,
     required TextEditingController this.controller,
-    required void Function(String value) this.onChanged,
+    void Function(String value)? this.onChanged,
   }) : super(key: key);
 
   @override
@@ -112,7 +112,10 @@ class _ClearButton extends StatelessWidget {
       onTap: () {
         controller.clear();
         print("cleared ${controller.text}");
-        onChanged(controller.text);
+
+        if (onChanged != null) {
+          onChanged!(controller.text);
+        }
       },
       child: Icon(
         CupertinoIcons.clear_circled_solid,
