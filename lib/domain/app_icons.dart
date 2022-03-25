@@ -1,5 +1,5 @@
 class AppIcons {
-  static const check = "assets/icons/check.svg";
+  static const check = 'assets/icons/check.svg';
   static const calendar = 'assets/icons/calendar.svg';
   static const heart = 'assets/icons/heart.svg';
   static const heart_fill = 'assets/icons/heart-fill.svg';
@@ -17,12 +17,14 @@ class AppIcons {
   static const tour = 'assets/icons/tour.svg';
   static const shoppingBag = 'assets/icons/shopping_bag.svg';
   static const error = 'assets/icons/error.svg';
+  static const search = 'assets/icons/search.svg';
+  static const filter = 'assets/icons/filter.svg';
 
   //  filter categories icons
-  static const hotel = "assets/icons/hotel.svg";
-  static const restaurant = "assets/icons/restaurant.svg";
-  static const poi = "assets/icons/poi.svg";
-  static const park = "assets/icons/park.svg";
-  static const museum = "assets/icons/museum.svg";
-  static const cafe = "assets/icons/cafe.svg";
+  static const hotel = 'assets/icons/hotel.svg';
+  static const restaurant = 'assets/icons/restaurant.svg';
+  static const poi = 'assets/icons/poi.svg';
+  static const park = 'assets/icons/park.svg';
+  static const museum = 'assets/icons/museum.svg';
+  static const cafe = 'assets/icons/cafe.svg';
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/filter_controller.dart';
-import 'package:provider/provider.dart';
 
 class RangeSelector extends StatefulWidget {
   final RangeValues rangeValues;
@@ -25,9 +23,7 @@ class _RangeSelectorState extends State<RangeSelector> {
       min: widget.rangeValues.start,
       max: widget.rangeValues.end,
       values: widget.values,
-      onChanged: (newValue) {
-        context.read<Filter>().setRangeValues(newValue);
-      },
+      onChanged: widget.onChanged,
     );
   }
 }

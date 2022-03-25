@@ -18,8 +18,8 @@ class EmptyList extends StatelessWidget {
   Widget build(BuildContext context) {
     final bodyText1 = Theme.of(context).textTheme.bodyText1;
 
-    const double maxBoxWidth = 300;
-    final double maxContentWidth = MediaQuery.of(context).size.width / 1.75;
+    const double maxBoxWidth = 350;
+    final double maxContentWidth = MediaQuery.of(context).size.width / 1.5;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

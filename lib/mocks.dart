@@ -56,3 +56,12 @@ final List<Sight> mocks = [
     type: 'Музей',
   ),
 ];
+
+final List filterCategories = [
+  SightCategories.hotel,
+  SightCategories.restaurant,
+  SightCategories.poi,
+  SightCategories.park,
+  SightCategories.museum,
+  SightCategories.cafe,
+];

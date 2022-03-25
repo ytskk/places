@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-/**
- * Class for describing filter option.
- */
+/// Class for describing filter option.
 class FilterOption {
   final String _name;
   bool _isSelected;

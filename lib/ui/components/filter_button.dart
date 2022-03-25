@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/filter_controller.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/models/filter_option.dart';
 import 'package:places/ui/components/icon_box.dart';
-import 'package:provider/provider.dart';
 
 class FilterButton extends StatefulWidget {
   final FilterOption category;
-  final Function() onTap;
+  final void Function() onTap;
 
   const FilterButton({
     Key? key,
@@ -28,7 +26,7 @@ class _FilterButtonState extends State<FilterButton> {
 
     return InkWell(
       onTap: () {
-        context.read<Filter>().toggleCategory(widget.category);
+        widget.onTap();
         setState(() {});
       },
       child: Column(
@@ -87,14 +85,6 @@ class _FilterButtonState extends State<FilterButton> {
 
   String _getCategoryIcon(String category) {
     switch (category) {
-      case SightCategories.coffeeShop:
-        return AppIcons.coffee;
-      case SightCategories.historicalBuilding:
-        return AppIcons.tour;
-      case SightCategories.shoppingCentre:
-        return AppIcons.shoppingBag;
-      case SightCategories.sightseeing:
-        return AppIcons.map_fill;
       case SightCategories.hotel:
         return AppIcons.hotel;
       case SightCategories.restaurant:

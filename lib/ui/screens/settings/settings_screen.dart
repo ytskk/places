@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -38,36 +39,35 @@ class SettingsTableState extends State<SettingsTable> {
         Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.2);
 
     return ListView(
-      children: ListTile.divideTiles(
-        context: context,
-        tiles: [
-          ListTile(
-            title: Text(AppStrings.settingsScreenDarkThemeTitle),
-            trailing: Switch.adaptive(
-              value: isDarkTheme,
-              onChanged: (bool newValue) {
-                setState(() {
-                  context.read<Settings>().setIsDarkTheme(!isDarkTheme);
-                });
-                log("Theme changed to ${isDarkTheme ? "dark" : "light"}");
-              },
-            ),
+      children: [
+        ListTile(
+          title: Text(AppStrings.settingsScreenDarkThemeTitle),
+          trailing: Switch.adaptive(
+            value: isDarkTheme,
+            onChanged: (bool newValue) {
+              setState(() {
+                context.read<Settings>().setIsDarkTheme(!isDarkTheme);
+              });
+              log("Theme changed to ${isDarkTheme ? "dark" : "light"}");
+            },
           ),
-          ListTile(
-            title: Text(AppStrings.settingsScreenTutorialTitle),
-            trailing: IconButton(
-              splashColor: splashColor,
-              padding: EdgeInsets.zero,
-              splashRadius: 24,
-              color: iconColor,
-              onPressed: () {
-                log("Info button pressed");
-              },
-              icon: Icon(Icons.info_outline),
-            ),
+        ),
+        HorizontalDivider(),
+        ListTile(
+          title: Text(AppStrings.settingsScreenTutorialTitle),
+          trailing: IconButton(
+            splashColor: splashColor,
+            padding: EdgeInsets.zero,
+            splashRadius: 24,
+            color: iconColor,
+            onPressed: () {
+              log("Info button pressed");
+            },
+            icon: Icon(Icons.info_outline),
           ),
-        ],
-      ).toList(),
+        ),
+        HorizontalDivider(),
+      ],
     );
   }
 }

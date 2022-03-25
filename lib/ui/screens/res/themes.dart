@@ -34,13 +34,21 @@ class AppThemeData {
         textColor: appColors.textLabel,
       ),
       dividerTheme: DividerThemeData(
-        color: appColors.textLabelSecondary,
+        color: appColors.textLabelSecondary.withOpacity(0.4),
+        thickness: 0.8,
+        endIndent: 16,
+        indent: 16,
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           splashFactory: NoSplash.splashFactory,
-          foregroundColor:
-              MaterialStateProperty.resolveWith((states) => appColors.green),
+          foregroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+              return appColors.backgroundSecondary;
+            }
+
+            return appColors.green;
+          }),
           textStyle: MaterialStateProperty.resolveWith(
             (states) => TextStyle(
               fontSize: 16,
@@ -56,15 +64,20 @@ class AppThemeData {
           textStyle: MaterialStateProperty.resolveWith((states) =>
               TextStyle(fontWeight: FontWeight.w700, color: Colors.white)),
           elevation: MaterialStateProperty.resolveWith((states) => 0),
-          backgroundColor:
-              MaterialStateProperty.resolveWith((states) => appColors.green),
+          backgroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+              return appColors.backgroundSecondary;
+            }
+
+            return appColors.green;
+          }),
           shape: MaterialStateProperty.resolveWith(
             (states) => RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
           padding: MaterialStateProperty.resolveWith(
-                (states) => EdgeInsets.all(16),
+            (states) => EdgeInsets.all(16),
           ),
         ),
       ),
@@ -99,6 +112,29 @@ class AppThemeData {
         thumbColor: appColors.backgroundSecondary,
         trackHeight: 2,
         minThumbSeparation: 20,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: appColors.green.withOpacity(0.4)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: appColors.red.withOpacity(0.4), width: 2),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: appColors.red.withOpacity(0.4)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        errorStyle: TextStyle(height: 0),
+        focusedBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: appColors.green.withOpacity(0.4), width: 2),
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
     );
   }

@@ -1,16 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/filter_option.dart';
 
 class Filter extends ChangeNotifier {
-  List<FilterOption> _filterOptions = mocks
-      .map((Sight sight) => sight.type)
-      .toSet()
-      .map(((type) => FilterOption(name: type)))
-      .toList();
+  // fill from mock data
+  List<FilterOption> _filterOptions =
+      filterCategories.map((category) => FilterOption(name: category)).toList();
 
   final double _rangeValueStart = 100;
   final double _rangeValueEnd = 10000;
