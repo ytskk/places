@@ -9,18 +9,18 @@ class SearchField extends StatefulWidget {
   final void Function()? onTap;
   final Widget? suffix;
   final TextEditingController? controller;
-  final void Function()? onEditingComplete;
-  final void Function(String? value)? onChange;
+  final VoidCallback? onEditingComplete;
+  final ValueChanged<String>? onChange;
 
   const SearchField({
     Key? key,
     bool this.readOnly = false,
     bool this.autofocus = false,
-    void Function()? this.onTap,
-    void Function()? this.onEditingComplete,
+    VoidCallback? this.onTap,
+    VoidCallback? this.onEditingComplete,
     Widget? this.suffix,
     TextEditingController? this.controller,
-    void Function(String? value)? this.onChange,
+    ValueChanged<String>? this.onChange,
   }) : super(key: key);
 
   @override

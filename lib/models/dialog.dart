@@ -8,22 +8,18 @@ enum DialogState {
   Alert,
 }
 
-/**
- * A model for building [DialogWidget], describing, depending on the received
- * [DialogStates], a set of [icon] and [color].
- */
+/// A model for building [DialogWidget], describing, depending on the received
+/// [DialogStates], a set of [icon] and [color].
 class DialogData {
   final Color? color;
   final IconData? icon;
 
-  /**
-   * **Arguments**
-   * - `color` — background color for [DialogWidget]
-   * - `icon` — returned IconData
-   *
-   * **Methods**
-   * - `resolveData` — static method to get [DialogData] for provided [dialogState]
-   */
+  /// **Arguments**
+  /// - `color` — background color for [DialogWidget]
+  /// - `icon` — returned IconData
+  ///
+  /// **Methods**
+  /// - `resolveData` — static method to get [DialogData] for provided [dialogState]
   const DialogData({
     required Color? this.color,
     required IconData? this.icon,

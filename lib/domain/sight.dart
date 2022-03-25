@@ -30,16 +30,17 @@ class Sight {
 }
 
 class SightCategories {
-  static const movie = "Кинотеатр";
-  static const restaurant = "Ресторан";
-  static const poi = "Особое место";
-  static const theatre = "Театр";
-  static const hotel = "Отель";
-  static const museum = "Музей";
-  static const cafe = "Кафе";
-  static const park = "Парк";
+  static const movie = 'Кинотеатр';
+  static const restaurant = 'Ресторан';
+  static const poi = 'Особое место';
+  static const theatre = 'Театр';
+  static const hotel = 'Отель';
+  static const museum = 'Музей';
+  static const cafe = 'Кафе';
+  static const park = 'Парк';
 
-  static List<String> getValues() {
-    return [];
-  }
+// // TODO: implement
+// static List<String> getValues() {
+//   return [];
+// }
 }

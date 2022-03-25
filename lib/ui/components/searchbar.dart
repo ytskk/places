@@ -4,9 +4,9 @@ import 'package:places/ui/components/search_field.dart';
 class SearchBar extends StatelessWidget {
   final bool readOnly;
   final bool autofocus;
-  final void Function()? onTap;
-  final void Function()? onEditingComplete;
-  final void Function(String? value)? onChange;
+  final VoidCallback? onTap;
+  final VoidCallback? onEditingComplete;
+  final ValueChanged<String>? onChange;
   final Widget? suffix;
   final TextEditingController? controller;
 
@@ -14,9 +14,9 @@ class SearchBar extends StatelessWidget {
     Key? key,
     bool this.readOnly = true,
     bool this.autofocus = true,
-    void Function()? this.onTap,
-    void Function()? this.onEditingComplete,
-    void Function(String? value)? this.onChange,
+    VoidCallback? this.onTap,
+    VoidCallback? this.onEditingComplete,
+    ValueChanged<String>? this.onChange,
     Widget? this.suffix,
     TextEditingController? this.controller,
   }) : super(key: key);

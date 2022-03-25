@@ -30,9 +30,8 @@ class VisitingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    Color scheduledAtColor = isVisited
-        ? theme.textTheme.bodyText1!.color!
-        : theme.cardColor;
+    Color scheduledAtColor =
+        isVisited ? theme.textTheme.bodyText1!.color! : theme.cardColor;
 
     return MyCard(
       sight,

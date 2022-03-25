@@ -49,3 +49,27 @@ class NetworkImageBox extends StatelessWidget {
     );
   }
 }
+
+class RoundedNetworkImageBox extends NetworkImageBox {
+  final String imageUrl;
+  final double borderRadius;
+
+  const RoundedNetworkImageBox({
+    Key? key,
+    required String this.imageUrl,
+    double this.borderRadius = 12,
+  }) : super(imageUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      clipBehavior: Clip.antiAlias,
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: NetworkImageBox(
+        imageUrl,
+        width: 56,
+        height: 56,
+      ),
+    );
+  }
+}

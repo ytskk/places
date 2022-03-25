@@ -3,7 +3,6 @@ import 'package:places/controllers/sight_search_controller.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/domain/sight.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/empty_list.dart';
@@ -176,37 +175,12 @@ class _SearchResultListTile extends StatelessWidget {
           term: context.read<SightSearch>().searchControllerText,
           textStyleHighlight: TextStyle(fontWeight: FontWeight.w700),
         ),
-        // title: Text(
-        //   sight.name,
-        //   style: textTheme.bodyText2,
-        // ),
         subtitle: Text(
           sight.type,
           style: textTheme.bodyText1,
         ),
-        leading: _SightImageBox(imageUrl: sight.url),
-      ),
-    );
-  }
-}
-
-class _SightImageBox extends StatelessWidget {
-  final String imageUrl;
-
-  const _SightImageBox({
-    Key? key,
-    required String this.imageUrl,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadius.circular(12),
-      child: NetworkImageBox(
-        imageUrl,
-        width: 56,
-        height: 56,
+        // leading: _SightImageBox(imageUrl: sight.url),
+        leading: RoundedNetworkImageBox(imageUrl: sight.url),
       ),
     );
   }
@@ -219,57 +193,56 @@ class _SearchRecentActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     final activityList = context.watch<SightSearch>().recentActivity;
 
-    return activityList.isEmpty
-        ? _SearchRecentActivityEmpty()
-        : _SearchRecentActivityRecords();
+    return activityList.isEmpty ? Container() : _SearchRecentActivityRecords();
   }
 }
 
-class _SearchRecentActivityEmpty extends StatelessWidget {
-  const _SearchRecentActivityEmpty({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final trailingColor = Theme.of(context).textTheme.bodyText1!.color;
-    final List<Sight> recommendations = mocks.toList()
-      ..shuffle()
-      ..take(5);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        RowGroup(
-          paddingLeft: 16,
-          paddingBottom: 0,
-          title: Text(AppStrings.searchScreenRecentActivityRecommendations
-              .toUpperCase()),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _SearchRecentActivityList(
-              content:
-                  recommendations.map((Sight sight) => _ActivityListTileElement(
-                        title: sight.name,
-                        trailing: Icon(
-                          Icons.chevron_right,
-                          color: trailingColor,
-                        ),
-                        onTap: () {
-                          context.read<SightSearch>().addActivity(sight.name);
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return SightDetails(sight);
-                            },
-                          ));
-                        },
-                      )),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+// // Disabled until better times.
+// class _SearchRecentActivityEmpty extends StatelessWidget {
+//   const _SearchRecentActivityEmpty({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final trailingColor = Theme.of(context).textTheme.bodyText1!.color;
+//     final List<Sight> recommendations = mocks.toList()
+//       ..shuffle()
+//       ..take(5);
+//
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         RowGroup(
+//           paddingLeft: 16,
+//           paddingBottom: 0,
+//           title: Text(AppStrings.searchScreenRecentActivityRecommendations
+//               .toUpperCase()),
+//           child: Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 16),
+//             child: _SearchRecentActivityList(
+//               content:
+//                   recommendations.map((Sight sight) => _ActivityListTileElement(
+//                         title: sight.name,
+//                         trailing: Icon(
+//                           Icons.chevron_right,
+//                           color: trailingColor,
+//                         ),
+//                         onTap: () {
+//                           context.read<SightSearch>().addActivity(sight.name);
+//                           Navigator.of(context).push(MaterialPageRoute(
+//                             builder: (BuildContext context) {
+//                               return SightDetails(sight);
+//                             },
+//                           ));
+//                         },
+//                       )),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class _SearchRecentActivityRecords extends StatelessWidget {
   const _SearchRecentActivityRecords({Key? key}) : super(key: key);

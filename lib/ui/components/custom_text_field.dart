@@ -12,11 +12,11 @@ class CustomTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputAction textInputAction;
-  final void Function(String)? onChanged;
+  final ValueChanged<String>? onChanged;
   final int? maxLines;
   final String? hint;
-  final void Function(String)? onFieldSubmitted;
-  final String? Function(String?)? validator;
+  final ValueSetter<String>? onFieldSubmitted;
+  final FormFieldValidator? validator;
 
   const CustomTextField({
     Key? key,
@@ -25,9 +25,9 @@ class CustomTextField extends StatefulWidget {
     TextInputType this.keyboardType = TextInputType.text,
     TextInputAction this.textInputAction = TextInputAction.next,
     List<TextInputFormatter>? this.inputFormatters,
-    void Function(String)? this.onChanged,
-    void Function(String)? this.onFieldSubmitted,
-    String? Function(String?)? this.validator,
+    ValueChanged<String>? this.onChanged,
+    ValueChanged<String>? this.onFieldSubmitted,
+    FormFieldValidator? this.validator,
     int? this.maxLines = 1,
     String? this.hint,
   }) : super(key: key);
@@ -39,7 +39,7 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   late FocusNode _focusNode;
   late TextEditingController _controller;
-  late void Function(String value) _onChanged;
+  late ValueChanged<String>? _onChanged;
 
   @override
   void initState() {
