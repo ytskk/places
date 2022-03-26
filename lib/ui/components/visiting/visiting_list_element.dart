@@ -26,7 +26,7 @@ class VisitingListElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return VisitingCard(
       sight,
-      key: sight.id,
+      key: ValueKey(sight),
       actions: [
         ...?cardActions,
         Button.icon(
