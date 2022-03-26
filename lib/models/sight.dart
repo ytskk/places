@@ -1,5 +1,8 @@
 // Sight Details model.
+import 'package:flutter/cupertino.dart';
+
 class Sight {
+  Key id;
   String name;
   double lat, lon;
   String url;
@@ -21,7 +24,7 @@ class Sight {
     this.url = '',
     this.details = '',
     this.type = '',
-  });
+  }) : id = UniqueKey();
 
   @override
   String toString() {

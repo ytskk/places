@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/controllers/sight_search_controller.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/models/sight.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/empty_list.dart';

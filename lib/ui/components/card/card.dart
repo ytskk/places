@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/models/sight.dart';
 import 'package:places/ui/components/card/card_header.dart';
 import 'package:places/ui/components/card/card_info.dart';
 import 'package:places/ui/components/image/network_image_box.dart';

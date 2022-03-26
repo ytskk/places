@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/models/sight.dart';
 
 class AddSight extends ChangeNotifier {
   ValidationModel _sightCategory = ValidationModel(null, null);

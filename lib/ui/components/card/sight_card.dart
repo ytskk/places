@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/models/sight.dart';
 import 'package:places/ui/components/card/card.dart';
 
 class SightCard extends StatelessWidget {
