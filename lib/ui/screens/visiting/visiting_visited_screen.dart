@@ -22,6 +22,7 @@ class VisitingVisitedScreen extends StatelessWidget {
           cardActions: [
             Button.icon(
               icon: AppIcons.share,
+              iconColor: Colors.white,
               background: Colors.transparent,
               onPressed: () {
                 print('for $sight pressed share button');

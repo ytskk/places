@@ -22,6 +22,7 @@ class VisitingWantToVisitScreen extends StatelessWidget {
           cardActions: [
             Button.icon(
               icon: AppIcons.calendar,
+              iconColor: Colors.white,
               background: Colors.transparent,
               onPressed: () {
                 print('for $sight pressed calendar button');
