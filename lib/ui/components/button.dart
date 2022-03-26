@@ -26,7 +26,7 @@ class Button extends StatelessWidget {
   final Color? background;
   final bool isTransparent;
   final bool isDisabled;
-  final Function()? onPressed;
+  final VoidCallback? onPressed;
 
   /// **Arguments**
   /// - `background` — if null, defaults to default button background.
