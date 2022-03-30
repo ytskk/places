@@ -19,6 +19,7 @@ class AppIcons {
   static const error = 'assets/icons/error.svg';
   static const search = 'assets/icons/search.svg';
   static const filter = 'assets/icons/filter.svg';
+  static const trash_bin = 'assets/icons/trash_bin.svg';
 
   //  filter categories icons
   static const hotel = 'assets/icons/hotel.svg';

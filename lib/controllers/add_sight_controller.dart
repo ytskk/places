@@ -9,6 +9,19 @@ class AddSight extends ChangeNotifier {
   ValidationModel _sightDescription = ValidationModel(null, null);
 
   ValidationModel get category => _sightCategory;
+  final List _sightImages = [];
+
+  List get images => _sightImages;
+
+  void addImage() {
+    _sightImages.add(UniqueKey());
+    notifyListeners();
+  }
+
+  void removeImage(Key key) {
+    _sightImages.remove(key);
+    notifyListeners();
+  }
 
   void validateCategory(String? value) {
     _sightCategory = value != null && isValidCategory(value)
@@ -92,6 +105,7 @@ class AddSight extends ChangeNotifier {
   }
 
   void clearFields() {
+    _sightImages.clear();
     _sightCategory = ValidationModel(null, null);
     _sightName = ValidationModel(null, null);
     _sightCoordinatesLat = ValidationModel(null, null);

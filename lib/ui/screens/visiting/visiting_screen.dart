@@ -28,7 +28,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
             child: const SlidingTabBar(AppStrings.visitingTabTitles),
           ),
         ),
-        body: SafeArea(
+        body: const SafeArea(
           child: TabBarView(
             children: [
               VisitingWantToVisitScreen(),

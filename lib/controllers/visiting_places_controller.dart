@@ -7,7 +7,7 @@ class VisitingPlaces extends ChangeNotifier {
     mocks[0],
     mocks[2],
   ];
-  final List<Sight> _visitedPlaces = mocks;
+  final List<Sight> _visitedPlaces = [...mocks];
 
   List<Sight> get wantToVisitPlaces => _wantToVisitPlaces;
 

@@ -48,7 +48,7 @@ class SettingsTableState extends State<SettingsTable> {
               setState(() {
                 context.read<Settings>().setIsDarkTheme(!isDarkTheme);
               });
-              log("Theme changed to ${isDarkTheme ? "dark" : "light"}");
+              log('Theme changed to ${isDarkTheme ? 'dark' : 'light'}');
             },
           ),
         ),
@@ -61,7 +61,7 @@ class SettingsTableState extends State<SettingsTable> {
             splashRadius: 24,
             color: iconColor,
             onPressed: () {
-              log("Info button pressed");
+              log('Info button pressed');
             },
             icon: Icon(Icons.info_outline),
           ),

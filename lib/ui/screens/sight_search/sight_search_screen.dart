@@ -55,7 +55,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
           preferredSize: Size.fromHeight(52),
           child: SearchBar(
             onEditingComplete: () {
-              print("searched for ${_searchFieldController.text}");
+              print('searched for ${_searchFieldController.text}');
               context
                   .read<SightSearch>()
                   .addActivity(_searchFieldController.text);
@@ -163,7 +163,7 @@ class _SearchResultListTile extends StatelessWidget {
     return InkWell(
       splashColor: Colors.black12,
       onTap: () {
-        print("pressed $sight");
+        print('pressed $sight');
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return SightDetails(sight);

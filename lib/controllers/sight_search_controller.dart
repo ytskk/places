@@ -6,7 +6,6 @@ class SightSearch extends ChangeNotifier {
   late TextEditingController _searchController;
 
   final List<ActivityRecord> _recentActivity = [];
-  final List<Sight> _searchResults = mocks;
 
   List<ActivityRecord> get recentActivity => _recentActivity;
 

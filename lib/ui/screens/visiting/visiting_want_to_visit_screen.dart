@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/visiting_places_controller.dart';
 import 'package:places/domain/app_icons.dart';
+import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/visiting/visiting_content.dart';
@@ -29,8 +30,10 @@ class VisitingWantToVisitScreen extends StatelessWidget {
               },
             ),
           ],
-          scheduledAt: 'Запланировано на 12 окт. 2020',
-          workingStatus: 'закрыто до 09:00',
+          scheduledAt:
+              '${AppStrings.visitingWantToVisitPlannedAt} 12 окт. 2020',
+          workingStatus:
+              '${AppStrings.visitingWantToVisitClosedUntil} до 09:00',
           onDeleteButtonPressed: () {
             context.read<VisitingPlaces>().deleteWantToVisitPlaceById(sight.id);
           },
