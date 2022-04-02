@@ -4,6 +4,7 @@ import 'package:places/controllers/filter_controller.dart';
 import 'package:places/controllers/navigation_controller.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
+import 'package:places/controllers/visiting_places_controller.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -25,11 +26,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ListenableProvider(create: (_) => Settings()),
-        ListenableProvider(create: (_) => Navigation()),
+        ChangeNotifierProvider(create: (_) => Settings()),
+        ChangeNotifierProvider(create: (_) => Navigation()),
         ChangeNotifierProvider(create: (_) => Filter()),
         ChangeNotifierProvider(create: (_) => AddSight()),
-        ListenableProvider(create: (_) => SightSearch()),
+        ChangeNotifierProvider(create: (_) => SightSearch()),
+        ChangeNotifierProvider(create: (_) => VisitingPlaces()),
       ],
       child: Consumer(
         builder: (BuildContext context, value, Widget? child) {

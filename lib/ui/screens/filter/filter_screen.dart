@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/coordinates.dart';
 import 'package:places/models/filter_option.dart';
+import 'package:places/models/sight.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/filter_button.dart';
 import 'package:places/ui/components/range_selector.dart';

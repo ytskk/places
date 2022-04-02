@@ -1,4 +1,4 @@
-import 'domain/sight.dart';
+import 'models/sight.dart';
 
 final List<Sight> mocks = [
   Sight(

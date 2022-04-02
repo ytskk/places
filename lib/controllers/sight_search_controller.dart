@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:places/domain/sight.dart';
 import 'package:places/mocks.dart';
+import 'package:places/models/sight.dart';
 
 class SightSearch extends ChangeNotifier {
   late TextEditingController _searchController;
 
   final List<ActivityRecord> _recentActivity = [];
-  final List<Sight> _searchResults = mocks;
 
   List<ActivityRecord> get recentActivity => _recentActivity;
 

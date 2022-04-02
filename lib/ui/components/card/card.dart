@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/models/sight.dart';
 import 'package:places/ui/components/card/card_header.dart';
 import 'package:places/ui/components/card/card_info.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
@@ -37,42 +37,35 @@ class MyCard extends StatelessWidget {
     final splashColor =
         Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.2);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ClipRRect(
-        clipBehavior: Clip.hardEdge,
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
+    return Stack(
+      children: [
+        Column(
           children: [
-            Column(
+            // header + photo
+            Stack(
               children: [
-                // header + photo
-                Stack(
-                  children: [
-                    // photo
-                    NetworkImageBox(sight.url, height: 96),
-                  ],
-                ),
-                // card info
-                buildCardInfo(cardInfo, context),
+                // photo
+                NetworkImageBox(sight.url, height: 96),
               ],
             ),
-            Positioned.fill(
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  splashColor: splashColor,
-                  onTap: () {
-                    print("Card clicked");
-                  },
-                ),
-              ),
-            ),
-            // text + action buttons
-            buildCardHeader(sight.type, actions: actions),
+            // card info
+            buildCardInfo(cardInfo, context),
           ],
         ),
-      ),
+        Positioned.fill(
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              splashColor: splashColor,
+              onTap: () {
+                print("Card clicked");
+              },
+            ),
+          ),
+        ),
+        // text + action buttons
+        buildCardHeader(sight.type, actions: actions),
+      ],
     );
   }
 }

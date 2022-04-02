@@ -10,6 +10,7 @@ class AppStrings {
   // Sight Screen
   static const sightTitle = 'Список интересных мест';
   static const sightFloatingButtonLabel = 'новое место';
+  static const sightClosedUntil = 'Закрыто до';
 
   // SightDetails screen
   static const sightDetailsGetDirections = 'Построить маршрут';
@@ -24,6 +25,11 @@ class AppStrings {
       'Отмечайте понравившиеся места и они появиятся здесь.';
   static const visitingVisitedEmpty =
       'Завершите маршрут, чтобы место попало сюда.';
+  static const visitingWantToVisitPlannedAt = 'Запланировано на';
+  static const visitingWantToVisitClosedUntil = 'Закрыто до';
+  static const visitingVisitedAchieved = 'Цель достигнута';
+  static const visitingVisitedClosedUntil = 'Закрыто до';
+  static const visitingDismissibleText = 'Удалить';
 
   // filter screen
   static const filterScreenActionClear = 'Очистить';
@@ -58,6 +64,9 @@ class AppStrings {
   static const addSightScreenSightDialogCloseActionStay = 'Нет';
 
   static const addSightScreenSightDialogCreateActionTitle = 'Закрыть';
+  static const addSightScreenDeleteImageDialogTitle = 'Удалить фото?';
+  static const addSightScreenDeleteImageDialogActionYes = 'Да, удалить';
+  static const addSightScreenDeleteImageDialogActionNo = 'Нет, оставить';
 
   // search field
   static const searchFieldHint = 'Поиск';
