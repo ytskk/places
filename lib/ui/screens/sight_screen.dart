@@ -49,22 +49,14 @@ class _SightListScreenState extends State<SightListScreen> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: _FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              fullscreenDialog: true,
-              builder: (builder) => AddSightScreen(),
-            ),
-          );
-        },
-      ),
+      floatingActionButton: const _AddPlaceFloatingButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(
         child: ListView.builder(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             top: 16,
             left: 16,
+            // in order for fab not to close the content.
             bottom: 72,
             right: 16,
           ),
@@ -78,7 +70,7 @@ class _SightListScreenState extends State<SightListScreen> {
                   iconColor: Colors.white,
                   background: Colors.transparent,
                   onPressed: () {
-                    print("Close icon clicked");
+                    print("Wishlist icon clicked");
                   },
                 ),
               ],
@@ -90,11 +82,77 @@ class _SightListScreenState extends State<SightListScreen> {
   }
 }
 
-class _FloatingActionButton extends StatelessWidget {
-  final void Function()? onPressed;
+/// floating button for adding a new place.
+class _AddPlaceFloatingButton extends StatelessWidget {
+  const _AddPlaceFloatingButton({Key? key}) : super(key: key);
 
-  const _FloatingActionButton({Key? key, void Function()? this.onPressed})
-      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return ButtonWithGradient(
+      content: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          Container(
+            child: SizedBox(
+              width: 8,
+            ),
+          ),
+          Text(
+            AppStrings.sightFloatingButtonLabel.toUpperCase(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            fullscreenDialog: true,
+            builder: (builder) => const AddSightScreen(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// A custom button with brand gradient.
+class ButtonWithGradient extends StatelessWidget {
+  /// Creates a button with [content] and [onPressed] callback and custom [padding]
+  /// (prefer to use [ButtonPadding]).
+  ///
+  /// If [content] is a multi child widget ([Row], [Column] and etc.),
+  /// make sure that the minimum size is used.
+  ///
+  /// ```dart
+  /// content: Row(
+  ///   mainAxisSize: MainAxisSize.min,
+  ///   children: […],
+  /// ),
+  /// ```
+  const ButtonWithGradient({
+    Key? key,
+    VoidCallback? this.onPressed,
+    required this.content,
+    this.padding = ButtonPadding.UltraWide,
+  }) : super(key: key);
+
+  final void Function()? onPressed;
+  final Widget content;
+  final EdgeInsets padding;
+
+  final _brandGradient = const LinearGradient(
+    colors: [Color(0xffFCDD3D), Color(0xff4CAF50)],
+  );
+
+  LinearGradient get brandGradient => _brandGradient;
 
   @override
   Widget build(BuildContext context) {
@@ -106,60 +164,14 @@ class _FloatingActionButton extends StatelessWidget {
         onTap: onPressed,
         child: Ink(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xffFCDD3D), Color(0xff4CAF50)],
-            ),
+            gradient: _brandGradient,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  AppStrings.sightFloatingButtonLabel.toUpperCase(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+            padding: padding,
+            child: content,
           ),
         ),
       ),
     );
-    // return Container(
-    //   decoration: BoxDecoration(
-    //     borderRadius: BorderRadius.circular(24),
-    //     gradient: LinearGradient(
-    //       colors: [Color(0xffFCDD3D), Color(0xff4CAF50)],
-    //     ),
-    //   ),
-    //   child: ElevatedButton.icon(
-    //     onPressed: onPressed,
-    //     style: ButtonStyle(
-    //       backgroundColor:
-    //           MaterialStateProperty.resolveWith((states) => Colors.transparent),
-    //       padding: MaterialStateProperty.resolveWith(
-    //         (states) => EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-    //       ),
-    //       shape: MaterialStateProperty.resolveWith(
-    //         (states) => RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(24),
-    //         ),
-    //       ),
-    //     ),
-    //     label: Text(AppStrings.sightFloatingButtonLabel.toUpperCase()),
-    //     icon: Icon(Icons.add),
-    //   ),
-    // );
   }
 }

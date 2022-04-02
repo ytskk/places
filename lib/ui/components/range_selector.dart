@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
+/// A custom [RangeSlider]
 class RangeSelector extends StatefulWidget {
-  final RangeValues rangeValues;
-  final RangeValues values;
-  final void Function(RangeValues) onChanged;
-
   const RangeSelector({
     Key? key,
-    required RangeValues this.rangeValues,
-    required void Function(RangeValues) this.onChanged,
-    required RangeValues this.values,
+    this.onChanged,
+    required this.initialRangeValues,
+    required this.values,
   }) : super(key: key);
+
+  /// Min and max values of slider.
+  final RangeValues initialRangeValues;
+
+  /// Current slider values.
+  final RangeValues values;
+  final ValueChanged<RangeValues>? onChanged;
 
   @override
   _RangeSelectorState createState() => _RangeSelectorState();
@@ -20,8 +24,8 @@ class _RangeSelectorState extends State<RangeSelector> {
   @override
   Widget build(BuildContext context) {
     return RangeSlider(
-      min: widget.rangeValues.start,
-      max: widget.rangeValues.end,
+      min: widget.initialRangeValues.start,
+      max: widget.initialRangeValues.end,
       values: widget.values,
       onChanged: widget.onChanged,
     );

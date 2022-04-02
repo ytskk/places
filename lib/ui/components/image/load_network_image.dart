@@ -2,12 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:places/ui/screens/res/themes.dart';
 
 class NetworkImageWidget extends StatelessWidget {
-  final String imageUrl;
-
+  /// Creates a widget that displays an [ImageStream] obtained from the network.
+  ///
+  /// Provides a progress loader - widget to display to the user while an image is still loading.
+  ///
+  /// If an error occurs, displays red.
   const NetworkImageWidget({
     Key? key,
-    required String this.imageUrl,
+    required this.imageUrl,
   }) : super(key: key);
+
+  /// The URL from which the image will be fetched.
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {

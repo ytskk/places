@@ -3,17 +3,22 @@ import 'package:places/domain/app_colors.dart';
 import 'package:places/ui/components/image/load_network_image.dart';
 
 class NetworkImageBox extends StatelessWidget {
-  final String imageUrl;
-
-  final double width;
-  final double height;
-
+  /// Creates [NetworkImageWidget] with [height] and [width].
   const NetworkImageBox(
     String this.imageUrl, {
     Key? key,
     double this.width = double.infinity,
     double this.height = 96,
   }) : super(key: key);
+
+  /// The URL from which the image will be fetched.
+  final String imageUrl;
+
+  /// Actual width of box. Defaults to double.infinity
+  final double width;
+
+  /// Actual height of box. Defaults to 96lp.
+  final double height;
 
   @override
   Widget build(BuildContext context) {

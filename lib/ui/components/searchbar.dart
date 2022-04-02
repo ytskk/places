@@ -2,6 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/components/search_field.dart';
 
 class SearchBar extends StatelessWidget {
+  const SearchBar({
+    Key? key,
+    this.readOnly = true,
+    this.autofocus = true,
+    this.onTap,
+    this.onEditingComplete,
+    this.onChange,
+    this.suffix,
+    this.controller,
+  }) : super(key: key);
+
   final bool readOnly;
   final bool autofocus;
   final VoidCallback? onTap;
@@ -9,17 +20,6 @@ class SearchBar extends StatelessWidget {
   final ValueChanged<String>? onChange;
   final Widget? suffix;
   final TextEditingController? controller;
-
-  const SearchBar({
-    Key? key,
-    bool this.readOnly = true,
-    bool this.autofocus = true,
-    VoidCallback? this.onTap,
-    VoidCallback? this.onEditingComplete,
-    ValueChanged<String>? this.onChange,
-    Widget? this.suffix,
-    TextEditingController? this.controller,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,27 @@ import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:provider/provider.dart';
 
+/// Creates custom text field according to the design.
 class CustomTextField extends StatefulWidget {
+  const CustomTextField({
+    Key? key,
+    this.focusNode,
+    this.controller,
+    this.keyboardType = TextInputType.text,
+    this.textInputAction = TextInputAction.next,
+    this.inputFormatters,
+    this.onChanged,
+    this.onFieldSubmitted,
+    this.validator,
+    this.maxLines = 1,
+    this.hint,
+  }) : super(key: key);
+
   final FocusNode? focusNode;
+
+  /// Controls the text being edited.
+  ///
+  /// If null, this widget will create it's own [TextEditingController].
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
@@ -17,20 +36,6 @@ class CustomTextField extends StatefulWidget {
   final String? hint;
   final ValueSetter<String>? onFieldSubmitted;
   final FormFieldValidator? validator;
-
-  const CustomTextField({
-    Key? key,
-    FocusNode? this.focusNode,
-    TextEditingController? this.controller,
-    TextInputType this.keyboardType = TextInputType.text,
-    TextInputAction this.textInputAction = TextInputAction.next,
-    List<TextInputFormatter>? this.inputFormatters,
-    ValueChanged<String>? this.onChanged,
-    ValueChanged<String>? this.onFieldSubmitted,
-    FormFieldValidator? this.validator,
-    int? this.maxLines = 1,
-    String? this.hint,
-  }) : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();

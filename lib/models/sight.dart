@@ -1,20 +1,11 @@
-// Sight Details model.
 import 'package:flutter/cupertino.dart';
 
 class Sight {
-  Key id;
-  String name;
-  double lat, lon;
-  String url;
-  String details;
-  String type;
-
-  /// Default sight constructor.
+  /// Creates sight object.
   ///
-  /// name is required
+  /// [name] must be not null.
   ///
-  /// Example
-  /// ```dart
+  /// ```
   ///   Sight(name: 'New place')
   /// ```
   Sight({
@@ -25,6 +16,13 @@ class Sight {
     this.details = '',
     this.type = '',
   }) : id = UniqueKey();
+
+  Key id;
+  String name;
+  double lat, lon;
+  String url;
+  String details;
+  String type;
 
   @override
   String toString() {

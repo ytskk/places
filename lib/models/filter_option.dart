@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-/// Class for describing filter option.
+/// Class for describing and controls filter option.
 class FilterOption {
-  final String _name;
-  bool _isSelected;
-
   FilterOption({required String name, bool isEnabled = true})
       : this._name = name,
         this._isSelected = isEnabled;
+
+  final String _name;
+  bool _isSelected;
 
   void setSelected(bool value) {
     _isSelected = value;
@@ -15,6 +15,7 @@ class FilterOption {
   }
 
   bool get isSelected => _isSelected;
+
   String get name => _name;
 
   @override

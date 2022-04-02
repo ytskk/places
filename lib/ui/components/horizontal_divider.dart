@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Thin horizontal line.
 class HorizontalDivider extends StatelessWidget {
+  /// Creates a divider with fixed [height] of 16lp.
   const HorizontalDivider({Key? key}) : super(key: key);
 
   @override
@@ -11,7 +13,10 @@ class HorizontalDivider extends StatelessWidget {
   }
 }
 
+/// Thin horizontal line.
 class HorizontalDividerInset extends StatelessWidget {
+  /// Creates a divider with fixed [height] of 16lp and indentation of 88lx
+  /// (to achieve pretty look for [ListTile]).
   const HorizontalDividerInset({Key? key}) : super(key: key);
 
   @override

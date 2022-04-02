@@ -80,6 +80,10 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   }
 }
 
+/// Defines search content.
+///
+/// Depends on [controller] status. If text is empty, show recent activity,
+/// else, search results
 class _SearchContent extends StatelessWidget {
   final TextEditingController controller;
 
@@ -90,7 +94,7 @@ class _SearchContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return controller.text.isEmpty
+    return controller.text.trim().isEmpty
         ? SliverToBoxAdapter(child: _SearchRecentActivity())
         : SliverFillRemaining(
             child: _SearchResults(controller: controller),
@@ -114,7 +118,7 @@ class _SearchResultsState extends State<_SearchResults> {
   @override
   Widget build(BuildContext context) {
     final List<Sight> results =
-        context.read<SightSearch>().searchByName(widget.controller.text);
+        context.read<SightSearch>().searchByName(widget.controller.text.trim());
 
     return results.isEmpty
         ? EmptyList(
@@ -163,7 +167,7 @@ class _SearchResultListTile extends StatelessWidget {
     return InkWell(
       splashColor: Colors.black12,
       onTap: () {
-        print('pressed $sight');
+        context.read<SightSearch>().addActivity(sight.name);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return SightDetails(sight);
@@ -172,8 +176,10 @@ class _SearchResultListTile extends StatelessWidget {
       child: ListTile(
         title: SubstringHighlight(
           text: sight.name,
-          term: context.read<SightSearch>().searchControllerText,
-          textStyleHighlight: TextStyle(fontWeight: FontWeight.w700),
+          term: context.read<SightSearch>().searchControllerText.trim(),
+          textStyle: textTheme.bodyText2!,
+          textStyleHighlight:
+              textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w700),
         ),
         subtitle: Text(
           sight.type,
@@ -186,6 +192,7 @@ class _SearchResultListTile extends StatelessWidget {
   }
 }
 
+/// Recent activity component, empty if it's no history.
 class _SearchRecentActivity extends StatelessWidget {
   const _SearchRecentActivity({Key? key}) : super(key: key);
 
@@ -193,57 +200,13 @@ class _SearchRecentActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     final activityList = context.watch<SightSearch>().recentActivity;
 
-    return activityList.isEmpty ? Container() : _SearchRecentActivityRecords();
+    return activityList.isEmpty
+        ? SizedBox.shrink()
+        : _SearchRecentActivityRecords();
   }
 }
 
-// // Disabled until better times.
-// class _SearchRecentActivityEmpty extends StatelessWidget {
-//   const _SearchRecentActivityEmpty({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final trailingColor = Theme.of(context).textTheme.bodyText1!.color;
-//     final List<Sight> recommendations = mocks.toList()
-//       ..shuffle()
-//       ..take(5);
-//
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         RowGroup(
-//           paddingLeft: 16,
-//           paddingBottom: 0,
-//           title: Text(AppStrings.searchScreenRecentActivityRecommendations
-//               .toUpperCase()),
-//           child: Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 16),
-//             child: _SearchRecentActivityList(
-//               content:
-//                   recommendations.map((Sight sight) => _ActivityListTileElement(
-//                         title: sight.name,
-//                         trailing: Icon(
-//                           Icons.chevron_right,
-//                           color: trailingColor,
-//                         ),
-//                         onTap: () {
-//                           context.read<SightSearch>().addActivity(sight.name);
-//                           Navigator.of(context).push(MaterialPageRoute(
-//                             builder: (BuildContext context) {
-//                               return SightDetails(sight);
-//                             },
-//                           ));
-//                         },
-//                       )),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
+/// Shows existed recent activities record. Takes 5 recent records.
 class _SearchRecentActivityRecords extends StatelessWidget {
   const _SearchRecentActivityRecords({Key? key}) : super(key: key);
 
@@ -283,29 +246,41 @@ class _SearchRecentActivityRecords extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
+        const Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: TextButton(
-            onPressed: () {
-              context.read<SightSearch>().removeAllActivities();
-            },
-            child: Text(AppStrings.searchScreenRecentActivityClear),
-          ),
+          child: _SearchRecentActivityClearHistoryButton(),
         ),
       ],
     );
   }
 }
 
-class _SearchRecentActivityList extends StatelessWidget {
-  final Iterable<Widget> content;
-  final Widget? trailing;
+class _SearchRecentActivityClearHistoryButton extends StatelessWidget {
+  const _SearchRecentActivityClearHistoryButton({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        context.read<SightSearch>().removeAllActivities();
+      },
+      child: Text(AppStrings.searchScreenRecentActivityClear),
+    );
+  }
+}
+
+/// List with divided titles of recent activity.
+///
+/// Accepts Iterable [content] to use in [tiles].
+class _SearchRecentActivityList extends StatelessWidget {
   const _SearchRecentActivityList({
     Key? key,
-    required Iterable<Widget> this.content,
-    Widget? this.trailing,
+    required this.content,
+    this.trailing,
   }) : super(key: key);
+
+  final Iterable<Widget> content;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -319,17 +294,22 @@ class _SearchRecentActivityList extends StatelessWidget {
   }
 }
 
+/// Creates element for [_SearchRecentActivityList]
 class _ActivityListTileElement extends StatelessWidget {
-  final String title;
-  final Widget? trailing;
-  final void Function()? onTap;
-
+  /// Customised dense [ListTile] with secondary title text style.
+  ///
+  /// [onTap] sets main text controller to [title] value.
+  /// [trailing] removes this from history.
   const _ActivityListTileElement({
     Key? key,
-    required String this.title,
-    Widget? this.trailing,
-    void Function()? this.onTap,
+    required this.title,
+    this.trailing,
+    this.onTap,
   }) : super(key: key);
+
+  final String title;
+  final Widget? trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

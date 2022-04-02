@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:places/models/sight.dart';
 
 class AddSight extends ChangeNotifier {
@@ -115,20 +116,21 @@ class AddSight extends ChangeNotifier {
   }
 }
 
-/**
- * A class for describing validation and error.
- *
- * **Arguments**
- * - value — field value
- * - error — text of the field error in case of failed validation
- */
+/// A class for describing validation and error.
 class ValidationModel {
+  /// Initialise validation model.
+  ///
+  /// [value] responds for field controller text value.
+  /// [error] — text of the field error in case of failed validation.
+  ///
+  /// When [error] is not null there is an error, otherwise field is valid.
+  ValidationModel(this.value, this.error);
+
   String? value;
   String? error;
-
-  ValidationModel(this.value, this.error);
 }
 
+/// Field errors texts. Shows in [TextFormField.validator] as [TextFormField.decoration.errorText].
 class FieldsErrors {
   static const invalidCategory = "";
   static const invalidName = "";
@@ -136,6 +138,7 @@ class FieldsErrors {
   static const invalidDescription = "";
 }
 
+/// Validation patterns to match.
 class FieldsPatterns {
   static final doublePattern = RegExp(r"^\d*\.?\d*");
 }

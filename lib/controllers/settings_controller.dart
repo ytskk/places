@@ -5,7 +5,7 @@ class Settings extends ChangeNotifier {
 
   bool get isDarkTheme => _isDarkTheme;
 
-  void setIsDarkTheme(bool newValue) {
+  set setIsDarkTheme(bool newValue) {
     _isDarkTheme = newValue;
     notifyListeners();
   }

@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:places/domain/app_icons.dart';
 
-/// Creates a fixed size box with provided svg icon.
-/// The [width] and [height] parameters can be null.
-///
-/// icon - assets icon name, provided by [AppIcons].
+/// A svg icon widget.
 ///
 /// Example
 /// ```
-///   IconContainer(
+///   IconBox(
 ///     icon: AppIcons.calendar,
 ///     color: AppColors.whiteMain,
 ///   ),
 /// ```
 class IconBox extends StatelessWidget {
-  final String icon;
-  final Color? color;
-  final double size;
-
-  /// Creates a fixed size box with provided svg icon.
-  /// The [width] and [height] is optional parameters can be null.
+  /// Creates a fixed size box with provided svg icon (basically from [AppIcons]).
   ///
-  /// Default `color` [Colors.white]
+  /// The [size] is optional parameters can be null, defaults to 24 lp.
+  ///
+  /// If [color] is null, uses default icon theme color.
   const IconBox({
     Key? key,
     required this.icon,
     this.color,
     this.size = 24,
   }) : super(key: key);
+
+  final String icon;
+  final Color? color;
+  final double size;
 
   @override
   Widget build(BuildContext context) {

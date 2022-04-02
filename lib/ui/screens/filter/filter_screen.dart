@@ -37,7 +37,7 @@ class FilterScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            FilterCategoryHeader(),
+            const FilterCategoryHeader(),
             _FilterButtonsTable(),
             FilterRowGroup(
               title: Text(
@@ -154,7 +154,7 @@ class _RangeSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RangeSelector(
-      rangeValues: _values,
+      initialRangeValues: _values,
       values: context.watch<Filter>().rangeValues,
       onChanged: (newValues) {
         context.read<Filter>().setRangeValues(newValues);
@@ -175,7 +175,7 @@ class _FilterShowResultButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           print("Filter show button clicked. Data saved");
-          print("Founded $sights");
+          context.read<Filter>().setNearbyPlaces(sights);
         },
         child: Text(
           "${AppStrings.filterScreenFilterShow} ${"(${sights.length})"}",

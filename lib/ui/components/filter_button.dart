@@ -5,14 +5,18 @@ import 'package:places/models/sight.dart';
 import 'package:places/ui/components/icon_box.dart';
 
 class FilterButton extends StatefulWidget {
-  final FilterOption category;
-  final void Function() onTap;
-
+  /// Creates icon with text that are Column aligned.
+  ///
+  /// Icon (canvas color) on background (canvas color with 0.4 opacity).
+  /// [category] used for label and [icon] selection.
   const FilterButton({
     Key? key,
-    required FilterOption this.category,
+    required this.category,
     required this.onTap,
   }) : super(key: key);
+
+  final FilterOption category;
+  final VoidCallback onTap;
 
   @override
   _FilterButtonState createState() => _FilterButtonState();
@@ -65,9 +69,7 @@ class _FilterButtonState extends State<FilterButton> {
     );
   }
 
-  /**
- * Shortens the content of a long string.
- */
+  /// Shortens the content of a long string.
   String _useShortName(String name) {
     if (name.split(" ").length > 1) {
       final result = [];
@@ -83,6 +85,7 @@ class _FilterButtonState extends State<FilterButton> {
         : name;
   }
 
+  /// Returns relevant icon for [category]
   String _getCategoryIcon(String category) {
     switch (category) {
       case SightCategories.hotel:
@@ -103,6 +106,7 @@ class _FilterButtonState extends State<FilterButton> {
   }
 }
 
+/// Check icon for selected [FilterButton]
 class _SelectedBadge extends StatelessWidget {
   const _SelectedBadge({Key? key}) : super(key: key);
 
@@ -115,7 +119,7 @@ class _SelectedBadge extends StatelessWidget {
         color: theme.dialogBackgroundColor,
         shape: BoxShape.circle,
       ),
-      child: Padding(
+      child: const Padding(
         padding: const EdgeInsets.all(2.0),
         child: IconBox(
           icon: AppIcons.check,

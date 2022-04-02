@@ -80,7 +80,7 @@ class _CategoriesTableState extends State<_CategoriesTable> {
               },
               title: Text(filterCategories[index]),
             ),
-            HorizontalDivider(),
+            const HorizontalDivider(),
           ],
         );
       },

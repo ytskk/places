@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+/// Custom designed [Tab].
 class TabItem extends StatelessWidget {
-  final String text;
+  const TabItem({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
 
-  const TabItem({Key? key, required this.text}) : super(key: key);
+  final String text;
 
   @override
   Widget build(BuildContext context) {
