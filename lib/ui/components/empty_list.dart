@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/components/icon_box.dart';
 
-import 'icon_box.dart';
-
+/// Widget displaying a message about empty content
 class EmptyList extends StatelessWidget {
+  /// Creates widget, displaying [icon], [title] and [subtitle].
+  ///
+  /// [title] must be not null.
+  const EmptyList({
+    Key? key,
+    this.iconName,
+    required this.title,
+    this.subtitle,
+  }) : super(key: key);
+
   final String? iconName;
   final String title;
   final String? subtitle;
-
-  const EmptyList({
-    Key? key,
-    String? this.iconName,
-    required String this.title,
-    String? this.subtitle,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class EmptyList extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: maxBoxWidth),
+          constraints: const BoxConstraints(maxWidth: maxBoxWidth),
           child: SizedBox(
             width: maxContentWidth,
             child: Column(

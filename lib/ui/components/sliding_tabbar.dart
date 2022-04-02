@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/components/tab_item.dart';
 
-import 'tab_item.dart';
-
+/// Custom designed [TabBar], uses [TabItem]
 class SlidingTabBar extends StatelessWidget {
-  final List<String> tabs;
+  /// Creates [TabItem] for provided [tabs]. tabs length must to match number of pages.
+  const SlidingTabBar({
+    Key? key,
+    required this.tabs,
+  }) : super(key: key);
 
-  const SlidingTabBar(List<String> this.tabs, {Key? key}) : super(key: key);
+  final List<String> tabs;
 
   @override
   Widget build(BuildContext context) {

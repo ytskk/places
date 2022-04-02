@@ -6,7 +6,7 @@ import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
 import 'package:places/ui/components/icon_box.dart';
 
-class VisitingListElement extends StatelessWidget {
+class VisitingListItem extends StatelessWidget {
   final Sight sight;
   final List<Widget>? cardActions;
   final VoidCallback onDeleteButtonPressed;
@@ -14,7 +14,7 @@ class VisitingListElement extends StatelessWidget {
   final String scheduledAt;
   final String workingStatus;
 
-  const VisitingListElement({
+  const VisitingListItem({
     Key? key,
     required this.sight,
     this.cardActions,

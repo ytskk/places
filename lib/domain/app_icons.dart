@@ -1,3 +1,6 @@
+/// App svg icons paths.
+///
+/// Name convention: snake_case.
 class AppIcons {
   static const check = 'assets/icons/check.svg';
   static const calendar = 'assets/icons/calendar.svg';
@@ -15,7 +18,7 @@ class AppIcons {
   static const list_fill = 'assets/icons/list-fill.svg';
   static const coffee = 'assets/icons/coffee.svg';
   static const tour = 'assets/icons/tour.svg';
-  static const shoppingBag = 'assets/icons/shopping_bag.svg';
+  static const shopping_bag = 'assets/icons/shopping_bag.svg';
   static const error = 'assets/icons/error.svg';
   static const search = 'assets/icons/search.svg';
   static const filter = 'assets/icons/filter.svg';

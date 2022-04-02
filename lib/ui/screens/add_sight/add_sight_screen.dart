@@ -67,11 +67,12 @@ class _AddSightScreenState extends State<AddSightScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _SightCreateButton(),
+      bottomNavigationBar: const _SightCreateButton(),
     );
   }
 }
 
+/// Creates photo loader component.
 class _CategoryPhotoLoader extends StatelessWidget {
   const _CategoryPhotoLoader({Key? key}) : super(key: key);
 
@@ -88,7 +89,7 @@ class _CategoryPhotoLoader extends StatelessWidget {
             ...context
                 .watch<AddSight>()
                 .images
-                .map((e) => _AddSightAddedImageElement(
+                .map((e) => _AddSightAddedImageItem(
                       element: e,
                     ))
                 .toList(),
@@ -99,6 +100,7 @@ class _CategoryPhotoLoader extends StatelessWidget {
   }
 }
 
+/// Creates readOnly [TextField] with on pressed callback to navigate to [SelectCategoryScreen].
 class _CategorySelection extends StatelessWidget {
   const _CategorySelection({Key? key}) : super(key: key);
 
@@ -113,7 +115,9 @@ class _CategorySelection extends StatelessWidget {
         controller: categoryController,
         onTap: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => SelectCategoryScreen()),
+            MaterialPageRoute(
+              builder: (context) => const SelectCategoryScreen(),
+            ),
           );
         },
       ),
@@ -237,6 +241,7 @@ class _SightDescription extends StatelessWidget {
   }
 }
 
+/// Button is enabled when [AddSight.validateFields] is true.
 class _SightCreateButton extends StatelessWidget {
   const _SightCreateButton({Key? key}) : super(key: key);
 
@@ -248,11 +253,11 @@ class _SightCreateButton extends StatelessWidget {
         text: AppStrings.addSightScreenSightCreate.toUpperCase(),
         onPressed: context.watch<AddSight>().validateFields()
             ? () {
-          showAlertDialog(
-            context,
-            _AddSightCreateButtonDialog(),
-          );
-        }
+                showAlertDialog(
+                  context,
+                  const _AddSightCreateButtonDialog(),
+                );
+              }
             : null,
         buttonPadding: ButtonPadding.UltraWide,
       ),
@@ -269,6 +274,7 @@ Future<bool?> showAlertDialog(BuildContext context, Widget dialog) async {
   );
 }
 
+/// Dialog, preventing form values loss.
 class _AddSightCloseButtonDialog extends StatelessWidget {
   const _AddSightCloseButtonDialog({Key? key}) : super(key: key);
 
@@ -317,7 +323,8 @@ class _AddSightCreateButtonDialog extends StatelessWidget {
             mocks.add(context.read<AddSight>().createSight());
             context.read<AddSight>().clearFields();
             Navigator.of(context)
-              ..pop()..pop();
+              ..pop()
+              ..pop();
           },
           child: Text(
             AppStrings.addSightScreenSightDialogCreateActionTitle,
@@ -328,6 +335,11 @@ class _AddSightCreateButtonDialog extends StatelessWidget {
   }
 }
 
+/// Zero element to choose new photo.
+///
+/// Bordered centered plus icon.
+///
+/// TODO: implement image picker!
 class _AddSightImageButton extends StatelessWidget {
   const _AddSightImageButton({Key? key}) : super(key: key);
 
@@ -381,8 +393,12 @@ class _AddSightImageButton extends StatelessWidget {
   }
 }
 
-class _AddSightAddedImageElement extends StatelessWidget {
-  const _AddSightAddedImageElement({
+/// Represents loaded image item.
+class _AddSightAddedImageItem extends StatelessWidget {
+  /// [element] — temporary argument, represents image data.
+  ///
+  /// Data stored in [AddSight._sightImages].
+  const _AddSightAddedImageItem({
     Key? key,
     this.element,
   }) : super(key: key);

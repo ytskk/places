@@ -10,20 +10,24 @@ enum DialogState {
 
 /// A model for building [DialogWidget], describing, depending on the received
 /// [DialogStates], a set of [icon] and [color].
+///
+/// Creates an object from the [DialogData.resolveData(dialogState)].
 class DialogData {
-  final Color? color;
-  final IconData? icon;
-
-  /// **Arguments**
-  /// - `color` — background color for [DialogWidget]
-  /// - `icon` — returned IconData
-  ///
-  /// **Methods**
-  /// - `resolveData` — static method to get [DialogData] for provided [dialogState]
+  /// Collects dialog data (color and icon).
   const DialogData({
-    required Color? this.color,
-    required IconData? this.icon,
+    required this.color,
+    required this.icon,
   });
+
+  /// background color for [DialogWidget]
+  final Color? color;
+
+  /// returned [IconData].
+  ///
+  /// ```
+  /// Icons.close
+  /// ```
+  final IconData? icon;
 
   /// get [DialogData] for provided [dialogState]
   static DialogData resolveData(DialogState dialogState) {
@@ -33,10 +37,7 @@ class DialogData {
       case DialogState.Error:
         return DialogData(color: Colors.red, icon: Icons.close);
       case DialogState.Alert:
-        return DialogData(
-          color: Colors.amber,
-          icon: CupertinoIcons.question,
-        );
+        return DialogData(color: Colors.amber, icon: CupertinoIcons.question);
     }
   }
 }

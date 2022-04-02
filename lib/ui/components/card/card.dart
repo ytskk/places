@@ -19,18 +19,28 @@ class CardInfo {
 }
 
 class MyCard extends StatelessWidget {
-  final CardInfo cardInfo;
-  final Sight sight;
-  final List<Widget> actions;
-
+  /// Creates card widget.
+  ///
+  /// If card info is null, uses [sight] data.
   MyCard(
-    Sight this.sight, {
+    this.sight, {
     Key? key,
-    List<Widget> this.actions = const [],
-    CardInfo? cardInfo,
+    this.actions = const [],
+    cardInfo,
+    this.onTap,
   })  : this.cardInfo =
             cardInfo ?? CardInfo(title: sight.name, text: sight.details),
         super(key: key);
+
+  /// Contains displayable card info.
+  final CardInfo cardInfo;
+  final Sight sight;
+
+  /// Top right list of widgets, typically buttons.
+  final List<Widget> actions;
+
+  /// Callback when clicking on any place on the card except for actions.
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +59,7 @@ class MyCard extends StatelessWidget {
               ],
             ),
             // card info
-            buildCardInfo(cardInfo, context),
+            CardInformation(cardInfo: cardInfo),
           ],
         ),
         Positioned.fill(
@@ -57,14 +67,12 @@ class MyCard extends StatelessWidget {
             type: MaterialType.transparency,
             child: InkWell(
               splashColor: splashColor,
-              onTap: () {
-                print("Card clicked");
-              },
+              onTap: onTap,
             ),
           ),
         ),
         // text + action buttons
-        buildCardHeader(sight.type, actions: actions),
+        CardHeader(title: sight.type, actions: actions),
       ],
     );
   }

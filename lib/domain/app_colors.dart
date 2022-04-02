@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
+/// Interface to describe possible colors.
+///
+/// Used to provide a common interface when setting up a theme.
 class AppColors {
   late final Color fillColor;
   late final Color textLabel;

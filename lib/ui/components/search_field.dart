@@ -3,25 +3,36 @@ import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/icon_box.dart';
 
+/// Custom search field, based on [TextField].
 class SearchField extends StatefulWidget {
-  final bool readOnly;
-  final bool autofocus;
-  final void Function()? onTap;
-  final Widget? suffix;
-  final TextEditingController? controller;
-  final VoidCallback? onEditingComplete;
-  final ValueChanged<String>? onChange;
-
+  /// Creates search text field.
+  ///
+  /// Search icon in [prefix].
+  ///
+  /// Field may be read only with [onTap] callback.
   const SearchField({
     Key? key,
-    bool this.readOnly = false,
-    bool this.autofocus = false,
-    VoidCallback? this.onTap,
-    VoidCallback? this.onEditingComplete,
-    Widget? this.suffix,
-    TextEditingController? this.controller,
-    ValueChanged<String>? this.onChange,
+    this.controller,
+    this.readOnly = false,
+    this.autofocus = false,
+    this.onTap,
+    this.onEditingComplete,
+    this.suffix,
+    this.onChange,
   }) : super(key: key);
+
+  /// Controls the text being edited.
+  ///
+  /// If null, this widget will create it's own [TextEditingController].
+  final TextEditingController? controller;
+  final bool readOnly;
+  final bool autofocus;
+  final VoidCallback? onTap;
+
+  /// Optional widget to place on the line after the input.
+  final Widget? suffix;
+  final VoidCallback? onEditingComplete;
+  final ValueChanged<String>? onChange;
 
   @override
   State<SearchField> createState() => _SearchFieldState();

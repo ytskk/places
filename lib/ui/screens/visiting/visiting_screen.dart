@@ -18,17 +18,17 @@ class _VisitingScreenState extends State<VisitingScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: AppStrings.visitingTabTitles.length,
-      child: Scaffold(
-        appBar: CustomAppBar(
+      child: const Scaffold(
+        appBar: const CustomAppBar(
           title: Text(
             AppStrings.visitingAppBarTitle,
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(52),
-            child: const SlidingTabBar(AppStrings.visitingTabTitles),
+            child: SlidingTabBar(tabs: AppStrings.visitingTabTitles),
           ),
         ),
-        body: const SafeArea(
+        body: SafeArea(
           child: TabBarView(
             children: [
               VisitingWantToVisitScreen(),

@@ -46,13 +46,13 @@ class SettingsTableState extends State<SettingsTable> {
             value: isDarkTheme,
             onChanged: (bool newValue) {
               setState(() {
-                context.read<Settings>().setIsDarkTheme(!isDarkTheme);
+                context.read<Settings>().setIsDarkTheme = !isDarkTheme;
               });
               log('Theme changed to ${isDarkTheme ? 'dark' : 'light'}');
             },
           ),
         ),
-        HorizontalDivider(),
+        const HorizontalDivider(),
         ListTile(
           title: Text(AppStrings.settingsScreenTutorialTitle),
           trailing: IconButton(
@@ -66,7 +66,7 @@ class SettingsTableState extends State<SettingsTable> {
             icon: Icon(Icons.info_outline),
           ),
         ),
-        HorizontalDivider(),
+        const HorizontalDivider(),
       ],
     );
   }

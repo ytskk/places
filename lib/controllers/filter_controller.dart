@@ -3,11 +3,21 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/filter_option.dart';
+import 'package:places/models/sight.dart';
 
 class Filter extends ChangeNotifier {
-  // fill from mock data
   List<FilterOption> _filterOptions =
       filterCategories.map((category) => FilterOption(name: category)).toList();
+
+  final List<Sight> _nearbyPlaces = [];
+
+  List<Sight> get nearbyPlaces => _nearbyPlaces;
+
+  void setNearbyPlaces(List<Sight> sights) {
+    _nearbyPlaces
+      ..clear()
+      ..addAll(sights);
+  }
 
   final double _rangeValueStart = 100;
   final double _rangeValueEnd = 10000;

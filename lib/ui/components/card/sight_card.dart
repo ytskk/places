@@ -6,9 +6,9 @@ import 'package:places/ui/components/card/card.dart';
 
 class SightCard extends StatelessWidget {
   const SightCard(
-    Sight this.sight, {
+    this.sight, {
     Key? key,
-    List<Widget> this.actions = const [],
+    this.actions = const [],
   }) : super(key: key);
 
   final Sight sight;

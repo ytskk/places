@@ -8,10 +8,12 @@ import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
 
+/// A page detailing the [Sight].
 class SightDetails extends StatelessWidget {
-  final Sight sight;
-
+  /// Detailed page for provided [sight].
   const SightDetails(Sight this.sight, {Key? key}) : super(key: key);
+
+  final Sight sight;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +23,14 @@ class SightDetails extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(
         background: Colors.transparent,
-        leading: Navigator.canPop(context) ? _RoundedBackButton() : null,
+        leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             NetworkImageBox(sight.url, height: 420),
             SafeArea(
+              // for better display in horizontal format
               top: false,
               child: Padding(
                 padding:
@@ -35,7 +38,6 @@ class SightDetails extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // sight name
                     Padding(
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
@@ -43,7 +45,11 @@ class SightDetails extends StatelessWidget {
                         style: textTheme.headline3,
                       ),
                     ),
-                    _buildSightSubtitle(context, sight.type),
+                    _SightSubtitle(
+                      sightType: sight.type,
+                      sightWorkingStatus:
+                          '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
+                    ),
                     if (sight.details.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 24),
@@ -52,41 +58,12 @@ class SightDetails extends StatelessWidget {
                           style: textTheme.bodyText2,
                         ),
                       ),
-                    // button
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: Button.icon(
-                        buttonPadding: ButtonPadding.Wide,
-                        text: AppStrings.sightDetailsGetDirections,
-                        onPressed: () {
-                          print("Direction button clicked");
-                        },
-                        icon: AppIcons.go,
-                      ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: _DirectionButton(),
                     ),
                     const HorizontalDivider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Button.icon(
-                            icon: AppIcons.calendar,
-                            text: AppStrings.sightDetailsSchedule,
-                            background: Colors.transparent,
-                          ),
-                        ),
-                        Expanded(
-                          child: Button.icon(
-                            icon: AppIcons.heart,
-                            text: AppStrings.sightDetailsAddToWishlist,
-                            background: Colors.transparent,
-                            onPressed: () {
-                              print("To Wishlist button clicked");
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                    const _SightManipulationButtons(),
                   ],
                 ),
               ),
@@ -98,31 +75,91 @@ class SightDetails extends StatelessWidget {
   }
 }
 
-Widget _buildSightSubtitle(BuildContext context, String sightType) {
-  final bodyText1 = Theme.of(context).textTheme.bodyText1;
+class _SightSubtitle extends StatelessWidget {
+  const _SightSubtitle({
+    Key? key,
+    required this.sightType,
+    this.sightWorkingStatus,
+  }) : super(key: key);
 
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 16),
-    child: Row(
+  final String sightType;
+  final String? sightWorkingStatus;
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitleTextStyle = Theme.of(context).textTheme.bodyText1;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Text(
+            sightType,
+            style: subtitleTextStyle!.copyWith(fontWeight: FontWeight.w700),
+          ),
+          if (sightWorkingStatus != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(
+                sightWorkingStatus!,
+                style: subtitleTextStyle,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DirectionButton extends StatelessWidget {
+  const _DirectionButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Button.icon(
+      buttonPadding: ButtonPadding.Wide,
+      text: AppStrings.sightDetailsGetDirections,
+      onPressed: () {
+        print("Direction button clicked");
+      },
+      icon: AppIcons.go,
+    );
+  }
+}
+
+class _SightManipulationButtons extends StatelessWidget {
+  const _SightManipulationButtons({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          sightType,
-          style: bodyText1!.copyWith(fontWeight: FontWeight.w700),
+        Expanded(
+          child: Button.icon(
+            icon: AppIcons.calendar,
+            text: AppStrings.sightDetailsSchedule,
+            background: Colors.transparent,
+          ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text(
-            // temp
-            'Закрыто до 09:00',
-            style: bodyText1,
+        Expanded(
+          child: Button.icon(
+            icon: AppIcons.heart,
+            text: AppStrings.sightDetailsAddToWishlist,
+            background: Colors.transparent,
+            onPressed: () {
+              print("To Wishlist button clicked");
+            },
           ),
         ),
       ],
-    ),
-  );
+    );
+  }
 }
 
+/// Creates rounded back button.
 class _RoundedBackButton extends StatelessWidget {
+  /// Rounded button with [Navigator.pop(context)] onPressed action.
   const _RoundedBackButton({Key? key}) : super(key: key);
 
   @override
@@ -130,24 +167,33 @@ class _RoundedBackButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: ElevatedButton(
-        style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.zero,
-          alignment: Alignment.center,
-          backgroundColor: theme.backgroundColor,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Center(
+        child: SizedBox(
+          height: 44,
+          width: 44,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: theme.backgroundColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+              child: InkWell(
+                splashColor: Colors.black12,
+                borderRadius: BorderRadius.circular(10),
+                onTap: () {
+                  print("Back button clicked");
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  CupertinoIcons.back,
+                  color: theme.textTheme.bodyText2!.color,
+                ),
+              ),
+            ),
           ),
-        ),
-        onPressed: () {
-          print("Back button clicked");
-          Navigator.pop(context);
-        },
-        child: Icon(
-          CupertinoIcons.back,
-          color: theme.textTheme.bodyText2!.color,
         ),
       ),
     );

@@ -2,28 +2,28 @@ import 'package:flutter/material.dart';
 
 /// Custom implemented [AppBar].
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  /// Created design specified AppBar.
+  const CustomAppBar({
+    Key? key,
+    this.title,
+    // The height of the title component of the [AppBar]
+    this.height = kToolbarHeight,
+    this.bottom,
+    this.actions,
+    this.leading,
+    this.background,
+  }) : super(key: key);
+
+  /// Height of AppBar, except [bottom], similar to [AppBar.toolbarHeight],
+  /// defaults to [kToolbarHeight].
   final double height;
+
+  /// Uses [titleTextStyle] if text style is not provided.
   final Widget? title;
   final PreferredSizeWidget? bottom;
   final List<Widget>? actions;
   final Widget? leading;
   final Color? background;
-
-  /// **Arguments**
-  /// - `title` as [Widget]. Uses [titleTextStyle] if text style is not provided.
-  /// - `bottom` — [PreferredSizeWidget]
-  /// - `height` — height of AppBar, except [bottom], similar to [AppBar.toolbarHeight],
-  /// defaults to [kToolbarHeight]
-  const CustomAppBar({
-    Key? key,
-    Widget? this.title,
-    // The height of the title component of the [AppBar]
-    double this.height = kToolbarHeight,
-    PreferredSizeWidget? this.bottom,
-    List<Widget>? this.actions,
-    Widget? this.leading,
-    Color? this.background,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

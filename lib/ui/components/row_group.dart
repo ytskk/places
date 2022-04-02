@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
 
+/// Wrapping text and provided content.
 class RowGroup extends StatelessWidget {
-  final Widget child;
-  final Text title;
-  final Text titleAfter;
-  final double paddingLeft;
-  final double paddingTop;
-  final double paddingBottom;
-
+  /// Creates [Column] based widget.
+  ///
+  /// [title] and [titleAfter] may be null, in that case only [child] will rendered.
   const RowGroup({
     Key? key,
-    required Widget this.child,
-    Text this.title = const Text(""),
-    Text this.titleAfter = const Text(""),
-    double this.paddingLeft = 0,
-    double this.paddingTop = 24,
-    double this.paddingBottom = 8,
+    required this.child,
+    this.title,
+    this.titleAfter,
+    this.paddingLeft = 0,
+    this.paddingTop = 24,
+    this.paddingBottom = 8,
   }) : super(key: key);
+
+  /// Any widget that can be placed in [Column].
+  final Widget child;
+
+  /// Have base style, that is merging with provided [Text] style.
+  final Text? title;
+
+  /// Have base style, that is merging with provided [Text] style.
+  final Text? titleAfter;
+
+  /// Padding for header ([title] + [titleAfter]) content.
+  final double paddingLeft;
+
+  /// Padding for header ([title] + [titleAfter]) content.
+  final double paddingTop;
+
+  /// Padding for header ([title] + [titleAfter]) content.
+  final double paddingBottom;
 
   @override
   Widget build(BuildContext context) {
@@ -35,23 +50,23 @@ class RowGroup extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (title.data!.length > 0)
+              if (title != null)
                 Text(
-                  title.data!,
+                  title!.data!,
                   style: textTheme.bodyText1!
                       .copyWith(
                         fontSize: 12,
                       )
-                      .merge(title.style),
+                      .merge(title!.style),
                 ),
-              if (titleAfter.data!.length > 0)
+              if (titleAfter != null)
                 Text(
-                  titleAfter.data!,
+                  titleAfter!.data!,
                   style: textTheme.bodyText1!
                       .copyWith(
                         fontSize: 12,
                       )
-                      .merge(titleAfter.style),
+                      .merge(titleAfter!.style),
                 ),
             ],
           ),

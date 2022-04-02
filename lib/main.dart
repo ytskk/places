@@ -5,7 +5,6 @@ import 'package:places/controllers/navigation_controller.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
 import 'package:places/controllers/visiting_places_controller.dart';
-import 'package:places/domain/app_icons.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/screens/res/themes.dart';
@@ -39,8 +38,6 @@ class MyApp extends StatelessWidget {
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()
                 : AppThemeData.light(),
-            // home: FilterScreen(),
-            // home: AddSightScreen(),
             home: MyHomePage(),
           );
         },
@@ -71,51 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+/// TODO: implement BottomNavigationBarButton model with dynamic icon state.
 class NavigationBar extends StatelessWidget {
-  static const List _bottomNavigationBarItemsData = const [
-    {
-      'icon': {
-        'name': {
-          'selected': AppIcons.list_fill,
-          'unselected': AppIcons.list,
-        },
-      },
-      'label': 'Sight List',
-    },
-    {
-      'icon': {
-        'name': {
-          'selected': AppIcons.map_fill,
-          'unselected': AppIcons.map,
-        },
-      },
-      'label': 'Map',
-    },
-    {
-      'icon': {
-        'name': {
-          'selected': AppIcons.heart_fill,
-          'unselected': AppIcons.heart,
-        },
-      },
-      'label': 'Favorites',
-    },
-    {
-      'icon': {
-        'name': {
-          'selected': AppIcons.settings_fill,
-          'unselected': AppIcons.settings,
-        },
-      },
-      'label': 'Settings',
-    },
-  ];
-
   const NavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final bottomButtons =
+        context.read<Navigation>().bottomNavigationBarItemsData;
 
     return BottomNavigationBar(
       backgroundColor: theme.backgroundColor,
@@ -127,7 +88,7 @@ class NavigationBar extends StatelessWidget {
         context.read<Navigation>().setSelectedPageIndex(value);
       },
       items: [
-        for (var barItem in _bottomNavigationBarItemsData)
+        for (var barItem in bottomButtons)
           BottomNavigationBarItem(
             activeIcon: IconBox(
               icon: barItem['icon']['name']['selected'],

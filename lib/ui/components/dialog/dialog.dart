@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:places/models/dialog.dart';
 
+/// A product design alert dialog.
+///
+/// An alert dialog informs the user about situations that require acknowledgement.
+/// An alert dialog has an optional content and an optional list of actions.
+/// The content is displayed above the actions and below the icon.
 class DialogWidget extends StatelessWidget {
-  final DialogState dialogState;
-  final Widget? content;
-  final List<Widget>? actions;
-
   const DialogWidget({
     Key? key,
-    DialogState this.dialogState = DialogState.Success,
-    Widget? this.content,
-    List<Widget>? this.actions,
+    this.dialogState = DialogState.Success,
+    this.content,
+    this.actions,
   }) : super(key: key);
+
+  /// Dialog state from [DialogState].
+  final DialogState dialogState;
+
+  /// The (optional) title of the dialog is displayed in a large font at the top
+  /// of the dialog.
+  ///
+  /// Typically a [Text] widget.
+  final Widget? content;
+
+  /// The (optional) set of actions that are displayed at the bottom of the
+  /// dialog.
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +49,14 @@ class DialogWidget extends StatelessWidget {
 }
 
 class _DialogStateIcon extends StatelessWidget {
-  final DialogState dialogState;
-  final Widget? child;
-
   const _DialogStateIcon({
     Key? key,
-    required DialogState this.dialogState,
-    Widget? this.child,
+    required this.dialogState,
+    this.child,
   }) : super(key: key);
+
+  final DialogState dialogState;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {

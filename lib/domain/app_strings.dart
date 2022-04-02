@@ -1,10 +1,9 @@
-/// Строковые константы.
+/// Constant strings of the application.
 ///
-/// Struct: `screen/component/widget name` + `Element`
+/// Struct: `screen/component/widget name` + `Modifier`
 ///
-/// Example
-/// ```dart
-///  Text(AppStrings.sightDetailsGetDirections)
+/// ```
+///  Text(AppStrings.sightDetailsGetDirectionsTitle)
 /// ```
 class AppStrings {
   // Sight Screen
@@ -13,6 +12,8 @@ class AppStrings {
   static const sightClosedUntil = 'Закрыто до';
 
   // SightDetails screen
+  static const sightDetailsWorkingStatusClosed = 'Закрыто до';
+  static const sightDetailsWorkingStatusOpened = 'Открыто до';
   static const sightDetailsGetDirections = 'Построить маршрут';
   static const sightDetailsSchedule = 'Запланировать';
   static const sightDetailsAddToWishlist = 'В избранное';
