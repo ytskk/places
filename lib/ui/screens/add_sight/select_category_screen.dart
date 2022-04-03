@@ -37,9 +37,22 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
         leading: BackButton(color: theme.textTheme.bodyText2!.color),
         title: Text(AppStrings.addSightScreenCategoryTitle),
       ),
-      body: _CategoriesTable(selectedCategory: selectedCategory),
-      bottomNavigationBar:
-          _SightCategorySelectButton(selectedCategory: selectedCategory),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            _CategoriesTable(selectedCategory: selectedCategory),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              fillOverscroll: true,
+              child: _SightCategorySelectButton(
+                selectedCategory: selectedCategory,
+              ),
+            ),
+          ],
+        ),
+      ),
+      // bottomNavigationBar:R
+      //     _SightCategorySelectButton(selectedCategory: selectedCategory),
     );
   }
 }
@@ -61,30 +74,56 @@ class _CategoriesTableState extends State<_CategoriesTable> {
   Widget build(BuildContext context) {
     final checkColor = Theme.of(context).primaryColor;
 
-    return ListView.builder(
-      itemCount: filterCategories.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: [
-            ListTile(
-              trailing: filterCategories[index] == widget.selectedCategory.text
-                  ? Icon(
-                      Icons.check,
-                      color: checkColor,
-                    )
-                  : null,
-              onTap: () {
-                setState(() {
-                  widget.selectedCategory.text = filterCategories[index];
-                });
-              },
-              title: Text(filterCategories[index]),
-            ),
-            const HorizontalDivider(),
-          ],
-        );
-      },
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return Column(
+            children: [
+              ListTile(
+                trailing:
+                    filterCategories[index] == widget.selectedCategory.text
+                        ? Icon(
+                            Icons.check,
+                            color: checkColor,
+                          )
+                        : null,
+                onTap: () {
+                  setState(() {
+                    widget.selectedCategory.text = filterCategories[index];
+                  });
+                },
+                title: Text(filterCategories[index]),
+              ),
+              const HorizontalDivider(),
+            ],
+          );
+        },
+        childCount: filterCategories.length,
+      ),
     );
+    // return ListView(
+    //   children: [
+    //     ...filterCategories.map((e) => Column(
+    //           children: [
+    //             ListTile(
+    //               trailing: e == widget.selectedCategory.text
+    //                   ? Icon(
+    //                       Icons.check,
+    //                       color: checkColor,
+    //                     )
+    //                   : null,
+    //               onTap: () {
+    //                 setState(() {
+    //                   widget.selectedCategory.text = e;
+    //                 });
+    //               },
+    //               title: Text(e),
+    //             ),
+    //             const HorizontalDivider(),
+    //           ],
+    //         )),
+    //   ],
+    // );
   }
 }
 
@@ -101,19 +140,25 @@ class _SightCategorySelectButton extends StatelessWidget {
     bool isDisabled = !(selectedCategory.text.length > 0);
     // print("selected: $selectedCategory");
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 44, left: 16, right: 16, top: 8),
-      child: Button(
-        text: AppStrings.addSightScreenSightSave.toUpperCase(),
-        onPressed: isDisabled
-            ? null
-            : () {
-                context
-                    .read<AddSight>()
-                    .validateCategory(selectedCategory.text);
-                Navigator.of(context).pop();
-              },
-        buttonPadding: ButtonPadding.UltraWide,
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Button(
+            text: AppStrings.addSightScreenSightSave.toUpperCase(),
+            onPressed: isDisabled
+                ? null
+                : () {
+                    context
+                        .read<AddSight>()
+                        .validateCategory(selectedCategory.text);
+                    Navigator.of(context).pop();
+                  },
+            buttonPadding: ButtonPadding.UltraWide,
+          ),
+        ),
       ),
     );
   }

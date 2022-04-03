@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/models/sight.dart';
 
@@ -45,7 +44,7 @@ class AddSight extends ChangeNotifier {
   }
 
   bool isValidName(String value) {
-    return value.length > 5;
+    return value.isNotEmpty;
   }
 
   ValidationModel get coordinatesLat => _sightCoordinatesLat;
@@ -140,5 +139,6 @@ class FieldsErrors {
 
 /// Validation patterns to match.
 class FieldsPatterns {
-  static final doublePattern = RegExp(r"^\d*\.?\d*");
+  /// Pattern for double value.
+  static final RegExp doublePattern = RegExp(r'^[+-]?([0-9]*[.])?[0-9]+$');
 }

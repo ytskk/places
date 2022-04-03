@@ -32,6 +32,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
     super.initState();
 
     _sightDescriptionNode = FocusNode();
+    // print('description focus node built: ${_sightDescriptionNode}');
   }
 
   @override
@@ -74,7 +75,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
             ),
             const SliverFillRemaining(
               hasScrollBody: false,
-              child: const _SightCreateButton(),
+              fillOverscroll: true,
+              child: _AddSightButton(),
             ),
           ],
         ),
@@ -266,8 +268,8 @@ class _SightDescription extends StatelessWidget {
 }
 
 /// Button is enabled when [AddSight.validateFields] is true.
-class _SightCreateButton extends StatelessWidget {
-  const _SightCreateButton({Key? key}) : super(key: key);
+class _AddSightButton extends StatelessWidget {
+  const _AddSightButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
