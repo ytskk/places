@@ -200,17 +200,19 @@ class FilterRowGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildListDelegate([
-        Column(
-          children: [
-            _BuildFilterCategoryTitle(
-              title: title,
-              titleAfter: titleAfter,
-            ),
-            child,
-          ],
-        ),
-      ]),
+      delegate: SliverChildListDelegate(
+        [
+          Column(
+            children: [
+              _BuildFilterCategoryTitle(
+                title: title,
+                titleAfter: titleAfter,
+              ),
+              child,
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

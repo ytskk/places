@@ -81,3 +81,12 @@ class _DialogStateIcon extends StatelessWidget {
     );
   }
 }
+
+Future<bool?> showAlertDialog(BuildContext context, Widget dialog) async {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return dialog;
+    },
+  );
+}

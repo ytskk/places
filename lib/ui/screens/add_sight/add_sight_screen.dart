@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,6 +52,10 @@ class _AddSightScreenState extends State<AddSightScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          // platform specified scroll physics
+          physics: Platform.isIOS || Platform.isMacOS
+              ? const BouncingScrollPhysics()
+              : const ClampingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Form(
             key: _formKey,
@@ -73,28 +79,39 @@ class _AddSightScreenState extends State<AddSightScreen> {
 }
 
 /// Creates photo loader component.
+///
+/// First element is [_AddSightImageButton] and all others are [_AddSightAddedImageItem].
 class _CategoryPhotoLoader extends StatelessWidget {
   const _CategoryPhotoLoader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final images = context.watch<AddSight>().images;
+
     return SizedBox(
       height: 72,
       width: double.infinity,
-      child: SingleChildScrollView(
+      child: ListView.builder(
+        // platform specified scroll physics
+        physics: Platform.isIOS || Platform.isMacOS
+            ? const BouncingScrollPhysics()
+            : const ClampingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            const _AddSightImageButton(),
-            ...context
-                .watch<AddSight>()
-                .images
-                .map((e) => _AddSightAddedImageItem(
-                      element: e,
-                    ))
-                .toList(),
-          ],
-        ),
+        itemCount: images.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return _AddSightImageButton();
+          }
+
+          final image = images[index - 1];
+
+          return Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: _AddSightAddedImageItem(
+              element: image,
+            ),
+          );
+        },
       ),
     );
   }
@@ -265,15 +282,6 @@ class _SightCreateButton extends StatelessWidget {
   }
 }
 
-Future<bool?> showAlertDialog(BuildContext context, Widget dialog) async {
-  return showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return dialog;
-    },
-  );
-}
-
 /// Dialog, preventing form values loss.
 class _AddSightCloseButtonDialog extends StatelessWidget {
   const _AddSightCloseButtonDialog({Key? key}) : super(key: key);
@@ -347,44 +355,46 @@ class _AddSightImageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).primaryColor.withOpacity(0.48);
 
-    return InkWell(
-      onTap: () {
-        // temp!
-        showAlertDialog(
-          context,
-          DialogWidget(
-            content: Text(
-              'Image picker',
-              textAlign: TextAlign.center,
-            ),
-            dialogState: DialogState.Alert,
-            actions: [
-              TextButton(
-                onPressed: () {
-                  context.read<AddSight>().addImage();
-                  Navigator.of(context).pop();
-                },
-                child: Text('Add image'),
+    return Center(
+      child: InkWell(
+        onTap: () {
+          // temp!
+          showAlertDialog(
+            context,
+            DialogWidget(
+              content: Text(
+                'Image picker',
+                textAlign: TextAlign.center,
               ),
-            ],
+              dialogState: DialogState.Alert,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    context.read<AddSight>().addImage();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Add image'),
+                ),
+              ],
+            ),
+          );
+        },
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: accentColor,
+              width: 2,
+            ),
           ),
-        );
-      },
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: accentColor,
-            width: 2,
-          ),
-        ),
-        child: SizedBox(
-          height: 72,
-          width: 72,
-          child: Center(
-            child: Icon(
-              Icons.add_rounded,
-              size: 40,
+          child: SizedBox(
+            height: 72,
+            width: 72,
+            child: Center(
+              child: Icon(
+                Icons.add_rounded,
+                size: 40,
+              ),
             ),
           ),
         ),
@@ -411,66 +421,60 @@ class _AddSightAddedImageItem extends StatelessWidget {
 
     return Dismissible(
       key: ValueKey(element),
-      background: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: Align(
-          child: Icon(
-            Icons.keyboard_arrow_up_rounded,
-            color: arrowUpIconColor,
-          ),
-          alignment: Alignment.bottomCenter,
+      background: Align(
+        child: Icon(
+          Icons.keyboard_arrow_up_rounded,
+          color: arrowUpIconColor,
         ),
+        alignment: Alignment.bottomCenter,
       ),
       direction: DismissDirection.up,
       onDismissed: (DismissDirection data) {
         context.read<AddSight>().removeImage(element);
       },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: RoundedBox(
-          child: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              // mock image
-              const SizedBox(
+      child: RoundedBox(
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            // mock image
+            const SizedBox(
+              height: 72,
+              width: 72,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.greenAccent,
+                ),
+              ),
+            ),
+            const Opacity(
+              opacity: 0.24,
+              child: SizedBox(
                 height: 72,
                 width: 72,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Colors.greenAccent,
+                    color: Colors.black,
                   ),
                 ),
               ),
-              const Opacity(
-                opacity: 0.24,
+            ),
+            GestureDetector(
+              onTap: () {
+                context.read<AddSight>().removeImage(element);
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(4.0),
                 child: SizedBox(
-                  height: 72,
-                  width: 72,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                    ),
+                  width: 24,
+                  height: 24,
+                  child: Icon(
+                    CupertinoIcons.clear_circled_solid,
+                    color: Colors.white,
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  context.read<AddSight>().removeImage(element);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Icon(
-                      CupertinoIcons.clear_circled_solid,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
