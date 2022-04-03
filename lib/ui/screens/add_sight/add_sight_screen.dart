@@ -51,29 +51,36 @@ class _AddSightScreenState extends State<AddSightScreen> {
         title: const Text(AppStrings.addSightScreenAppTitle),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          // platform specified scroll physics
-          physics: Platform.isIOS || Platform.isMacOS
-              ? const BouncingScrollPhysics()
-              : const ClampingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const _CategoryPhotoLoader(),
-                const _CategorySelection(),
-                const _SightName(),
-                _SightCoordinates(nextFocus: _sightDescriptionNode),
-                const _ShowOnMap(),
-                _SightDescription(focusNode: _sightDescriptionNode),
-              ],
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const _CategoryPhotoLoader(),
+                      const _CategorySelection(),
+                      const _SightName(),
+                      _SightCoordinates(nextFocus: _sightDescriptionNode),
+                      const _ShowOnMap(),
+                      _SightDescription(focusNode: _sightDescriptionNode),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
+            const SliverFillRemaining(
+              hasScrollBody: false,
+              child: const _SightCreateButton(),
+            ),
+          ],
         ),
       ),
-      bottomNavigationBar: const _SightCreateButton(),
+      // ),
+      // bottomNavigationBar: const _SightCreateButton(),
     );
   }
 }
@@ -264,19 +271,25 @@ class _SightCreateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 44, left: 16, right: 16, top: 8),
-      child: Button(
-        text: AppStrings.addSightScreenSightCreate.toUpperCase(),
-        onPressed: context.watch<AddSight>().validateFields()
-            ? () {
-                showAlertDialog(
-                  context,
-                  const _AddSightCreateButtonDialog(),
-                );
-              }
-            : null,
-        buttonPadding: ButtonPadding.UltraWide,
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Button(
+            text: AppStrings.addSightScreenSightCreate.toUpperCase(),
+            onPressed: context.watch<AddSight>().validateFields()
+                ? () {
+                    showAlertDialog(
+                      context,
+                      const _AddSightCreateButtonDialog(),
+                    );
+                  }
+                : null,
+            buttonPadding: ButtonPadding.UltraWide,
+          ),
+        ),
       ),
     );
   }
