@@ -101,29 +101,6 @@ class _CategoriesTableState extends State<_CategoriesTable> {
         childCount: filterCategories.length,
       ),
     );
-    // return ListView(
-    //   children: [
-    //     ...filterCategories.map((e) => Column(
-    //           children: [
-    //             ListTile(
-    //               trailing: e == widget.selectedCategory.text
-    //                   ? Icon(
-    //                       Icons.check,
-    //                       color: checkColor,
-    //                     )
-    //                   : null,
-    //               onTap: () {
-    //                 setState(() {
-    //                   widget.selectedCategory.text = e;
-    //                 });
-    //               },
-    //               title: Text(e),
-    //             ),
-    //             const HorizontalDivider(),
-    //           ],
-    //         )),
-    //   ],
-    // );
   }
 }
 
@@ -138,7 +115,6 @@ class _SightCategorySelectButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDisabled = !(selectedCategory.text.length > 0);
-    // print("selected: $selectedCategory");
 
     return Align(
       alignment: Alignment.bottomCenter,
