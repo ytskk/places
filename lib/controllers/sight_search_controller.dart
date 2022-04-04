@@ -3,9 +3,12 @@ import 'package:places/mocks.dart';
 import 'package:places/models/sight.dart';
 
 class SightSearch extends ChangeNotifier {
-  late TextEditingController _searchController;
+  // definition.
 
+  late TextEditingController _searchController;
   final List<ActivityRecord> _recentActivity = [];
+
+  // getters.
 
   List<ActivityRecord> get recentActivity => _recentActivity;
 

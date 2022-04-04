@@ -52,11 +52,14 @@ class FilterScreen extends StatelessWidget {
                 rangeValues: RangeValues(100, 20000),
               ),
             ),
-            // _RangeSelection(),
+            const SliverFillRemaining(
+              hasScrollBody: false,
+              fillOverscroll: true,
+              child: _FilterShowResultButton(),
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: _FilterShowResultButton(),
     );
   }
 }
@@ -170,15 +173,21 @@ class _FilterShowResultButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Sight> sights = _getMatchedResults(context);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 44, left: 16, right: 16, top: 8),
-      child: ElevatedButton(
-        onPressed: () {
-          print("Filter show button clicked. Data saved");
-          context.read<Filter>().setNearbyPlaces(sights);
-        },
-        child: Text(
-          "${AppStrings.filterScreenFilterShow} ${"(${sights.length})"}",
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ElevatedButton(
+            onPressed: () {
+              print("Filter show button clicked. Data saved");
+              context.read<Filter>().setNearbyPlaces(sights);
+            },
+            child: Text(
+              "${AppStrings.filterScreenFilterShow} ${"(${sights.length})"}",
+            ),
+          ),
         ),
       ),
     );
@@ -200,17 +209,19 @@ class FilterRowGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildListDelegate([
-        Column(
-          children: [
-            _BuildFilterCategoryTitle(
-              title: title,
-              titleAfter: titleAfter,
-            ),
-            child,
-          ],
-        ),
-      ]),
+      delegate: SliverChildListDelegate(
+        [
+          Column(
+            children: [
+              _BuildFilterCategoryTitle(
+                title: title,
+                titleAfter: titleAfter,
+              ),
+              child,
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

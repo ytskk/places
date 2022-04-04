@@ -40,15 +40,14 @@ class Navigation extends ChangeNotifier {
       'label': 'Settings',
     },
   ];
-
   int _selectedPageIndex = 0;
 
   int get selectedPageIndex => _selectedPageIndex;
+
+  List get bottomNavigationBarItemsData => _bottomNavigationBarItemsData;
 
   void setSelectedPageIndex(int newIndex) {
     _selectedPageIndex = newIndex;
     notifyListeners();
   }
-
-  List get bottomNavigationBarItemsData => _bottomNavigationBarItemsData;
 }

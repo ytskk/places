@@ -18,10 +18,10 @@ class RowGroup extends StatelessWidget {
   /// Any widget that can be placed in [Column].
   final Widget child;
 
-  /// Have base style, that is merging with provided [Text] style.
+  /// Have base style, that is merging with provided [title] style.
   final Text? title;
 
-  /// Have base style, that is merging with provided [Text] style.
+  /// Have base style, that is merging with provided [titleAfter] style.
   final Text? titleAfter;
 
   /// Padding for header ([title] + [titleAfter]) content.

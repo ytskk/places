@@ -42,9 +42,9 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  late FocusNode _focusNode;
-  late TextEditingController _controller;
-  late ValueChanged<String>? _onChanged;
+  late final FocusNode _focusNode;
+  late final TextEditingController _controller;
+  late final ValueChanged<String>? _onChanged;
 
   @override
   void initState() {
@@ -56,6 +56,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
     // to handle clear button visibility
     _focusNode.addListener(() => setState(() {}));
+    // print('focus node built: ${_focusNode}');
     _controller.addListener(() => setState(() {}));
   }
 
@@ -64,6 +65,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
     super.dispose();
 
     _focusNode.dispose();
+    // print('focus node disposed: ${_focusNode}');
+    _controller.dispose();
   }
 
   @override
