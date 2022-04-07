@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()
-                : AppThemeData.light(),
+                : AppThemeData.dark(),
             // home: MyHomePage(),
             home: OnboardingScreen(),
           );

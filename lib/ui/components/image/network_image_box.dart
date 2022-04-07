@@ -5,10 +5,11 @@ import 'package:places/ui/components/image/load_network_image.dart';
 class NetworkImageBox extends StatelessWidget {
   /// Creates [NetworkImageWidget] with [height] and [width].
   const NetworkImageBox(
-    String this.imageUrl, {
+    this.imageUrl, {
     Key? key,
-    double this.width = double.infinity,
-    double this.height = 96,
+    this.width = double.infinity,
+    this.height = 96,
+    this.fit = BoxFit.cover,
   }) : super(key: key);
 
   /// The URL from which the image will be fetched.
@@ -19,6 +20,8 @@ class NetworkImageBox extends StatelessWidget {
 
   /// Actual height of box. Defaults to 96lp.
   final double height;
+
+  final BoxFit fit;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,10 @@ class NetworkImageBox extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          NetworkImageWidget(imageUrl: imageUrl),
+          NetworkImageWidget(
+            imageUrl: imageUrl,
+            fit: fit,
+          ),
           imageOpacity,
         ],
       ),

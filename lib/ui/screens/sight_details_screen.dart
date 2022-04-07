@@ -28,10 +28,14 @@ class SightDetails extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            NetworkImageBox(sight.url, height: 420),
+            // if sight has image, show it
+            if (sight.images.isNotEmpty)
+              _SightImagesCarousel(
+                sightImages: sight.images,
+              ),
             SafeArea(
               // for better display in horizontal format
-              top: false,
+              top: sight.images.isEmpty,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -71,6 +75,84 @@ class SightDetails extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Sight images carousel view with slide indicator.
+class _SightImagesCarousel extends StatefulWidget {
+  /// Shows [sightImages] in carousel.
+  ///
+  /// If [sightImages] length is less than 2, indicator is not shown.
+  const _SightImagesCarousel({
+    Key? key,
+    required this.sightImages,
+  }) : super(key: key);
+
+  final List<String> sightImages;
+
+  @override
+  State<_SightImagesCarousel> createState() => _SightImagesCarouselState();
+}
+
+class _SightImagesCarouselState extends State<_SightImagesCarousel> {
+  int _currentPage = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 360,
+      child: Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          PageView.builder(
+            onPageChanged: (index) => setState(() => _currentPage = index),
+            itemCount: widget.sightImages.length,
+            itemBuilder: (context, index) => NetworkImageBox(
+              widget.sightImages[index],
+            ),
+          ),
+          if (widget.sightImages.length > 1)
+            _SightImagesCarouselIndicator(
+              imagesCount: widget.sightImages.length,
+              currentPage: _currentPage,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SightImagesCarouselIndicator extends StatelessWidget {
+  const _SightImagesCarouselIndicator({
+    Key? key,
+    required this.imagesCount,
+    required this.currentPage,
+  }) : super(key: key);
+
+  final int imagesCount;
+  final int currentPage;
+
+  @override
+  Widget build(BuildContext context) {
+    final indicatorColor = Theme.of(context).textTheme.bodyText2!.color;
+
+    // images indicator, which is expanded to full width.
+    return Row(
+      children: [
+        for (int i = 0; i < imagesCount; i += 1)
+          Expanded(
+            child: SizedBox(
+              height: 8.0,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: i == currentPage ? indicatorColor : Colors.transparent,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

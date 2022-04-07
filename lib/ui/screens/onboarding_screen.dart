@@ -3,7 +3,7 @@ import 'package:places/controllers/tutor_controller.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
-import 'package:places/ui/components/empty_list.dart';
+import 'package:places/ui/components/info_list.dart';
 import 'package:provider/provider.dart';
 
 /// Height of list content is 1/2 of the screen height, when the page indicator
@@ -13,13 +13,16 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLastPage = context.watch<Tutor>().currentPage ==
+        context.read<Tutor>().tutorContent.length - 1;
+
     return Scaffold(
       appBar: CustomAppBar(
         actions: [
           // Shows skip button if its not the last page.
-          if (context.watch<Tutor>().currentPage !=
-              context.read<Tutor>().tutorContent.length - 1)
+          if (isLastPage)
             TextButton(
+              // TODO: implement skip button callback.
               onPressed: () {},
               child: Text(AppStrings.tutorAppBarSkipButtonText),
             ),
@@ -32,9 +35,8 @@ class OnboardingScreen extends StatelessWidget {
         children: [
           _OnboardingPageIndicator(),
           const SizedBox(height: 24),
-          if (context.watch<Tutor>().currentPage ==
-              context.read<Tutor>().tutorContent.length - 1)
-            Align(
+          if (isLastPage)
+            const Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
                 width: double.infinity,
@@ -75,8 +77,9 @@ class _OnboardingPageIndicator extends StatelessWidget {
               height: 8,
               width: currentPage == i ? 24 : 8,
               decoration: BoxDecoration(
-                color:
-                    currentPage == i ? theme.primaryColor : theme.disabledColor,
+                color: currentPage == i
+                    ? theme.primaryColor
+                    : theme.textTheme.bodyText1!.color!.withOpacity(0.54),
                 borderRadius: BorderRadius.circular(30),
               ),
             ),

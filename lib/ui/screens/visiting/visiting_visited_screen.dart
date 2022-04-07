@@ -4,7 +4,7 @@ import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
-import 'package:places/ui/components/empty_list.dart';
+import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/visiting/visiting_list_item.dart';
 import 'package:provider/provider.dart';
 
