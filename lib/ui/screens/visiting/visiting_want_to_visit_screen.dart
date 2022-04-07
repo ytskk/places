@@ -62,10 +62,10 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
               ),
             ],
           )
-        : EmptyList(
+        : InfoList(
             iconName: AppIcons.card,
-            title: AppStrings.visitingEmpty,
-            subtitle: AppStrings.visitingWantToVisitEmpty,
+            title: Text(AppStrings.visitingEmpty),
+            subtitle: Text(AppStrings.visitingWantToVisitEmpty),
           );
     // return VisitingListContent<Sight>(
     //   liContent: context.watch<VisitingPlaces>().wantToVisitPlaces,

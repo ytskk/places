@@ -121,10 +121,10 @@ class _SearchResultsState extends State<_SearchResults> {
         context.read<SightSearch>().searchByName(widget.controller.text.trim());
 
     return results.isEmpty
-        ? EmptyList(
+        ? InfoList(
             iconName: AppIcons.search,
-            title: AppStrings.searchScreenNotFoundTitle,
-            subtitle: AppStrings.searchScreenNotFoundSubtitle,
+            title: Text(AppStrings.searchScreenNotFoundTitle),
+            subtitle: Text(AppStrings.searchScreenNotFoundSubtitle),
           )
         : _SearchResultsList(content: results);
   }

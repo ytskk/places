@@ -97,10 +97,10 @@ class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
               ),
             ],
           )
-        : EmptyList(
+        : InfoList(
             iconName: AppIcons.go,
-            title: AppStrings.visitingEmpty,
-            subtitle: AppStrings.visitingVisitedEmpty,
+            title: Text(AppStrings.visitingEmpty),
+            subtitle: Text(AppStrings.visitingVisitedEmpty),
           );
   }
 }

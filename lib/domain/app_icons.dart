@@ -31,4 +31,9 @@ class AppIcons {
   static const park = 'assets/icons/park.svg';
   static const museum = 'assets/icons/museum.svg';
   static const cafe = 'assets/icons/cafe.svg';
+
+  // tutor icons
+  static const travel_guide = 'assets/icons/travel_guide.svg';
+  static const bag = 'assets/icons/bag.svg';
+  static const pointer = 'assets/icons/pointer.svg';
 }
