@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
-import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
@@ -23,12 +22,10 @@ class SightDetails extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         slivers: [
-          _SightSliverAppBar(sight: sight),
+          _SightSliverAppBar(sightImages: sight.images),
           SliverList(
             delegate: SliverChildListDelegate([
               SafeArea(
-                // for better display in horizontal format
-                // top: isImagesEmpty,
                 top: false,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -70,94 +67,8 @@ class SightDetails extends StatelessWidget {
               ),
             ]),
           ),
-          // SingleChildScrollView(
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          //     child: Column(
-          //       crossAxisAlignment: CrossAxisAlignment.stretch,
-          //       children: [
-          //         Padding(
-          //           padding: const EdgeInsets.only(bottom: 4),
-          //           child: Text(
-          //             sight.name,
-          //             style: textTheme.headline3,
-          //           ),
-          //         ),
-          //         _SightSubtitle(
-          //           sightType: sight.type,
-          //           sightWorkingStatus:
-          //               '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
-          //         ),
-          //         if (sight.details.isNotEmpty)
-          //           Padding(
-          //             padding: const EdgeInsets.only(bottom: 24),
-          //             child: Text(
-          //               sight.details,
-          //               style: textTheme.bodyText2,
-          //             ),
-          //           ),
-          //         const Padding(
-          //           padding: EdgeInsets.only(bottom: 8),
-          //           child: _DirectionButton(),
-          //         ),
-          //         const HorizontalDivider(),
-          //         const _SightManipulationButtons(),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
-      //   body: SingleChildScrollView(
-      //     child: Column(
-      //       children: [
-      //         // if sight has image, show it
-      //         if (sight.images.isNotEmpty)
-      //           _SightImagesCarousel(
-      //             sightImages: sight.images,
-      //           ),
-      //         SafeArea(
-      //           // for better display in horizontal format
-      //           top: sight.images.isEmpty,
-      //           child: Padding(
-      //             padding:
-      //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      //             child: Column(
-      //               crossAxisAlignment: CrossAxisAlignment.stretch,
-      //               children: [
-      //                 Padding(
-      //                   padding: const EdgeInsets.only(bottom: 4),
-      //                   child: Text(
-      //                     sight.name,
-      //                     style: textTheme.headline3,
-      //                   ),
-      //                 ),
-      //                 _SightSubtitle(
-      //                   sightType: sight.type,
-      //                   sightWorkingStatus:
-      //                       '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
-      //                 ),
-      //                 if (sight.details.isNotEmpty)
-      //                   Padding(
-      //                     padding: const EdgeInsets.only(bottom: 24),
-      //                     child: Text(
-      //                       sight.details,
-      //                       style: textTheme.bodyText2,
-      //                     ),
-      //                   ),
-      //                 const Padding(
-      //                   padding: EdgeInsets.only(bottom: 8),
-      //                   child: _DirectionButton(),
-      //                 ),
-      //                 const HorizontalDivider(),
-      //                 const _SightManipulationButtons(),
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
     );
   }
 }
@@ -165,14 +76,14 @@ class SightDetails extends StatelessWidget {
 class _SightSliverAppBar extends StatelessWidget {
   const _SightSliverAppBar({
     Key? key,
-    required this.sight,
+    required this.sightImages,
   }) : super(key: key);
 
-  final Sight sight;
+  final List<String>? sightImages;
 
   @override
   Widget build(BuildContext context) {
-    final isImagesEmpty = sight.images.isEmpty;
+    final isImagesEmpty = sightImages?.isEmpty ?? true;
 
     return SliverAppBar(
       leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
@@ -184,7 +95,7 @@ class _SightSliverAppBar extends StatelessWidget {
           ? null
           : FlexibleSpaceBar(
               background: _SightImagesCarousel(
-                sightImages: sight.images,
+                sightImages: sightImages!,
               ),
             ),
     );
