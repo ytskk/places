@@ -21,60 +21,172 @@ class SightDetails extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: CustomAppBar(
-        background: Colors.transparent,
-        leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // if sight has image, show it
-            if (sight.images.isNotEmpty)
-              _SightImagesCarousel(
-                sightImages: sight.images,
-              ),
-            SafeArea(
-              // for better display in horizontal format
-              top: sight.images.isEmpty,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        sight.name,
-                        style: textTheme.headline3,
-                      ),
-                    ),
-                    _SightSubtitle(
-                      sightType: sight.type,
-                      sightWorkingStatus:
-                          '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
-                    ),
-                    if (sight.details.isNotEmpty)
+      body: CustomScrollView(
+        slivers: [
+          _SightSliverAppBar(sight: sight),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SafeArea(
+                // for better display in horizontal format
+                // top: isImagesEmpty,
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 24,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
+                        padding: const EdgeInsets.only(bottom: 4),
                         child: Text(
-                          sight.details,
-                          style: textTheme.bodyText2,
+                          sight.name,
+                          style: textTheme.headline3,
                         ),
                       ),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: _DirectionButton(),
-                    ),
-                    const HorizontalDivider(),
-                    const _SightManipulationButtons(),
-                  ],
+                      _SightSubtitle(
+                        sightType: sight.type,
+                        sightWorkingStatus:
+                            '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
+                      ),
+                      if (sight.details.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24),
+                          child: Text(
+                            sight.details,
+                            style: textTheme.bodyText2,
+                          ),
+                        ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: _DirectionButton(),
+                      ),
+                      const HorizontalDivider(),
+                      const _SightManipulationButtons(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ]),
+          ),
+          // SingleChildScrollView(
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.stretch,
+          //       children: [
+          //         Padding(
+          //           padding: const EdgeInsets.only(bottom: 4),
+          //           child: Text(
+          //             sight.name,
+          //             style: textTheme.headline3,
+          //           ),
+          //         ),
+          //         _SightSubtitle(
+          //           sightType: sight.type,
+          //           sightWorkingStatus:
+          //               '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
+          //         ),
+          //         if (sight.details.isNotEmpty)
+          //           Padding(
+          //             padding: const EdgeInsets.only(bottom: 24),
+          //             child: Text(
+          //               sight.details,
+          //               style: textTheme.bodyText2,
+          //             ),
+          //           ),
+          //         const Padding(
+          //           padding: EdgeInsets.only(bottom: 8),
+          //           child: _DirectionButton(),
+          //         ),
+          //         const HorizontalDivider(),
+          //         const _SightManipulationButtons(),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+        ],
       ),
+      //   body: SingleChildScrollView(
+      //     child: Column(
+      //       children: [
+      //         // if sight has image, show it
+      //         if (sight.images.isNotEmpty)
+      //           _SightImagesCarousel(
+      //             sightImages: sight.images,
+      //           ),
+      //         SafeArea(
+      //           // for better display in horizontal format
+      //           top: sight.images.isEmpty,
+      //           child: Padding(
+      //             padding:
+      //                 const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      //             child: Column(
+      //               crossAxisAlignment: CrossAxisAlignment.stretch,
+      //               children: [
+      //                 Padding(
+      //                   padding: const EdgeInsets.only(bottom: 4),
+      //                   child: Text(
+      //                     sight.name,
+      //                     style: textTheme.headline3,
+      //                   ),
+      //                 ),
+      //                 _SightSubtitle(
+      //                   sightType: sight.type,
+      //                   sightWorkingStatus:
+      //                       '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
+      //                 ),
+      //                 if (sight.details.isNotEmpty)
+      //                   Padding(
+      //                     padding: const EdgeInsets.only(bottom: 24),
+      //                     child: Text(
+      //                       sight.details,
+      //                       style: textTheme.bodyText2,
+      //                     ),
+      //                   ),
+      //                 const Padding(
+      //                   padding: EdgeInsets.only(bottom: 8),
+      //                   child: _DirectionButton(),
+      //                 ),
+      //                 const HorizontalDivider(),
+      //                 const _SightManipulationButtons(),
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+    );
+  }
+}
+
+class _SightSliverAppBar extends StatelessWidget {
+  const _SightSliverAppBar({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+  final Sight sight;
+
+  @override
+  Widget build(BuildContext context) {
+    final isImagesEmpty = sight.images.isEmpty;
+
+    return SliverAppBar(
+      leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
+      pinned: true,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      expandedHeight: isImagesEmpty ? 0 : 360,
+      flexibleSpace: isImagesEmpty
+          ? null
+          : FlexibleSpaceBar(
+              background: _SightImagesCarousel(
+                sightImages: sight.images,
+              ),
+            ),
     );
   }
 }
@@ -100,25 +212,22 @@ class _SightImagesCarouselState extends State<_SightImagesCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 360,
-      child: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          PageView.builder(
-            onPageChanged: (index) => setState(() => _currentPage = index),
-            itemCount: widget.sightImages.length,
-            itemBuilder: (context, index) => NetworkImageBox(
-              widget.sightImages[index],
-            ),
+    return Stack(
+      alignment: Alignment.bottomLeft,
+      children: [
+        PageView.builder(
+          onPageChanged: (index) => setState(() => _currentPage = index),
+          itemCount: widget.sightImages.length,
+          itemBuilder: (context, index) => NetworkImageBox(
+            widget.sightImages[index],
           ),
-          if (widget.sightImages.length > 1)
-            _SightImagesCarouselIndicator(
-              imagesCount: widget.sightImages.length,
-              currentPage: _currentPage,
-            ),
-        ],
-      ),
+        ),
+        if (widget.sightImages.length > 1)
+          _SightImagesCarouselIndicator(
+            imagesCount: widget.sightImages.length,
+            currentPage: _currentPage,
+          ),
+      ],
     );
   }
 }

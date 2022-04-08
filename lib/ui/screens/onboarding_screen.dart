@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/tutor_controller.dart';
+import 'package:places/controllers/onboarding_controller.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:provider/provider.dart';
 
-/// Height of list content is 1/2 of the screen height, when the page indicator
-/// fills remaining space and places at the center. And action button is a floating action button.
 class OnboardingScreen extends StatelessWidget {
   OnboardingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bool isLastPage = context.watch<Tutor>().currentPage ==
-        context.read<Tutor>().tutorContent.length - 1;
+    final bool isLastPage = context.watch<Onboarding>().currentPage ==
+        context.read<Onboarding>().tutorContent.length - 1;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -62,12 +60,12 @@ class _OnboardingPageIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    int currentPage = context.watch<Tutor>().currentPage;
+    int currentPage = context.watch<Onboarding>().currentPage;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (int i = 0; i < context.read<Tutor>().tutorContent.length; i++)
+        for (int i = 0; i < context.read<Onboarding>().tutorContent.length; i++)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: AnimatedContainer(
@@ -130,12 +128,12 @@ class _OnboardingPagesState extends State<_OnboardingPages> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final tutor = context.read<Tutor>();
+    final tutor = context.read<Onboarding>();
 
     return PageView.builder(
       controller: _pageController,
       onPageChanged: (page) {
-        context.read<Tutor>().setPage = page;
+        context.read<Onboarding>().setPage = page;
       },
       itemCount: tutor.tutorContent.length,
       itemBuilder: (BuildContext context, int index) {
