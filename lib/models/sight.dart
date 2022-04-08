@@ -13,6 +13,7 @@ class Sight {
     this.lat = 0.0,
     this.lon = 0.0,
     this.url = '',
+    this.images = const [],
     this.details = '',
     this.type = '',
   }) : id = UniqueKey();
@@ -20,7 +21,13 @@ class Sight {
   Key id;
   String name;
   double lat, lon;
+
+  /// Link to primary sight image. To be deleted!
   String url;
+
+  /// List of sight images.
+  List<String> images;
+
   String details;
   String type;
 

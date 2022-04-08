@@ -17,7 +17,7 @@ class AppColors {
 
 class AppColorsLight extends AppColors {
   final Color fillColor = Color(0xffffffff);
-  final Color textLabel = Color(0xff252849);
+  final Color textLabel = Color(0xff111222);
   final Color textLabelSecondary = Color.fromRGBO(134, 136, 156, 0.96);
   final Color backgroundSecondary = Color(0xffF5F5F5);
   final Color background = Color(0xffffffff);

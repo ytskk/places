@@ -5,9 +5,9 @@ import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
-import 'package:places/ui/components/empty_list.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
+import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/components/searchbar.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -121,10 +121,10 @@ class _SearchResultsState extends State<_SearchResults> {
         context.read<SightSearch>().searchByName(widget.controller.text.trim());
 
     return results.isEmpty
-        ? EmptyList(
+        ? InfoList(
             iconName: AppIcons.search,
-            title: AppStrings.searchScreenNotFoundTitle,
-            subtitle: AppStrings.searchScreenNotFoundSubtitle,
+            title: Text(AppStrings.searchScreenNotFoundTitle),
+            subtitle: Text(AppStrings.searchScreenNotFoundSubtitle),
           )
         : _SearchResultsList(content: results);
   }

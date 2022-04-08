@@ -4,9 +4,11 @@ import 'package:places/controllers/filter_controller.dart';
 import 'package:places/controllers/navigation_controller.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
+import 'package:places/controllers/tutor_controller.dart';
 import 'package:places/controllers/visiting_places_controller.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -31,14 +33,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AddSight()),
         ChangeNotifierProvider(create: (_) => SightSearch()),
         ChangeNotifierProvider(create: (_) => VisitingPlaces()),
+        ChangeNotifierProvider(create: (_) => Tutor()),
       ],
       child: Consumer(
         builder: (BuildContext context, value, Widget? child) {
           return MaterialApp(
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()
-                : AppThemeData.light(),
-            home: MyHomePage(),
+                : AppThemeData.dark(),
+            // home: MyHomePage(),
+            home: OnboardingScreen(),
           );
         },
       ),

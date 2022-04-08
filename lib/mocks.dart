@@ -51,6 +51,11 @@ final List<Sight> mocks = [
     lon: 37.607574,
     url:
         'https://avatars.mds.yandex.net/get-altay/1778671/2a0000016c4cf082ca263bd6369cd2a1031b/L',
+    images: [
+      'https://avatars.mds.yandex.net/get-altay/1778671/2a0000016c4cf082ca263bd6369cd2a1031b/L',
+      'https://avatars.mds.yandex.net/get-altay/1778671/2a0000016c4cf082ca263bd6369cd2a1031b/L',
+      'https://avatars.mds.yandex.net/get-altay/1778671/2a0000016c4cf082ca263bd6369cd2a1031b/L',
+    ],
     details:
         'Работы Зураба Церетели был воздвигнут в 1997 году по заказу Правительства Москвы на искусственном острове, насыпанном у разделения Москвы-реки и Водоотводного канала. Один из самых высоких памятников в России. Общая высота памятника 98 метров, высота фигуры Петра 18 м.',
     type: 'Музей',

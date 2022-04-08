@@ -76,4 +76,18 @@ class AppStrings {
       'Попробуйте изменить параметры поиска';
   static const searchScreenRecentActivity = 'вы искали';
   static const searchScreenRecentActivityClear = 'Очистить историю';
+
+  // tutor screen
+  static const tutorStartButtonTitle = 'На старт';
+  static const tutorAppBarSkipButtonText = 'Пропустить';
+  static const tutorScreenWelcomeTitle = 'Добро пожаловать в Путеводитель';
+  static const tutorScreenWelcomeSubtitle =
+      'Ищи новые локации и сохраняй самые любимые.';
+  static const tutorScreenBuildDirectionTitle =
+      'Построй маршру и отправляйся в путь';
+  static const tutorScreenBuildDirectionSubtitle =
+      'Достигай цели максимально быстро и комфортно.';
+  static const tutorScreenAddPlaceTitle = 'Добавляй места, которые нашёл сам';
+  static const tutorScreenAddPlaceSubtitle =
+      'Делись самыми интересными и помоги нам стать лучше!';
 }

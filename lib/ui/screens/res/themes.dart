@@ -52,6 +52,7 @@ class AppThemeData {
           textStyle: MaterialStateProperty.resolveWith(
             (states) => TextStyle(
               fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

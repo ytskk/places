@@ -82,8 +82,9 @@ class _SightListScreenState extends State<SightListScreen> {
   }
 }
 
-/// floating button for adding a new place.
+/// Floating button for adding a new place.
 class _AddPlaceFloatingButton extends StatelessWidget {
+  /// Creates a floating action button for adding a new place.
   const _AddPlaceFloatingButton({Key? key}) : super(key: key);
 
   @override
@@ -92,14 +93,12 @@ class _AddPlaceFloatingButton extends StatelessWidget {
       content: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.add,
             color: Colors.white,
           ),
-          Container(
-            child: SizedBox(
-              width: 8,
-            ),
+          const SizedBox(
+            width: 8,
           ),
           Text(
             AppStrings.sightFloatingButtonLabel.toUpperCase(),
@@ -119,59 +118,6 @@ class _AddPlaceFloatingButton extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-/// A custom button with brand gradient.
-class ButtonWithGradient extends StatelessWidget {
-  /// Creates a button with [content] and [onPressed] callback and custom [padding]
-  /// (prefer to use [ButtonPadding]).
-  ///
-  /// If [content] is a multi child widget ([Row], [Column] and etc.),
-  /// make sure that the minimum size is used.
-  ///
-  /// ```dart
-  /// content: Row(
-  ///   mainAxisSize: MainAxisSize.min,
-  ///   children: […],
-  /// ),
-  /// ```
-  const ButtonWithGradient({
-    Key? key,
-    VoidCallback? this.onPressed,
-    required this.content,
-    this.padding = ButtonPadding.UltraWide,
-  }) : super(key: key);
-
-  final void Function()? onPressed;
-  final Widget content;
-  final EdgeInsets padding;
-
-  final _brandGradient = const LinearGradient(
-    colors: [Color(0xffFCDD3D), Color(0xff4CAF50)],
-  );
-
-  LinearGradient get brandGradient => _brandGradient;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(24),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        splashColor: Colors.black12,
-        onTap: onPressed,
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: _brandGradient,
-          ),
-          child: Padding(
-            padding: padding,
-            child: content,
-          ),
-        ),
-      ),
     );
   }
 }

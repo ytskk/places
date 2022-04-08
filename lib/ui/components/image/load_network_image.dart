@@ -10,16 +10,19 @@ class NetworkImageWidget extends StatelessWidget {
   const NetworkImageWidget({
     Key? key,
     required this.imageUrl,
+    this.fit = BoxFit.cover,
   }) : super(key: key);
 
   /// The URL from which the image will be fetched.
   final String imageUrl;
 
+  final BoxFit fit;
+
   @override
   Widget build(BuildContext context) {
     return Image.network(
       imageUrl,
-      fit: BoxFit.cover,
+      fit: fit,
       loadingBuilder: (
         context,
         child,
