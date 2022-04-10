@@ -8,6 +8,7 @@
 class AppStrings {
   // Sight Screen
   static const sightTitle = 'Список интересных мест';
+  static const sightTitleExpanded = 'Список\nинтересных мест';
   static const sightFloatingButtonLabel = 'новое место';
   static const sightClosedUntil = 'Закрыто до';
 
