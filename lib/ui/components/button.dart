@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/ui/components/icon_box.dart';
 
@@ -207,12 +208,6 @@ class ButtonWithGradient extends StatelessWidget {
   final Widget content;
   final EdgeInsets padding;
 
-  final _brandGradient = const LinearGradient(
-    colors: [Color(0xffFCDD3D), Color(0xff4CAF50)],
-  );
-
-  LinearGradient get brandGradient => _brandGradient;
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -223,7 +218,7 @@ class ButtonWithGradient extends StatelessWidget {
         onTap: onPressed,
         child: Ink(
           decoration: BoxDecoration(
-            gradient: _brandGradient,
+            gradient: brandGradient,
           ),
           child: Padding(
             padding: padding,

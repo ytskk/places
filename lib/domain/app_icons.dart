@@ -14,6 +14,7 @@ class AppIcons {
   static const settings_fill = 'assets/icons/settings-fill.svg';
   static const map = 'assets/icons/map.svg';
   static const map_fill = 'assets/icons/map-fill.svg';
+  static const map_fill_circle = 'assets/icons/map-fill-circle.svg';
   static const list = 'assets/icons/list.svg';
   static const list_fill = 'assets/icons/list-fill.svg';
   static const coffee = 'assets/icons/coffee.svg';
