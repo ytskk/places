@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/controllers/filter_controller.dart';
 import 'package:places/controllers/navigation_controller.dart';
+import 'package:places/controllers/onboarding_controller.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
-import 'package:places/controllers/onboarding_controller.dart';
 import 'package:places/controllers/visiting_places_controller.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -12,6 +12,7 @@ import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
+import 'package:places/ui/screens/splash_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()
                 : AppThemeData.dark(),
-            home: MyHomePage(),
+            // home: MyHomePage(),
+            home: SplashScreen(),
             // home: OnboardingScreen(),
           );
         },
