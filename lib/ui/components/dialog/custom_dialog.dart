@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/models/dialog.dart';
 
 /// A product design alert dialog.
@@ -41,7 +42,7 @@ class DialogWidget extends StatelessWidget {
       contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(smallBorderRadius),
       ),
       actions: actions,
     );

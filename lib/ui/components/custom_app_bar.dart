@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 
 /// Custom implemented [AppBar].
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -36,7 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final Color backgroundColor = background ?? theme.scaffoldBackgroundColor;
 
     return AppBar(
-      leadingWidth: 80,
+      leadingWidth: largeLeadingWidth,
       titleTextStyle: titleTextStyle,
       title: title,
       actions: actions,
