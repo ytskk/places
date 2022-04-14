@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:places/controllers/settings_controller.dart';
+import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:provider/provider.dart';
 
@@ -62,6 +63,11 @@ class SettingsTableState extends State<SettingsTable> {
             color: iconColor,
             onPressed: () {
               log('Info button pressed');
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                AppRoutes.onboarding,
+                (route) => false,
+                arguments: AppRoutes.settings,
+              );
             },
             icon: Icon(Icons.info_outline),
           ),

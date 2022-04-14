@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:places/models/card_info.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/card/card_header.dart';
-import 'package:places/ui/components/card/card_info.dart';
+import 'package:places/ui/components/card/card_information.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
-
-class CardInfo {
-  final String title;
-  final String? subtitle;
-  final Color? subtitleColor;
-  final String? text;
-
-  const CardInfo({
-    required String this.title,
-    String? this.text,
-    String? this.subtitle,
-    Color? this.subtitleColor,
-  });
-}
 
 class MyCard extends StatelessWidget {
   /// Creates card widget.

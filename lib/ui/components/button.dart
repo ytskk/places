@@ -211,7 +211,7 @@ class ButtonWithGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: const BorderRadius.all(Radius.circular(largeBorderRadius)),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         splashColor: Colors.black12,

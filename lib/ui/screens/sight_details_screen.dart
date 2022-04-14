@@ -1,37 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:places/mocks.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
 
+// BUG: when its no internet, throws error!
+// TODO: hide sliver image carousel when its bad link.
+
 /// A page detailing the [Sight].
-class SightDetails extends StatelessWidget {
-  /// Detailed page for provided [sight].
-  const SightDetails(Sight this.sight, {Key? key}) : super(key: key);
+class SightDetailsScreen extends StatefulWidget {
+  const SightDetailsScreen({Key? key}) : super(key: key);
 
-  final Sight sight;
+  @override
+  State<SightDetailsScreen> createState() => _SightDetailsScreenState();
+}
 
+class _SightDetailsScreenState extends State<SightDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final Key sightId = ModalRoute.of(context)!.settings.arguments as Key;
+    final Sight sight = mocks.firstWhere((sight) => sight.id == sightId);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
         slivers: [
-          _SightSliverAppBar(sightImages: sight.images),
+          _SightSliverAppBar(
+            sightImages: sight.images.isEmpty ? [sight.url] : sight.images,
+          ),
           SliverList(
             delegate: SliverChildListDelegate([
               SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 24,
-                  ),
+                  padding: largeWrappingPadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -79,11 +87,11 @@ class _SightSliverAppBar extends StatelessWidget {
     required this.sightImages,
   }) : super(key: key);
 
-  final List<String>? sightImages;
+  final List<String> sightImages;
 
   @override
   Widget build(BuildContext context) {
-    final isImagesEmpty = sightImages?.isEmpty ?? true;
+    final isImagesEmpty = sightImages.isEmpty;
 
     return SliverAppBar(
       leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
@@ -94,8 +102,8 @@ class _SightSliverAppBar extends StatelessWidget {
       flexibleSpace: isImagesEmpty
           ? null
           : FlexibleSpaceBar(
-              background: _SightImagesCarousel(
-                sightImages: sightImages!,
+              background: _ImagesCarousel(
+                images: sightImages,
               ),
             ),
     );
@@ -103,39 +111,41 @@ class _SightSliverAppBar extends StatelessWidget {
 }
 
 /// Sight images carousel view with slide indicator.
-class _SightImagesCarousel extends StatefulWidget {
-  /// Shows [sightImages] in carousel.
+class _ImagesCarousel extends StatefulWidget {
+  /// Shows [images] in carousel.
   ///
-  /// If [sightImages] length is less than 2, indicator is not shown.
-  const _SightImagesCarousel({
+  /// If [images] length is less than 2, indicator is not shown.
+  const _ImagesCarousel({
     Key? key,
-    required this.sightImages,
+    required this.images,
   }) : super(key: key);
 
-  final List<String> sightImages;
+  final List<String> images;
 
   @override
-  State<_SightImagesCarousel> createState() => _SightImagesCarouselState();
+  State<_ImagesCarousel> createState() => _ImagesCarouselState();
 }
 
-class _SightImagesCarouselState extends State<_SightImagesCarousel> {
+class _ImagesCarouselState extends State<_ImagesCarousel> {
   int _currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
+    print('displaying images: ${widget.images}');
+
     return Stack(
       alignment: Alignment.bottomLeft,
       children: [
         PageView.builder(
           onPageChanged: (index) => setState(() => _currentPage = index),
-          itemCount: widget.sightImages.length,
+          itemCount: widget.images.length,
           itemBuilder: (context, index) => NetworkImageBox(
-            widget.sightImages[index],
+            widget.images[index],
           ),
         ),
-        if (widget.sightImages.length > 1)
+        if (widget.images.length > 1)
           _SightImagesCarouselIndicator(
-            imagesCount: widget.sightImages.length,
+            imagesCount: widget.images.length,
             currentPage: _currentPage,
           ),
       ],
@@ -160,14 +170,16 @@ class _SightImagesCarouselIndicator extends StatelessWidget {
     // images indicator, which is expanded to full width.
     return Row(
       children: [
-        for (int i = 0; i < imagesCount; i += 1)
+        for (int pageIndex = 0; pageIndex < imagesCount; pageIndex += 1)
           Expanded(
             child: SizedBox(
               height: 8.0,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: i == currentPage ? indicatorColor : Colors.transparent,
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  color: pageIndex == currentPage
+                      ? indicatorColor
+                      : Colors.transparent,
                 ),
               ),
             ),
@@ -277,14 +289,14 @@ class _RoundedBackButton extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: theme.backgroundColor,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             child: Material(
               color: Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: InkWell(
                 splashColor: Colors.black12,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 onTap: () {
                   print("Back button clicked");
                   Navigator.pop(context);

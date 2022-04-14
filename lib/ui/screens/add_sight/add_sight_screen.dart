@@ -4,13 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:places/controllers/add_sight_controller.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/dialog.dart';
-import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
-import 'package:places/ui/components/dialog/dialog.dart';
+import 'package:places/ui/components/dialog/custom_dialog.dart';
 import 'package:places/ui/components/rounded_box.dart';
 import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/screens/add_sight/select_category_screen.dart';
@@ -37,52 +38,60 @@ class _AddSightScreenState extends State<AddSightScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        leading: Button(
-          background: Colors.transparent,
-          text: AppStrings.addSightScreenAppLeading,
-          onPressed: () {
-            showAlertDialog(
+    return WillPopScope(
+      onWillPop: () async {
+        bool willPop = await showAlertDialog(
               context,
               const _AddSightCloseButtonDialog(),
-            );
-          },
+            ) ??
+            false;
+
+        return willPop;
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(
+          leading: Button(
+            background: Colors.transparent,
+            text: AppStrings.addSightScreenAppLeading,
+            onPressed: () {
+              Navigator.of(context).maybePop();
+            },
+          ),
+          title: const Text(AppStrings.addSightScreenAppTitle),
         ),
-        title: const Text(AppStrings.addSightScreenAppTitle),
-      ),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const _CategoryPhotoLoader(),
-                      const _CategorySelection(),
-                      const _SightName(),
-                      _SightCoordinates(nextFocus: _sightDescriptionNode),
-                      const _ShowOnMap(),
-                      _SightDescription(focusNode: _sightDescriptionNode),
-                    ],
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const _CategoryPhotoLoader(),
+                        const _CategorySelection(),
+                        const _SightName(),
+                        _SightCoordinates(nextFocus: _sightDescriptionNode),
+                        const _ShowOnMap(),
+                        _SightDescription(focusNode: _sightDescriptionNode),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SliverFillRemaining(
-              hasScrollBody: false,
-              fillOverscroll: true,
-              child: _AddSightButton(),
-            ),
-          ],
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                fillOverscroll: true,
+                child: _AddSightButton(),
+              ),
+            ],
+          ),
         ),
+        // ),
+        // bottomNavigationBar: const _SightCreateButton(),
       ),
-      // ),
-      // bottomNavigationBar: const _SightCreateButton(),
     );
   }
 }
@@ -101,10 +110,6 @@ class _CategoryPhotoLoader extends StatelessWidget {
       height: 72,
       width: double.infinity,
       child: ListView.builder(
-        // platform specified scroll physics
-        physics: Platform.isIOS || Platform.isMacOS
-            ? const BouncingScrollPhysics()
-            : const ClampingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: images.length + 1,
         itemBuilder: (context, index) {
@@ -201,7 +206,7 @@ class _SightCoordinatesState extends State<_SightCoordinates> {
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: mediumSpacing),
         Expanded(
           child: RowGroup(
             title: Text(
@@ -303,7 +308,7 @@ class _AddSightCloseButtonDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DialogWidget(
+    return CustomDialog(
       dialogState: DialogState.Alert,
       content: Text(
         AppStrings.addSightScreenSightDialogCloseContent,
@@ -313,15 +318,13 @@ class _AddSightCloseButtonDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.read<AddSight>().clearFields();
-            Navigator.of(context)
-              ..pop()
-              ..pop();
+            Navigator.of(context).pop(true);
           },
           child: Text(AppStrings.addSightScreenSightDialogCloseActionClose),
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(false);
           },
           child: Text(AppStrings.addSightScreenSightDialogCloseActionStay),
         ),
@@ -335,7 +338,7 @@ class _AddSightCreateButtonDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DialogWidget(
+    return CustomDialog(
       content: Text(
         AppStrings.addSightScreenSightDialogCreateContent,
         textAlign: TextAlign.center,
@@ -376,7 +379,7 @@ class _AddSightImageButton extends StatelessWidget {
           // temp!
           showAlertDialog(
             context,
-            DialogWidget(
+            CustomDialog(
               content: Text(
                 'Image picker',
                 textAlign: TextAlign.center,
@@ -396,7 +399,8 @@ class _AddSightImageButton extends StatelessWidget {
         },
         child: DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius:
+                const BorderRadius.all(Radius.circular(mediumBorderRadius)),
             border: Border.all(
               color: accentColor,
               width: 2,

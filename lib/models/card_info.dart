@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
-class CardInfo extends StatelessWidget {
-  const CardInfo({Key key}) : super(key: key);
+/// Contains displayable card info.
+class CardInfo {
+  final String title;
+  final String? subtitle;
+  final Color? subtitleColor;
+  final String? text;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+  const CardInfo({
+    required String this.title,
+    String? this.text,
+    String? this.subtitle,
+    Color? this.subtitleColor,
+  });
 }

@@ -1,4 +1,4 @@
-package com.yatsuk.places
+package me.yatsuk.places
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -5,7 +5,7 @@ import 'package:places/mocks.dart';
 import 'package:places/models/coordinates.dart';
 import 'package:places/models/filter_option.dart';
 import 'package:places/models/sight.dart';
-import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/filter_button.dart';
 import 'package:places/ui/components/range_selector.dart';
 import 'package:places/utils/coordinates.dart';

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
+import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/searchbar.dart';
-import 'package:places/ui/screens/add_sight/add_sight_screen.dart';
-import 'package:places/ui/screens/filter/filter_screen.dart';
-import 'package:places/ui/screens/sight_search/sight_search_screen.dart';
 
-class SightListScreen extends StatefulWidget {
-  const SightListScreen({Key? key}) : super(key: key);
+class SightScreen extends StatefulWidget {
+  const SightScreen({Key? key}) : super(key: key);
 
   @override
-  _SightListScreenState createState() => _SightListScreenState();
+  _SightScreenState createState() => _SightScreenState();
 }
 
-class _SightListScreenState extends State<SightListScreen> {
+class _SightScreenState extends State<SightScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +36,12 @@ class _SightListScreenState extends State<SightListScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => SightCard(
                     mocks[index],
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.sightDetails,
+                        arguments: mocks[index].id,
+                      );
+                    },
                     actions: [
                       Button.icon(
                         icon: AppIcons.heart,
@@ -79,6 +84,7 @@ class _SightListSliverAppBar extends StatelessWidget {
       pinned: true,
       elevation: 0,
       expandedHeight: 212,
+      automaticallyImplyLeading: false,
       title: AnimatedOpacity(
         opacity: isScrolled ? 1 : 0,
         duration: Duration(milliseconds: 150),
@@ -109,11 +115,7 @@ class _SightListSliverAppBar extends StatelessWidget {
             ),
             SearchBar(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (builder) => SightSearchScreen(),
-                  ),
-                );
+                Navigator.of(context).pushNamed(AppRoutes.search);
               },
               suffix: IconButton(
                 padding: EdgeInsets.zero,
@@ -121,9 +123,7 @@ class _SightListSliverAppBar extends StatelessWidget {
                   icon: AppIcons.filter,
                 ),
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (builder) => FilterScreen()),
-                  );
+                  Navigator.of(context).pushNamed(AppRoutes.sightFilter);
                 },
               ),
             ),
@@ -149,9 +149,7 @@ class _AddPlaceFloatingButton extends StatelessWidget {
             Icons.add,
             color: Colors.white,
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: smallSpacing),
           Text(
             AppStrings.sightFloatingButtonLabel.toUpperCase(),
             style: TextStyle(
@@ -163,11 +161,8 @@ class _AddPlaceFloatingButton extends StatelessWidget {
         ],
       ),
       onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            fullscreenDialog: true,
-            builder: (builder) => const AddSightScreen(),
-          ),
+        Navigator.of(context).pushNamed(
+          AppRoutes.addSight,
         );
       },
     );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/sight_search_controller.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
+import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
-import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
@@ -52,7 +54,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
         ),
         title: Text(AppStrings.sightTitle),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(52),
+          preferredSize: Size.fromHeight(bottomAppBarHeight),
           child: SearchBar(
             onEditingComplete: () {
               print('searched for ${_searchFieldController.text}');
@@ -95,7 +97,9 @@ class _SearchContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return controller.text.trim().isEmpty
-        ? SliverToBoxAdapter(child: _SearchRecentActivity())
+        ? SliverToBoxAdapter(
+            child: _SearchRecentActivity(),
+          )
         : SliverFillRemaining(
             child: _SearchResults(controller: controller),
           );
@@ -167,11 +171,13 @@ class _SearchResultListTile extends StatelessWidget {
     return InkWell(
       splashColor: Colors.black12,
       onTap: () {
-        context.read<SightSearch>().addActivity(sight.name);
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (BuildContext context) {
-          return SightDetails(sight);
-        }));
+        context
+            .read<SightSearch>()
+            .addActivity(context.read<SightSearch>().searchControllerText);
+        Navigator.of(context).pushNamed(
+          AppRoutes.sightDetails,
+          arguments: sight.id,
+        );
       },
       child: ListTile(
         title: SubstringHighlight(

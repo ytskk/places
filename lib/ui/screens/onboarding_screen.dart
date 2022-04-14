@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/onboarding_controller.dart';
+import 'package:places/domain/app_constants.dart';
+import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:provider/provider.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  OnboardingScreen({Key? key}) : super(key: key);
+class OnboardingScreen extends StatefulWidget {
+  OnboardingScreen({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<Onboarding>().createPageController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +34,11 @@ class OnboardingScreen extends StatelessWidget {
       appBar: CustomAppBar(
         actions: [
           // Shows skip button if its not the last page.
-          if (isLastPage)
+          if (!isLastPage)
             TextButton(
-              // TODO: implement skip button callback.
-              onPressed: () {},
+              onPressed: () {
+                context.read<Onboarding>().jumpToLastPage();
+              },
               child: Text(AppStrings.tutorAppBarSkipButtonText),
             ),
         ],
@@ -32,19 +49,8 @@ class OnboardingScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _OnboardingPageIndicator(),
-          const SizedBox(height: 24),
-          if (isLastPage)
-            const Align(
-              alignment: Alignment.bottomCenter,
-              child: SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: _OnboardingActionButton(),
-                ),
-              ),
-            ),
+          const SizedBox(height: largeSpacing),
+          if (isLastPage) const _OnboardingActionButton(),
         ],
       ),
       body: _OnboardingPages(),
@@ -65,7 +71,9 @@ class _OnboardingPageIndicator extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        for (int i = 0; i < context.read<Onboarding>().tutorContent.length; i++)
+        for (int pageIndex = 0;
+            pageIndex < context.read<Onboarding>().tutorContent.length;
+            pageIndex++)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: AnimatedContainer(
@@ -73,12 +81,12 @@ class _OnboardingPageIndicator extends StatelessWidget {
               margin: EdgeInsets.only(right: 4),
               curve: Curves.easeOut,
               height: 8,
-              width: currentPage == i ? 24 : 8,
+              width: currentPage == pageIndex ? 24 : 8,
               decoration: BoxDecoration(
-                color: currentPage == i
+                color: currentPage == pageIndex
                     ? theme.primaryColor
                     : theme.textTheme.bodyText1!.color!.withOpacity(0.54),
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: const BorderRadius.all(Radius.circular(30)),
               ),
             ),
           ),
@@ -92,11 +100,22 @@ class _OnboardingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Button(
-      text: AppStrings.tutorStartButtonTitle.toUpperCase(),
-      buttonPadding: ButtonPadding.UltraWide,
-      // TODO: implement onPressed callback.
-      onPressed: () {},
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: mediumWrappingPadding,
+          child: Button(
+            text: AppStrings.tutorStartButtonTitle.toUpperCase(),
+            buttonPadding: ButtonPadding.UltraWide,
+            onPressed: () {
+              context.read<Onboarding>().clearOnboardingProgress();
+              Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+            },
+          ),
+        ),
+      ),
     );
   }
 }
@@ -109,33 +128,17 @@ class _OnboardingPages extends StatefulWidget {
 }
 
 class _OnboardingPagesState extends State<_OnboardingPages> {
-  late final _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _pageController = PageController(initialPage: 0);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _pageController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final tutor = context.read<Onboarding>();
+    final onboardingProvider = context.read<Onboarding>();
 
     return PageView.builder(
-      controller: _pageController,
+      controller: onboardingProvider.pageController,
       onPageChanged: (page) {
-        context.read<Onboarding>().setPage = page;
+        onboardingProvider.setPage = page;
       },
-      itemCount: tutor.tutorContent.length,
+      itemCount: onboardingProvider.tutorContent.length,
       itemBuilder: (BuildContext context, int index) {
         return Center(
           child: ListView(
@@ -146,17 +149,17 @@ class _OnboardingPagesState extends State<_OnboardingPages> {
                 // To center content vertically. And to avoid overlapping of text and indicator.
                 padding: const EdgeInsets.only(bottom: 120),
                 child: InfoList(
-                  iconName: tutor.tutorContent[index].icon,
+                  iconName: onboardingProvider.tutorContent[index].icon,
                   iconColor: theme.textTheme.bodyText2!.color,
                   iconSize: 128,
                   iconPaddingBottom: 40,
                   title: Text(
-                    tutor.tutorContent[index].title,
+                    onboardingProvider.tutorContent[index].title,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.headline3,
                   ),
                   subtitle: Text(
-                    tutor.tutorContent[index].subtitle,
+                    onboardingProvider.tutorContent[index].subtitle,
                     textAlign: TextAlign.center,
                   ),
                 ),

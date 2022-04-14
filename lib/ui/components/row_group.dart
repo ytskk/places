@@ -35,7 +35,10 @@ class RowGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final defaultTitleTextStyle =
+        Theme.of(context).textTheme.bodyText1!.copyWith(
+              fontSize: 12,
+            );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -53,20 +56,12 @@ class RowGroup extends StatelessWidget {
               if (title != null)
                 Text(
                   title!.data!,
-                  style: textTheme.bodyText1!
-                      .copyWith(
-                        fontSize: 12,
-                      )
-                      .merge(title!.style),
+                  style: defaultTitleTextStyle.merge(title!.style),
                 ),
               if (titleAfter != null)
                 Text(
                   titleAfter!.data!,
-                  style: textTheme.bodyText1!
-                      .copyWith(
-                        fontSize: 12,
-                      )
-                      .merge(titleAfter!.style),
+                  style: defaultTitleTextStyle.merge(titleAfter!.style),
                 ),
             ],
           ),

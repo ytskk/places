@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
+import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 
 /// Controller for onboarding screen.
@@ -8,7 +9,7 @@ import 'package:places/domain/app_strings.dart';
 class Onboarding extends ChangeNotifier {
   // definitions.
   int _currentPage = 0;
-  List<OnboardingPageData> _tutorContent = [
+  final List<OnboardingPageData> _onboardingPagesContent = [
     OnboardingPageData(
       title: AppStrings.tutorScreenWelcomeTitle,
       subtitle: AppStrings.tutorScreenWelcomeSubtitle,
@@ -25,16 +26,37 @@ class Onboarding extends ChangeNotifier {
       icon: AppIcons.pointer,
     ),
   ];
+  late PageController _pageController;
 
   // getters.
   int get currentPage => _currentPage;
 
-  List<OnboardingPageData> get tutorContent => _tutorContent;
+  List<OnboardingPageData> get tutorContent => _onboardingPagesContent;
+
+  PageController get pageController => _pageController;
 
   // setters.
   set setPage(int page) {
     _currentPage = page;
     notifyListeners();
+  }
+
+  // methods.
+  void createPageController() {
+    _pageController = PageController(initialPage: 0);
+  }
+
+  void clearOnboardingProgress() {
+    _pageController.dispose();
+    _currentPage = 0;
+  }
+
+  void jumpToLastPage() {
+    _pageController.animateToPage(
+      _onboardingPagesContent.length - 1,
+      curve: Curves.easeOut,
+      duration: Duration(milliseconds: 500),
+    );
   }
 }
 

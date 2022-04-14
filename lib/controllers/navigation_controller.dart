@@ -24,7 +24,7 @@ class Navigation extends ChangeNotifier {
     {
       'icon': {
         'name': {
-          'selected': AppIcons.heart_fill,
+          'selected': AppIcons.heartFilled,
           'unselected': AppIcons.heart,
         },
       },
@@ -33,7 +33,7 @@ class Navigation extends ChangeNotifier {
     {
       'icon': {
         'name': {
-          'selected': AppIcons.settings_fill,
+          'selected': AppIcons.settingsFilled,
           'unselected': AppIcons.settings,
         },
       },

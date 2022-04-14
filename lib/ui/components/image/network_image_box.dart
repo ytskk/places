@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_colors.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/ui/components/image/load_network_image.dart';
 
 class NetworkImageBox extends StatelessWidget {
@@ -68,7 +69,7 @@ class RoundedNetworkImageBox extends NetworkImageBox {
   const RoundedNetworkImageBox({
     Key? key,
     required String this.imageUrl,
-    double this.borderRadius = 12,
+    double this.borderRadius = smallBorderRadius,
   }) : super(imageUrl);
 
   @override
