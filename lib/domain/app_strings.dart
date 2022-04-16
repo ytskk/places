@@ -36,7 +36,7 @@ class AppStrings {
   // filter screen
   static const filterScreenActionClear = 'Очистить';
   static const filterScreenRangeSelectionGroupTitle = 'Расстояние';
-  static const filterScreenRangeSelectionGroupTitleAfter = 'От 10м до 10 000м';
+  static const filterScreenRangeSelectionGroupTitleAfter = 'от 10 до 30 км';
   static const filterScreenFilterTitle = 'Категории';
   static const filterScreenFilterShow = 'Показать';
 

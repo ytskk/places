@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:places/controllers/filter_controller.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/searchbar.dart';
+import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
   const SightScreen({Key? key}) : super(key: key);
@@ -19,6 +20,9 @@ class SightScreen extends StatefulWidget {
 class _SightScreenState extends State<SightScreen> {
   @override
   Widget build(BuildContext context) {
+    final sights = context.watch<Filter>().nearbyPlaces;
+    print('sights: $sights');
+
     return Scaffold(
       floatingActionButton: const _AddPlaceFloatingButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -35,11 +39,11 @@ class _SightScreenState extends State<SightScreen> {
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => SightCard(
-                    mocks[index],
+                    sights.elementAt(index),
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         AppRoutes.sightDetails,
-                        arguments: mocks[index].id,
+                        arguments: sights.elementAt(index).id,
                       );
                     },
                     actions: [
@@ -53,7 +57,7 @@ class _SightScreenState extends State<SightScreen> {
                       ),
                     ],
                   ),
-                  childCount: mocks.length,
+                  childCount: sights.length,
                 ),
               ),
             ),

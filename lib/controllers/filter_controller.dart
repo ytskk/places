@@ -9,7 +9,8 @@ class Filter extends ChangeNotifier {
   List<FilterOption> _filterOptions =
       filterCategories.map((category) => FilterOption(name: category)).toList();
 
-  final List<Sight> _nearbyPlaces = [];
+  /// TMP: initial value to mocks.
+  final List<Sight> _nearbyPlaces = [...mocks];
 
   List<Sight> get nearbyPlaces => _nearbyPlaces;
 
@@ -17,11 +18,12 @@ class Filter extends ChangeNotifier {
     _nearbyPlaces
       ..clear()
       ..addAll(sights);
+    notifyListeners();
   }
 
-  final double _rangeValueStart = 100;
-  final double _rangeValueEnd = 10000;
-  RangeValues _rangeValues = RangeValues(100, 10000);
+  final double _rangeValueStart = 10000;
+  final double _rangeValueEnd = 30000;
+  RangeValues _rangeValues = RangeValues(10000, 30000);
 
   RangeValues get rangeValues => _rangeValues;
 
@@ -40,7 +42,7 @@ class Filter extends ChangeNotifier {
 
   void clearFilterOptions() {
     _filterOptions.forEach((category) {
-      category.setSelected(false);
+      category.setSelected(true);
     });
     log("Selected options: ${selectedOptions}");
     _rangeValues = RangeValues(_rangeValueStart, _rangeValueEnd);

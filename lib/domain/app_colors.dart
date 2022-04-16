@@ -21,7 +21,7 @@ class AppColorsLight extends AppColors {
   final Color textLabelSecondary = Color.fromRGBO(134, 136, 156, 0.96);
   final Color backgroundSecondary = Color(0xffF5F5F5);
   final Color background = Color(0xffffffff);
-  final Color green = Color(0xff4caf50);
+  final Color green = Color(0xff4CAF50);
   final Color greenSurface = Color(0xFFD9ECDA);
   final Color blueSurface = Color(0xff252849);
   final Color red = CupertinoColors.destructiveRed;

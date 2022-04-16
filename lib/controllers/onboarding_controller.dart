@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:provider/provider.dart';
 
 /// Controller for onboarding screen.
 ///
@@ -51,12 +52,18 @@ class Onboarding extends ChangeNotifier {
     _currentPage = 0;
   }
 
-  void jumpToLastPage() {
-    _pageController.animateToPage(
-      _onboardingPagesContent.length - 1,
-      curve: Curves.easeOut,
-      duration: Duration(milliseconds: 500),
-    );
+  // temporary unused method.
+  // void jumpToLastPage() {
+  //   _pageController.animateToPage(
+  //     _onboardingPagesContent.length - 1,
+  //     curve: Curves.easeOut,
+  //     duration: Duration(milliseconds: 500),
+  //   );
+  // }
+
+  void completeOnboarding(BuildContext context) {
+    clearOnboardingProgress();
+    Navigator.of(context).pushReplacementNamed(AppRoutes.home);
   }
 }
 

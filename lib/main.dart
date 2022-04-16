@@ -38,10 +38,10 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, value, Widget? child) {
           return MaterialApp(
             routes: routes,
-            initialRoute: AppRoutes.splash,
+            initialRoute: AppRoutes.onboarding,
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()
-                : AppThemeData.dark(),
+                : AppThemeData.light(),
             // home: MyHomePage(),
             // home: const SplashScreen(),
             // home: OnboardingScreen(),

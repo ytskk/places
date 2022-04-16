@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/controllers/filter_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -12,7 +13,6 @@ import 'package:places/ui/components/image/network_image_box.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/components/searchbar.dart';
-import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
@@ -121,14 +121,26 @@ class _SearchResults extends StatefulWidget {
 class _SearchResultsState extends State<_SearchResults> {
   @override
   Widget build(BuildContext context) {
-    final List<Sight> results =
-        context.read<SightSearch>().searchByName(widget.controller.text.trim());
+    final List<Sight> filteredSights = context.watch<Filter>().nearbyPlaces;
+    final List<Sight> results = context
+        .read<SightSearch>()
+        .searchByName(widget.controller.text.trim(), domain: filteredSights);
+    final theme = Theme.of(context);
 
     return results.isEmpty
-        ? InfoList(
-            iconName: AppIcons.search,
-            title: Text(AppStrings.searchScreenNotFoundTitle),
-            subtitle: Text(AppStrings.searchScreenNotFoundSubtitle),
+        ? Center(
+            child: InfoList(
+              iconName: AppIcons.search,
+              iconColor: theme.textTheme.bodyText2!.color,
+              title: Text(
+                AppStrings.searchScreenNotFoundTitle,
+                textAlign: TextAlign.center,
+              ),
+              subtitle: Text(
+                AppStrings.searchScreenNotFoundSubtitle,
+                textAlign: TextAlign.center,
+              ),
+            ),
           )
         : _SearchResultsList(content: results);
   }

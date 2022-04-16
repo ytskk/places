@@ -36,9 +36,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // Shows skip button if its not the last page.
           if (!isLastPage)
             TextButton(
-              onPressed: () {
-                context.read<Onboarding>().jumpToLastPage();
-              },
+              onPressed: () =>
+                  context.read<Onboarding>().completeOnboarding(context),
               child: Text(AppStrings.tutorAppBarSkipButtonText),
             ),
         ],
@@ -109,10 +108,8 @@ class _OnboardingActionButton extends StatelessWidget {
           child: Button(
             text: AppStrings.tutorStartButtonTitle.toUpperCase(),
             buttonPadding: ButtonPadding.UltraWide,
-            onPressed: () {
-              context.read<Onboarding>().clearOnboardingProgress();
-              Navigator.of(context).pushReplacementNamed(AppRoutes.home);
-            },
+            onPressed: () =>
+                context.read<Onboarding>().completeOnboarding(context),
           ),
         ),
       ),

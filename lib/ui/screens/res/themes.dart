@@ -17,6 +17,7 @@ class AppThemeData {
     ),
   );
 
+  // ignore: long-method
   static ThemeData _themeData(AppColors appColors) {
     return ThemeData(
       primaryColor: appColors.green,
@@ -74,7 +75,7 @@ class AppThemeData {
           }),
           shape: MaterialStateProperty.resolveWith(
             (states) => RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
           ),
           padding: MaterialStateProperty.resolveWith(
@@ -103,14 +104,14 @@ class AppThemeData {
         labelColor: appColors.fillColor,
         unselectedLabelColor: appColors.textLabelSecondary,
         indicator: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: const BorderRadius.all(Radius.circular(40)),
           color: appColors.textLabel,
         ),
       ),
       sliderTheme: SliderThemeData(
         activeTrackColor: appColors.green,
         overlayColor: Colors.transparent,
-        thumbColor: appColors.backgroundSecondary,
+        thumbColor: Colors.white,
         trackHeight: 2,
         minThumbSeparation: 20,
       ),
@@ -119,22 +120,22 @@ class AppThemeData {
             const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: appColors.green.withOpacity(0.4)),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         errorBorder: OutlineInputBorder(
           borderSide:
               BorderSide(color: appColors.red.withOpacity(0.4), width: 2),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: appColors.red.withOpacity(0.4)),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         errorStyle: TextStyle(height: 0),
         focusedBorder: OutlineInputBorder(
           borderSide:
               BorderSide(color: appColors.green.withOpacity(0.4), width: 2),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
       ),
     );

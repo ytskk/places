@@ -40,9 +40,7 @@ class _FilterButtonState extends State<FilterButton> {
             children: [
               DecoratedBox(
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? theme.canvasColor
-                      : theme.canvasColor.withAlpha(40),
+                  color: theme.canvasColor,
                   shape: BoxShape.circle,
                 ),
                 child: Padding(
@@ -61,7 +59,9 @@ class _FilterButtonState extends State<FilterButton> {
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               _useShortName(widget.category.name),
-              style: theme.textTheme.caption,
+              style: theme.textTheme.caption!.copyWith(
+                color: theme.textTheme.bodyText2!.color,
+              ),
             ),
           ),
         ],
@@ -114,19 +114,10 @@ class _SelectedBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: theme.dialogBackgroundColor,
-        shape: BoxShape.circle,
-      ),
-      child: const Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: IconBox(
-          icon: AppIcons.check,
-          color: Colors.white,
-          size: 12,
-        ),
-      ),
+    return Icon(
+      Icons.check_circle,
+      size: 16,
+      color: theme.textTheme.bodyText2!.color,
     );
   }
 }
