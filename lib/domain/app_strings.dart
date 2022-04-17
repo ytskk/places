@@ -64,6 +64,10 @@ class AppStrings {
       'Уверены что хотите закрыть? Вы потеряете введённые данные.';
   static const addSightScreenSightDialogCloseActionClose = 'Да';
   static const addSightScreenSightDialogCloseActionStay = 'Нет';
+  // image picker options
+  static const addSightScreenImagePickerOptionsCameraTitle = 'Камера';
+  static const addSightScreenImagePickerOptionsGalleryTitle = 'Фотография';
+  static const addSightScreenImagePickerOptionsFileTitle = 'Файл';
 
   static const addSightScreenSightDialogCreateActionTitle = 'Закрыть';
   static const addSightScreenDeleteImageDialogTitle = 'Удалить фото?';
@@ -91,4 +95,7 @@ class AppStrings {
   static const tutorScreenAddPlaceTitle = 'Добавляй места, которые нашёл сам';
   static const tutorScreenAddPlaceSubtitle =
       'Делись самыми интересными и помоги нам стать лучше!';
+
+  // buttons
+  static const buttonTextCancel = 'Отмена';
 }

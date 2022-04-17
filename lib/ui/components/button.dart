@@ -27,6 +27,8 @@ class Button extends StatelessWidget {
     Color? this.background,
     EdgeInsets? buttonPadding,
     this.textStyle,
+    this.contentAlignment = MainAxisAlignment.center,
+    this.borderRadius = smallBorderRadius,
   })  : icon = null,
         iconColor = null,
         iconAlignment = null,
@@ -54,6 +56,8 @@ class Button extends StatelessWidget {
     EdgeInsets? buttonPadding,
     double? gap,
     this.textStyle,
+    this.contentAlignment = MainAxisAlignment.center,
+    this.borderRadius = smallBorderRadius,
   })  : padding = buttonPadding ?? ButtonPadding.Narrow,
         gap = gap ?? 8,
         isTransparent = background == Colors.transparent,
@@ -86,6 +90,8 @@ class Button extends StatelessWidget {
   final bool isTransparent;
   final bool isDisabled;
   final VoidCallback? onPressed;
+  final MainAxisAlignment contentAlignment;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -140,12 +146,17 @@ class Button extends StatelessWidget {
             icon: buttonIcon!,
             text: buttonText,
             gap: gap,
+            contentAlignment: contentAlignment,
           )
         : buttonText!;
 
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle().copyWith(
+        shape: MaterialStateProperty.resolveWith(
+            (states) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+                )),
         backgroundColor: MaterialStateProperty.resolveWith((states) => primary),
         foregroundColor:
             MaterialStateProperty.resolveWith((states) => onPrimary),
@@ -157,24 +168,26 @@ class Button extends StatelessWidget {
 }
 
 class _ButtonWithIconContent extends StatelessWidget {
+  const _ButtonWithIconContent({
+    Key? key,
+    required this.alignment,
+    required this.icon,
+    required this.text,
+    required this.gap,
+    required this.contentAlignment,
+  }) : super(key: key);
+
   final IconAlignment alignment;
   final IconBox icon;
   final Text? text;
   final double gap;
-
-  const _ButtonWithIconContent({
-    Key? key,
-    required IconAlignment this.alignment,
-    required IconBox this.icon,
-    required Text? this.text,
-    required double this.gap,
-  }) : super(key: key);
+  final MainAxisAlignment contentAlignment;
 
   @override
   Widget build(BuildContext context) {
     return alignment == IconAlignment.Horizontal
         ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: contentAlignment,
             children: [
               icon,
               if (text != null)
@@ -185,6 +198,7 @@ class _ButtonWithIconContent extends StatelessWidget {
             ],
           )
         : Column(
+            mainAxisAlignment: contentAlignment,
             children: [
               icon,
               if (text != null)

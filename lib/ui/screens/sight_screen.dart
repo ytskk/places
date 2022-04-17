@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
 import 'package:places/domain/app_constants.dart';
@@ -8,6 +9,7 @@ import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/searchbar.dart';
+import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
@@ -26,42 +28,117 @@ class _SightScreenState extends State<SightScreen> {
     return Scaffold(
       floatingActionButton: const _AddPlaceFloatingButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            _SightListSliverAppBar(isScrolled: innerBoxIsScrolled),
-          ];
-        },
-        body: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 72),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => SightCard(
-                    sights.elementAt(index),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        AppRoutes.sightDetails,
-                        arguments: sights.elementAt(index).id,
-                      );
-                    },
-                    actions: [
-                      Button.icon(
-                        icon: AppIcons.heart,
-                        iconColor: Colors.white,
-                        background: Colors.transparent,
-                        onPressed: () {
-                          print("Wishlist icon clicked");
-                        },
-                      ),
-                    ],
+      body: SafeArea(
+        top: false,
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              _SightListSliverAppBar(isScrolled: innerBoxIsScrolled),
+            ];
+          },
+          body: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 72),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => SightCard(
+                      sights.elementAt(index),
+                      onTap: () {
+                        // BUG: does not scrolls when description is large.
+                        showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            isScrollControlled: true,
+                            builder: (context) => Padding(
+                                  padding: const EdgeInsets.only(top: 64),
+                                  child: ClipRRect(
+                                    clipBehavior: Clip.antiAlias,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft:
+                                          Radius.circular(smallBorderRadius),
+                                      topRight:
+                                          Radius.circular(smallBorderRadius),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        SightDetailsScreen(
+                                            id: sights.elementAt(index).id),
+                                        DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Colors.black.withOpacity(0.5),
+                                                Colors.black.withOpacity(0.0),
+                                              ],
+                                            ),
+                                          ),
+                                          child: Stack(
+                                            alignment: Alignment.topRight,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 12),
+                                                    child: DecoratedBox(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .all(
+                                                                Radius.circular(
+                                                                    largeBorderRadius)),
+                                                      ),
+                                                      child: SizedBox(
+                                                        height: 4,
+                                                        width: 40,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              IconButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                iconSize: 40,
+                                                icon: Icon(
+                                                  CupertinoIcons
+                                                      .xmark_circle_fill,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ));
+                      },
+                      actions: [
+                        Button.icon(
+                          icon: AppIcons.heart,
+                          iconColor: Colors.white,
+                          background: Colors.transparent,
+                          onPressed: () {
+                            print("Wishlist icon clicked");
+                          },
+                        ),
+                      ],
+                    ),
+                    childCount: sights.length,
                   ),
-                  childCount: sights.length,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
