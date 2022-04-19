@@ -42,11 +42,23 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
                   sight: sight,
                   cardActions: [
                     Button.icon(
-                      icon: AppIcons.share,
+                      icon: AppIcons.calendar,
                       iconColor: Colors.white,
                       background: Colors.transparent,
-                      onPressed: () {
-                        print('for $sight pressed share button');
+                      onPressed: () async {
+                        // print('for $sight pressed calendar button');
+                        DateTime? remindDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(Duration(days: 31)),
+                          builder: (context, child) => Theme(
+                            data: ThemeData(),
+                            child: child!,
+                          ),
+                        );
+                        print(
+                            '$sight is planned to visit on ${remindDate?.toIso8601String()}');
                       },
                     ),
                   ],
