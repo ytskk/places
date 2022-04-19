@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, value, Widget? child) {
           return MaterialApp(
             routes: routes,
+
             initialRoute: AppRoutes.onboarding,
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()

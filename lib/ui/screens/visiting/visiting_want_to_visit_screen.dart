@@ -50,6 +50,7 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
                       background: Colors.transparent,
                       onPressed: () async {
                         // print('for $sight pressed calendar button');
+                        /// Pick remind date from now to one month from now.
                         DateTime? remindDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
