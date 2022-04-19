@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/controllers/visiting_places_controller.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/info_list.dart';
+import 'package:places/ui/components/rounded_box.dart';
 import 'package:places/ui/components/visiting/visiting_list_item.dart';
 import 'package:provider/provider.dart';
 
@@ -42,11 +45,23 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
                   sight: sight,
                   cardActions: [
                     Button.icon(
-                      icon: AppIcons.share,
+                      icon: AppIcons.calendar,
                       iconColor: Colors.white,
                       background: Colors.transparent,
-                      onPressed: () {
-                        print('for $sight pressed share button');
+                      onPressed: () async {
+                        // print('for $sight pressed calendar button');
+                        DateTime? remindDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(Duration(days: 31)),
+                          builder: (context, child) => Theme(
+                            data: dateTimePickerThemeData(context),
+                            child: child!,
+                          ),
+                        );
+                        print(
+                            '$sight is planned to visit on ${remindDate?.toIso8601String()}');
                       },
                     ),
                   ],
@@ -77,3 +92,23 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
           );
   }
 }
+
+ThemeData Function(BuildContext context) dateTimePickerThemeData =
+    (BuildContext context) {
+  final theme = Theme.of(context);
+
+  return ThemeData(
+    dialogBackgroundColor: theme.scaffoldBackgroundColor,
+    dialogTheme: DialogTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(
+          Radius.circular(smallBorderRadius),
+        ),
+      ),
+    ),
+    colorScheme: ColorScheme.light(
+      primary: theme.primaryColor,
+      onSurface: theme.textTheme.bodyText2!.color!,
+    ),
+  );
+};
