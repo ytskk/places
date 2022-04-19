@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 
 /// Thin horizontal line.
 class HorizontalDivider extends StatelessWidget {
@@ -8,7 +9,7 @@ class HorizontalDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Divider(
-      height: 16,
+      height: mediumSpacing,
     );
   }
 }

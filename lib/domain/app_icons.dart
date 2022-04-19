@@ -37,4 +37,9 @@ class AppIcons {
   static const travel_guide = 'assets/icons/travel_guide.svg';
   static const bag = 'assets/icons/bag.svg';
   static const pointer = 'assets/icons/pointer.svg';
+
+  // image picker icons
+  static const camera = 'assets/icons/camera.svg';
+  static const gallery = 'assets/icons/gallery.svg';
+  static const file = 'assets/icons/file.svg';
 }

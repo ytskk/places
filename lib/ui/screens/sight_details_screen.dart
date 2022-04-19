@@ -14,7 +14,12 @@ import 'package:places/ui/components/image/network_image_box.dart';
 
 /// A page detailing the [Sight].
 class SightDetailsScreen extends StatefulWidget {
-  const SightDetailsScreen({Key? key}) : super(key: key);
+  const SightDetailsScreen({
+    Key? key,
+    this.id,
+  }) : super(key: key);
+
+  final Key? id;
 
   @override
   State<SightDetailsScreen> createState() => _SightDetailsScreenState();
@@ -24,15 +29,18 @@ class _SightDetailsScreenState extends State<SightDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final Key sightId = ModalRoute.of(context)!.settings.arguments as Key;
+    final Key sightId =
+        widget.id ?? ModalRoute.of(context)!.settings.arguments as Key;
     final Sight sight = mocks.firstWhere((sight) => sight.id == sightId);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       body: CustomScrollView(
+        primary: false,
         slivers: [
           _SightSliverAppBar(
             sightImages: sight.images.isEmpty ? [sight.url] : sight.images,
+            useBackButton: widget.id == null,
           ),
           SliverList(
             delegate: SliverChildListDelegate([
@@ -85,16 +93,20 @@ class _SightSliverAppBar extends StatelessWidget {
   const _SightSliverAppBar({
     Key? key,
     required this.sightImages,
+    required this.useBackButton,
   }) : super(key: key);
 
   final List<String> sightImages;
+  final bool useBackButton;
 
   @override
   Widget build(BuildContext context) {
     final isImagesEmpty = sightImages.isEmpty;
 
     return SliverAppBar(
-      leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
+      // leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
+      leading: useBackButton ? const _RoundedBackButton() : null,
+      automaticallyImplyLeading: false,
       pinned: true,
       backgroundColor: Colors.transparent,
       elevation: 0,

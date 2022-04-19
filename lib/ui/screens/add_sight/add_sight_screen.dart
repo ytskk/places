@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/domain/app_constants.dart';
+import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/dialog.dart';
@@ -12,6 +11,7 @@ import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/dialog/custom_dialog.dart';
+import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/rounded_box.dart';
 import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/screens/add_sight/select_category_screen.dart';
@@ -376,26 +376,27 @@ class _AddSightImageButton extends StatelessWidget {
     return Center(
       child: InkWell(
         onTap: () {
+          showDialog(context: context, builder: (_) => _AddSightImageDialog());
           // temp!
-          showAlertDialog(
-            context,
-            CustomDialog(
-              content: Text(
-                'Image picker',
-                textAlign: TextAlign.center,
-              ),
-              dialogState: DialogState.Alert,
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    context.read<AddSight>().addImage();
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Add image'),
-                ),
-              ],
-            ),
-          );
+          // showAlertDialog(
+          //   context,
+          //   CustomDialog(
+          //     content: Text(
+          //       'Image picker',
+          //       textAlign: TextAlign.center,
+          //     ),
+          //     dialogState: DialogState.Alert,
+          //     actions: [
+          //       TextButton(
+          //         onPressed: () {
+          //           context.read<AddSight>().addImage();
+          //           Navigator.of(context).pop();
+          //         },
+          //         child: Text('Add image'),
+          //       ),
+          //     ],
+          //   ),
+          // );
         },
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -417,6 +418,151 @@ class _AddSightImageButton extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AddSightImageDialog extends StatelessWidget {
+  const _AddSightImageDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: mediumSpacing),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _AddSightImageDialogActionButtons(),
+            SizedBox(height: smallSpacing),
+            _AddSightImageDialogDismissButton(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddSightImageDialogActionButtons extends StatelessWidget {
+  _AddSightImageDialogActionButtons({Key? key}) : super(key: key);
+
+  final List _actionButtons = [
+    {
+      'text': AppStrings.addSightScreenImagePickerOptionsCameraTitle,
+      'icon': AppIcons.camera,
+      'onPressed': () {},
+    },
+    {
+      'text': AppStrings.addSightScreenImagePickerOptionsGalleryTitle,
+      'icon': AppIcons.gallery,
+      'onPressed': () {},
+    },
+    {
+      'text': AppStrings.addSightScreenImagePickerOptionsFileTitle,
+      'icon': AppIcons.file,
+      'onPressed': () {},
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return RoundedBox(
+      color: theme.scaffoldBackgroundColor,
+      child: Column(
+        children: [
+          ..._buildActionButtons(),
+        ],
+      ),
+    );
+  }
+
+  /// Builds action buttons.
+  ///
+  /// Wraps each [_actionButtons] into [_AddSightImageDialogActionButton] and [Divider],
+  /// except the last one
+  List<Widget> _buildActionButtons() {
+    final actions = [];
+
+    _actionButtons.take(_actionButtons.length - 1).forEach((element) {
+      actions.add(
+        _AddSightImageDialogActionButton(
+          text: element['text'],
+          icon: element['icon'],
+          onPressed: element['onPressed'],
+        ),
+      );
+      actions.add(Divider(
+        height: 0,
+      ));
+    });
+    actions.add(
+      _AddSightImageDialogActionButton(
+        text: _actionButtons.last['text'],
+        icon: _actionButtons.last['icon'],
+        onPressed: _actionButtons.last['onPressed'],
+      ),
+    );
+
+    return [
+      ...actions,
+    ];
+  }
+}
+
+class _AddSightImageDialogActionButton extends StatelessWidget {
+  const _AddSightImageDialogActionButton({
+    Key? key,
+    required this.text,
+    required this.icon,
+    this.onPressed,
+  }) : super(key: key);
+
+  final String text;
+  final String icon;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final labelTextStyle = Theme.of(context).textTheme.labelMedium;
+
+    return Button.icon(
+      buttonPadding: ButtonPadding.UltraWide,
+      text: text,
+      textStyle: labelTextStyle,
+      icon: icon,
+      iconColor: labelTextStyle!.color,
+      background: Colors.transparent,
+      contentAlignment: MainAxisAlignment.start,
+      onPressed: onPressed,
+      borderRadius: 0,
+    );
+  }
+}
+
+class _AddSightImageDialogDismissButton extends StatelessWidget {
+  const _AddSightImageDialogDismissButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: double.infinity,
+      ),
+      child: Button(
+        text: AppStrings.buttonTextCancel.toUpperCase(),
+        buttonPadding: ButtonPadding.UltraWide,
+        onPressed: () => Navigator.of(context).pop(),
+        textStyle: TextStyle(
+          color: theme.primaryColor,
+          fontWeight: FontWeight.w700,
+        ),
+        background: theme.scaffoldBackgroundColor,
       ),
     );
   }

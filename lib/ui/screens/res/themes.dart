@@ -90,6 +90,10 @@ class AppThemeData {
             ),
         bodyText1: TextStyle(color: appColors.textLabelSecondary),
         bodyText2: TextStyle(color: appColors.textLabel, fontSize: 16),
+        labelMedium: TextStyle(
+          color: appColors.textLabelTertiary,
+          fontSize: 16,
+        ),
         headline2: headline2.copyWith(
           color: appColors.textLabel,
         ),
