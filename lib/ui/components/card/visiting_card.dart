@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/models/card_info.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/card/card.dart';
 
@@ -11,12 +12,14 @@ class VisitingCard extends StatelessWidget {
     this.scheduledAt = '',
     this.workingStatus = '',
     this.isVisited = false,
+    this.onTap,
   }) : super(key: key);
 
   final Sight sight;
   final List<Widget> actions;
   final String scheduledAt;
   final String workingStatus;
+  final VoidCallback? onTap;
 
   /// Controls [MyCard] subtitle color
   ///
@@ -32,6 +35,7 @@ class VisitingCard extends StatelessWidget {
 
     return MyCard(
       sight,
+      onTap: onTap,
       actions: actions,
       cardInfo: CardInfo(
         title: sight.name,

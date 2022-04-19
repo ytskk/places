@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/ui/components/icon_box.dart';
 
 /// Widget displaying a message content
@@ -26,10 +27,10 @@ class InfoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final defaultIconColor = Theme.of(context).
-    final defaultTitleStyle = Theme.of(context).textTheme.headline6;
+    final defaultTitleStyle =
+        Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 24);
     final defaultSubtitleStyle = Theme.of(context).textTheme.bodyText1;
 
-    const double maxBoxWidth = 350;
     final double maxContentWidth = MediaQuery.of(context).size.width / 1.5;
 
     return Column(
@@ -52,7 +53,7 @@ class InfoList extends StatelessWidget {
                   ),
                 Text(
                   title.data!,
-                  style: defaultTitleStyle!.merge(title.style),
+                  style: defaultTitleStyle.merge(title.style),
                   textAlign: title.textAlign,
                 ),
                 if (subtitle != null)

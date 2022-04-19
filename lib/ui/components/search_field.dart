@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -67,11 +68,13 @@ class _SearchFieldState extends State<SearchField> {
         hintStyle: textTheme.bodyText1,
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius:
+              const BorderRadius.all(Radius.circular(smallBorderRadius)),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius:
+              const BorderRadius.all(Radius.circular(smallBorderRadius)),
         ),
         prefixIcon: Padding(
           padding: const EdgeInsets.all(12),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/components/card/card.dart';
+import 'package:places/models/card_info.dart';
 
 class CardInformation extends StatelessWidget {
   const CardInformation({

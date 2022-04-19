@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
+import 'package:places/ui/components/sliding_tabbar.dart';
 import 'package:places/ui/screens/visiting/visiting_visited_screen.dart';
 import 'package:places/ui/screens/visiting/visiting_want_to_visit_screen.dart';
-
-import '../../components/sliding_tabbar.dart';
 
 class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
@@ -24,13 +24,14 @@ class _VisitingScreenState extends State<VisitingScreen> {
             AppStrings.visitingAppBarTitle,
           ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(52),
+            preferredSize: Size.fromHeight(bottomAppBarHeight),
             child: SlidingTabBar(tabs: AppStrings.visitingTabTitles),
           ),
         ),
         body: SafeArea(
           child: TabBarView(
             children: [
+              // TODO: merge base;
               VisitingWantToVisitScreen(),
               VisitingVisitedScreen(),
             ],

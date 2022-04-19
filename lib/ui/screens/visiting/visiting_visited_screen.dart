@@ -18,45 +18,12 @@ class VisitingVisitedScreen extends StatefulWidget {
 class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
   @override
   Widget build(BuildContext context) {
-    final List<Sight> li = context.watch<VisitingPlaces>().visitedPlaces;
+    final textColor = Theme.of(context).textTheme.bodyText2!.color;
 
-    // return VisitingListContent<Sight>(
-    //   liContent: li,
-    //   liContentChildren: [
-    //     ...li.map(
-    //       (sight) => VisitingListItem(
-    //         key: ValueKey(sight),
-    //         sight: sight,
-    //         cardActions: [
-    //           Button.icon(
-    //             icon: AppIcons.share,
-    //             iconColor: Colors.white,
-    //             background: Colors.transparent,
-    //             onPressed: () {
-    //               print('for $sight pressed share button');
-    //             },
-    //           ),
-    //         ],
-    //         scheduledAt: '${AppStrings.visitingVisitedAchieved} 12 окт. 2020',
-    //         workingStatus: '${AppStrings.visitingVisitedClosedUntil} 09:00',
-    //         onDeleteButtonPressed: () {
-    //           //                 context
-    //           //                     .read<VisitingPlaces>()
-    //           //                     .deleteVisitedPlaceById(sight.id);
-    //
-    //           context
-    //               .read<VisitingPlaces>()
-    //               .deleteWantToVisitPlaceById(sight.id);
-    //         },
-    //       ),
-    //     ),
-    //   ],
-    //   emptyListTitle: AppStrings.visitingEmpty,
-    //   emptyListSubtitle: AppStrings.visitingWantToVisitEmpty,
-    //   emptyListIconName: AppIcons.card,
-    // );
+    final List<Sight> visitedPlaces =
+        context.watch<VisitingPlaces>().visitedPlaces;
 
-    return li.isNotEmpty
+    return visitedPlaces.isNotEmpty
         ? ReorderableListView(
             padding: const EdgeInsets.all(16),
             onReorder: (int oldIndex, int newIndex) {
@@ -64,12 +31,12 @@ class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
-                final Sight item = li.removeAt(oldIndex);
-                li.insert(newIndex, item);
+                final Sight item = visitedPlaces.removeAt(oldIndex);
+                visitedPlaces.insert(newIndex, item);
               });
             },
             children: [
-              ...li.map(
+              ...visitedPlaces.map(
                 (sight) => VisitingListItem(
                   key: ValueKey(sight),
                   sight: sight,
@@ -97,10 +64,16 @@ class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
               ),
             ],
           )
-        : InfoList(
-            iconName: AppIcons.go,
-            title: Text(AppStrings.visitingEmpty),
-            subtitle: Text(AppStrings.visitingVisitedEmpty),
+        : Center(
+            child: InfoList(
+              iconName: AppIcons.go,
+              iconColor: textColor,
+              title: Text(AppStrings.visitingEmpty),
+              subtitle: Text(
+                AppStrings.visitingVisitedEmpty,
+                textAlign: TextAlign.center,
+              ),
+            ),
           );
   }
 }

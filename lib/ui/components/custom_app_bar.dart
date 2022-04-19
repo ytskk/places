@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 
 /// Custom implemented [AppBar].
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,6 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leading,
     this.background,
+    this.automaticallyImplyLeading = false,
   }) : super(key: key);
 
   /// Height of AppBar, except [bottom], similar to [AppBar.toolbarHeight],
@@ -24,6 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Widget? leading;
   final Color? background;
+  final bool automaticallyImplyLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final Color backgroundColor = background ?? theme.scaffoldBackgroundColor;
 
     return AppBar(
-      leadingWidth: 80,
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      leadingWidth: largeLeadingWidth,
       titleTextStyle: titleTextStyle,
       title: title,
       actions: actions,

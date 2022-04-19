@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/models/dialog.dart';
 
 /// A product design alert dialog.
@@ -6,8 +7,8 @@ import 'package:places/models/dialog.dart';
 /// An alert dialog informs the user about situations that require acknowledgement.
 /// An alert dialog has an optional content and an optional list of actions.
 /// The content is displayed above the actions and below the icon.
-class DialogWidget extends StatelessWidget {
-  const DialogWidget({
+class CustomDialog extends StatelessWidget {
+  const CustomDialog({
     Key? key,
     this.dialogState = DialogState.Success,
     this.content,
@@ -41,7 +42,8 @@ class DialogWidget extends StatelessWidget {
       contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius:
+            const BorderRadius.all(Radius.circular(smallBorderRadius)),
       ),
       actions: actions,
     );

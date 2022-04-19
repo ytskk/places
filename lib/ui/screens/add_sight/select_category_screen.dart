@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/components/app_bar.dart';
 import 'package:places/ui/components/button.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,8 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
 
     selectedCategory =
         TextEditingController(text: context.read<AddSight>().category.value);
-    // to update the root value
+
+    // to update the root value. It's removing at [CustomTextField] dispose.
     selectedCategory.addListener(() => setState(() {}));
   }
 
@@ -51,8 +52,6 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
           ],
         ),
       ),
-      // bottomNavigationBar:R
-      //     _SightCategorySelectButton(selectedCategory: selectedCategory),
     );
   }
 }

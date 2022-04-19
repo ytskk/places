@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
+import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
@@ -29,7 +31,8 @@ class VisitingListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius:
+            const BorderRadius.all(Radius.circular(smallBorderRadius)),
         child: Dismissible(
           key: ValueKey(sight),
           direction: DismissDirection.endToStart,
@@ -39,6 +42,12 @@ class VisitingListItem extends StatelessWidget {
           background: const _DismissibleBackground(),
           child: VisitingCard(
             sight,
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                AppRoutes.sightDetails,
+                arguments: sight.id,
+              );
+            },
             key: ValueKey(sight),
             actions: [
               ...?cardActions,
@@ -71,7 +80,8 @@ class _DismissibleBackground extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius:
+            const BorderRadius.all(Radius.circular(smallBorderRadius)),
         color: Colors.red,
       ),
       child: Align(
@@ -86,7 +96,7 @@ class _DismissibleBackground extends StatelessWidget {
                 color: Colors.white,
               ),
               const SizedBox(
-                height: 8,
+                height: smallSpacing,
               ),
               Text(
                 AppStrings.visitingDismissibleText,

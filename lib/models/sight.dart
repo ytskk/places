@@ -46,9 +46,4 @@ class SightCategories {
   static const museum = 'Музей';
   static const cafe = 'Кафе';
   static const park = 'Парк';
-
-// // TODO: implement
-// static List<String> getValues() {
-//   return [];
-// }
 }

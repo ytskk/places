@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_constants.dart' as constants;
 import 'package:places/domain/app_icons.dart';
+import 'package:places/domain/app_routes.dart';
 import 'package:places/ui/components/icon_box.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,11 +27,19 @@ class _SplashScreenState extends State<SplashScreen> {
   /// Controls app loading progress. When it's done, it moves to the next screen.
   ///
   /// On loading shows an animation.
+  ///
+  /// On push, clears navigation stack.
   Future<void> _moveToNext() async {
     await Future.delayed(
       const Duration(seconds: 2),
       () {
-        print('Переход на следующий экран');
+        print('navigating to the next screen');
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.onboarding,
+          (route) => false,
+          arguments: AppRoutes.home,
+        );
       },
     );
   }

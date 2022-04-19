@@ -26,6 +26,7 @@ class Button extends StatelessWidget {
     this.onPressed,
     Color? this.background,
     EdgeInsets? buttonPadding,
+    this.textStyle,
   })  : icon = null,
         iconColor = null,
         iconAlignment = null,
@@ -52,6 +53,7 @@ class Button extends StatelessWidget {
     IconAlignment? iconAlignment,
     EdgeInsets? buttonPadding,
     double? gap,
+    this.textStyle,
   })  : padding = buttonPadding ?? ButtonPadding.Narrow,
         gap = gap ?? 8,
         isTransparent = background == Colors.transparent,
@@ -72,6 +74,8 @@ class Button extends StatelessWidget {
 
   /// Padding around content. Recommended to use [ButtonPadding]. By default [ButtonPadding.Narrow])
   final EdgeInsets? padding;
+
+  final TextStyle? textStyle;
 
   /// controls distance in logical pixels  between [icon] and [text] (if text is not null).
   /// By default 8 logical pixels.
@@ -111,7 +115,17 @@ class Button extends StatelessWidget {
       }
     }
 
-    final buttonText = text != null ? Text(text!) : null;
+    final buttonTextStyle = textStyle ??
+        theme.textTheme.bodyText2!.copyWith(
+          fontSize: 14,
+          color: onPrimary,
+        );
+    final buttonText = text != null
+        ? Text(
+            text!,
+            style: buttonTextStyle,
+          )
+        : null;
     final buttonIcon = icon != null
         ? IconBox(
             icon: icon!,
@@ -211,7 +225,7 @@ class ButtonWithGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: const BorderRadius.all(Radius.circular(largeBorderRadius)),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         splashColor: Colors.black12,

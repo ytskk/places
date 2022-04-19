@@ -5,7 +5,8 @@ import 'package:places/mocks.dart';
 import 'package:places/models/coordinates.dart';
 import 'package:places/models/filter_option.dart';
 import 'package:places/models/sight.dart';
-import 'package:places/ui/components/app_bar.dart';
+import 'package:places/ui/components/button.dart';
+import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/filter_button.dart';
 import 'package:places/ui/components/range_selector.dart';
 import 'package:places/utils/coordinates.dart';
@@ -49,7 +50,7 @@ class FilterScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               child: _RangeSelection(
-                rangeValues: RangeValues(100, 20000),
+                rangeValues: RangeValues(100, 30000),
               ),
             ),
             const SliverFillRemaining(
@@ -89,7 +90,7 @@ class _BuildFilterCategoryTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final titleTextTheme = Theme.of(context).textTheme.bodyText1;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -98,13 +99,17 @@ class _BuildFilterCategoryTitle extends StatelessWidget {
         children: [
           Text(
             title.data!,
-            style:
-                textTheme.bodyText1!.copyWith(fontSize: 12).merge(title.style),
+            style: titleTextTheme!
+                .copyWith(
+                  fontSize: 12,
+                  color: titleTextTheme.color!.withOpacity(0.56),
+                )
+                .merge(title.style),
           ),
           if (titleAfter.data!.length > 0)
             Text(
               titleAfter.data!,
-              style: textTheme.bodyText1!
+              style: titleTextTheme
                   .copyWith(
                     fontSize: 12,
                   )
@@ -179,15 +184,38 @@ class _FilterShowResultButton extends StatelessWidget {
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ElevatedButton(
-            onPressed: () {
-              print("Filter show button clicked. Data saved");
-              context.read<Filter>().setNearbyPlaces(sights);
-            },
-            child: Text(
-              "${AppStrings.filterScreenFilterShow} ${"(${sights.length})"}",
+          child: Button(
+            text: '${AppStrings.filterScreenFilterShow} ${'(${sights.length})'}'
+                .toUpperCase(),
+            textStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
             ),
+            onPressed: sights.isNotEmpty
+                ? () {
+                    print('Filter show button clicked. Data saved');
+                    context.read<Filter>().setNearbyPlaces(sights);
+                    Navigator.of(context).pop();
+                  }
+                : null,
+            buttonPadding: const EdgeInsets.symmetric(vertical: 18),
           ),
+          // child: ElevatedButton(
+          //   onPressed: sights.isNotEmpty
+          //       ? () {
+          //           print("Filter show button clicked. Data saved");
+          //           context.read<Filter>().setNearbyPlaces(sights);
+          //           Navigator.of(context).pop();
+          //         }
+          //       : null,
+          //   // onPressed: () {
+          //   //   print("Filter show button clicked. Data saved");
+          //   //   context.read<Filter>().setNearbyPlaces(sights);
+          //   // },
+          //   child: Text(
+          //     "${AppStrings.filterScreenFilterShow} ${"(${sights.length})"}",
+          //   ),
+          // ),
         ),
       ),
     );

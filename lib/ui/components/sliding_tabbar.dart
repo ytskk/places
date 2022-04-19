@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/ui/components/tab_item.dart';
 
 /// Custom designed [TabBar], uses [TabItem]
@@ -14,14 +15,13 @@ class SlidingTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    double defaultBorderRadius = 40;
+    final double _defaultBorderRadius = 40;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: mediumWrappingPadding,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(defaultBorderRadius),
+          borderRadius: BorderRadius.circular(_defaultBorderRadius),
           color: theme.backgroundColor,
         ),
         child: TabBar(
