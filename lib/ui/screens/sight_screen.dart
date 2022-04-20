@@ -5,6 +5,8 @@ import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:places/models/sight.dart';
+import 'package:places/ui/components/bottom_sheet/bottom_sheet_header.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -36,111 +38,76 @@ class _SightScreenState extends State<SightScreen> {
               _SightListSliverAppBar(isScrolled: innerBoxIsScrolled),
             ];
           },
-          body: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 72),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => SightCard(
-                      sights.elementAt(index),
-                      onTap: () {
-                        // BUG: does not scrolls when description is large.
-                        showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            isScrollControlled: true,
-                            builder: (context) => Padding(
-                                  padding: const EdgeInsets.only(top: 64),
-                                  child: ClipRRect(
-                                    clipBehavior: Clip.antiAlias,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft:
-                                          Radius.circular(smallBorderRadius),
-                                      topRight:
-                                          Radius.circular(smallBorderRadius),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        SightDetailsScreen(
-                                            id: sights.elementAt(index).id),
-                                        DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Colors.black.withOpacity(0.5),
-                                                Colors.black.withOpacity(0.0),
-                                              ],
-                                            ),
-                                          ),
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 12),
-                                                    child: DecoratedBox(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    largeBorderRadius)),
-                                                      ),
-                                                      child: SizedBox(
-                                                        height: 4,
-                                                        width: 40,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              IconButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                iconSize: 40,
-                                                icon: Icon(
-                                                  CupertinoIcons
-                                                      .xmark_circle_fill,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ));
-                      },
-                      actions: [
-                        Button.icon(
-                          icon: AppIcons.heart,
-                          iconColor: Colors.white,
-                          background: Colors.transparent,
-                          onPressed: () {
-                            print("Wishlist icon clicked");
-                          },
+          body: OrientationBuilder(
+            builder: (BuildContext context, Orientation orientation) {
+              return CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 78),
+                    sliver: SliverGrid(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => Align(
+                          alignment: Alignment.topLeft,
+                          child: _SightListItem(
+                            sight: sights.elementAt(index),
+                          ),
                         ),
-                      ],
+                        childCount: sights.length,
+                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisSpacing: 36.0,
+                        mainAxisSpacing: 16.0,
+                        mainAxisExtent: 200,
+                        crossAxisCount: MediaQuery.of(context).orientation ==
+                                Orientation.portrait
+                            ? 1
+                            : 2,
+                      ),
                     ),
-                    childCount: sights.length,
                   ),
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SightListItem extends StatelessWidget {
+  const _SightListItem({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+  final Sight sight;
+
+  @override
+  Widget build(BuildContext context) {
+    return SightCard(
+      sight,
+      onTap: () {
+        // TODO: replace with surf bottom sheet.
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => BottomSheetHeader(
+            child: SightDetailsScreen(id: sight.id),
+          ),
+        );
+      },
+      actions: [
+        Button.icon(
+          icon: AppIcons.heart,
+          iconColor: Colors.white,
+          background: Colors.transparent,
+          onPressed: () {
+            print("Wishlist icon clicked");
+          },
+        ),
+      ],
     );
   }
 }
