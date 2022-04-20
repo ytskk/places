@@ -52,7 +52,7 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
                       iconColor: Colors.white,
                       background: Colors.transparent,
                       onPressed: () async {
-                        DateTime? remindDate = await Picker.Adaptive(
+                        DateTime? remindDate = await Picker.Cupertino(
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
                           lastDate:

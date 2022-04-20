@@ -3,7 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_constants.dart';
+import 'package:provider/provider.dart';
 
 /// Creates date oriented picker.
 ///
@@ -152,13 +154,16 @@ class CupertinoPicker extends CustomPicker {
   // ignore: long-method
   Widget create(BuildContext context) {
     final theme = Theme.of(context);
-    print('picker mode: $mode');
+    final brightness = context.read<Settings>().isDarkTheme
+        ? Brightness.dark
+        : Brightness.light;
+    print('picker mode: $brightness');
 
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
         return OrientationBuilder(
           builder: ((context, orientation) => DecoratedBox(
-                decoration: BoxDecoration(color: Colors.white),
+                decoration: BoxDecoration(color: theme.scaffoldBackgroundColor),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -197,16 +202,21 @@ class CupertinoPicker extends CustomPicker {
                     ),
                     SizedBox(
                       height: 240.0,
-                      child: CupertinoDatePicker(
-                        mode: mode,
-                        minimumDate: firstDate,
-                        maximumDate: lastDate,
-                        onDateTimeChanged: (value) {
-                          print('updating remindDate');
-                          setState(() {
-                            selectedDate = value;
-                          });
-                        },
+                      child: CupertinoTheme(
+                        data: CupertinoThemeData(
+                          brightness: brightness,
+                        ),
+                        child: CupertinoDatePicker(
+                          mode: mode,
+                          minimumDate: firstDate,
+                          maximumDate: lastDate,
+                          onDateTimeChanged: (value) {
+                            print('updating remindDate');
+                            setState(() {
+                              selectedDate = value;
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ],
