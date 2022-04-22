@@ -1,16 +1,11 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/controllers/visiting_places_controller.dart';
-import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/picker.dart';
-import 'package:places/ui/components/rounded_box.dart';
 import 'package:places/ui/components/visiting/visiting_list_item.dart';
 import 'package:provider/provider.dart';
 

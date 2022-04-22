@@ -7,6 +7,17 @@ import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:provider/provider.dart';
 
+String _defaultCancelText = 'Cancel';
+String _defaultConfirmText = 'Select';
+
+TextStyle _cupertinoActionTextStyle = TextStyle(
+  fontFamily: '.SF UI Text',
+  inherit: false,
+  fontSize: 17.0,
+  fontWeight: FontWeight.w400,
+  textBaseline: TextBaseline.alphabetic,
+);
+
 /// Creates date oriented picker.
 ///
 /// Can be separate: from android or ios and both as adaptive.
@@ -71,8 +82,6 @@ class Picker {
   Future<DateTime?> show(BuildContext context) {
     return _picker.show(context);
   }
-
-  // static const dialogType;
 }
 
 abstract class CustomPicker {
@@ -102,6 +111,7 @@ class AndroidPicker extends CustomPicker {
   final String? cancelText;
   final String? confirmText;
 
+  // TODO: implement time picker.
   @override
   Widget create(BuildContext context) {
     return Theme(
@@ -157,7 +167,6 @@ class CupertinoPicker extends CustomPicker {
     final brightness = context.read<Settings>().isDarkTheme
         ? Brightness.dark
         : Brightness.light;
-    print('picker mode: $brightness');
 
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
@@ -211,7 +220,6 @@ class CupertinoPicker extends CustomPicker {
                           minimumDate: firstDate,
                           maximumDate: lastDate,
                           onDateTimeChanged: (value) {
-                            print('updating remindDate');
                             setState(() {
                               selectedDate = value;
                             });
@@ -318,14 +326,3 @@ ThemeData Function(BuildContext context) _dateTimePickerThemeData =
     ),
   );
 };
-
-String _defaultCancelText = 'Cancel';
-String _defaultConfirmText = 'Select';
-
-TextStyle _cupertinoActionTextStyle = TextStyle(
-  fontFamily: '.SF UI Text',
-  inherit: false,
-  fontSize: 17.0,
-  fontWeight: FontWeight.w400,
-  textBaseline: TextBaseline.alphabetic,
-);
