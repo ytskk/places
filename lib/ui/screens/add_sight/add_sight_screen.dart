@@ -364,7 +364,6 @@ class _AddSightCreateButtonDialog extends StatelessWidget {
 /// Zero element to choose new photo.
 ///
 /// Bordered centered plus icon.
-///
 /// TODO: implement image picker!
 class _AddSightImageButton extends StatelessWidget {
   const _AddSightImageButton({Key? key}) : super(key: key);

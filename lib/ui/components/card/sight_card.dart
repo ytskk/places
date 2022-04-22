@@ -22,19 +22,15 @@ class SightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ClipRRect(
-        borderRadius:
-            const BorderRadius.all(Radius.circular(smallBorderRadius)),
-        child: MyCard(
-          sight,
-          onTap: onTap,
-          actions: actions,
-          cardInfo: CardInfo(
-            subtitle: '${AppStrings.sightClosedUntil} 09:00',
-            title: sight.name,
-          ),
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(smallBorderRadius)),
+      child: MyCard(
+        sight,
+        onTap: onTap,
+        actions: actions,
+        cardInfo: CardInfo(
+          subtitle: '${AppStrings.sightClosedUntil} 09:00',
+          title: sight.name,
         ),
       ),
     );

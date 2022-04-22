@@ -36,15 +36,12 @@ class MyCard extends StatelessWidget {
 
     return Stack(
       children: [
-        Column(
+        Stack(
+          alignment: Alignment.bottomCenter,
+          // mainAxisSize: MainAxisSize.min,
           children: [
             // header + photo
-            Stack(
-              children: [
-                // photo
-                NetworkImageBox(sight.url, height: 96),
-              ],
-            ),
+            NetworkImageBox(sight.url, height: 200),
             // card info
             CardInformation(cardInfo: cardInfo),
           ],

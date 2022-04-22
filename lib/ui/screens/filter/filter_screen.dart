@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/coordinates.dart';
@@ -10,6 +11,7 @@ import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/filter_button.dart';
 import 'package:places/ui/components/range_selector.dart';
 import 'package:places/utils/coordinates.dart';
+import 'package:places/utils/screen_sizes.dart';
 import 'package:places/utils/string_manipulations.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +21,7 @@ class FilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bodyText2 = Theme.of(context).textTheme.bodyText2;
+    final categories = context.read<Filter>().filterOptions;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -28,7 +31,6 @@ class FilterScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              print("Clear action clicked");
               context.read<Filter>().clearFilterOptions();
             },
             child: Text(AppStrings.filterScreenActionClear),
@@ -39,7 +41,9 @@ class FilterScreen extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             const FilterCategoryHeader(),
-            _FilterButtonsTable(),
+            _FilterButtonsTable(
+              categories: categories,
+            ),
             FilterRowGroup(
               title: Text(
                 AppStrings.filterScreenRangeSelectionGroupTitle,
@@ -121,43 +125,110 @@ class _BuildFilterCategoryTitle extends StatelessWidget {
   }
 }
 
-/// Returns [FilterOption] buttons from parsed sight types from mock.dart.
+/// Returns [FilterOption] buttons, depends on screen height.
+///
+/// If screen height is less than [_screenSizeSmall], returns [_FilterButtonsTableSmall].
 class _FilterButtonsTable extends StatelessWidget {
-  const _FilterButtonsTable({Key? key}) : super(key: key);
+  _FilterButtonsTable({
+    Key? key,
+    required this.categories,
+  }) : super(key: key);
+
+  late final ScreenSizes screenSize;
+  final List<FilterOption> categories;
 
   @override
   Widget build(BuildContext context) {
-    // get all categories
-    final List<FilterOption> categories = context.read<Filter>().filterOptions;
+    final screenSize = resolveScreenSize(MediaQuery.of(context).size.height);
 
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(8),
+    switch (screenSize) {
+      case ScreenSizes.Small:
+        return _FilterButtonsTableSmall(
+          content: categories,
+        );
+      default:
+        return _FilterButtonsTableMedium(
+          content: categories,
+        );
+    }
+  }
+}
+
+class _FilterButtonsTableSmall extends StatelessWidget {
+  const _FilterButtonsTableSmall({
+    Key? key,
+    required this.content,
+  }) : super(key: key);
+
+  final List<FilterOption> content;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 110,
+        child: ListView.builder(
+          itemBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.all(smallSpacing),
             child: FilterButton(
-              category: categories[index],
+              category: content.elementAt(index),
               onTap: () {
-                context.read<Filter>().toggleCategory(categories[index]);
+                context.read<Filter>().toggleCategory(content[index]);
               },
             ),
-          );
-        },
-        childCount: categories.length,
+          ),
+          scrollDirection: Axis.horizontal,
+          itemCount: content.length,
+          padding: const EdgeInsets.symmetric(horizontal: smallSpacing),
+        ),
+      ),
+    );
+  }
+}
+
+class _FilterButtonsTableMedium extends StatelessWidget {
+  const _FilterButtonsTableMedium({
+    Key? key,
+    required this.content,
+  }) : super(key: key);
+
+  final List<FilterOption> content;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: smallSpacing),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return Padding(
+              padding: const EdgeInsets.all(smallSpacing),
+              child: FilterButton(
+                category: content[index],
+                onTap: () {
+                  context.read<Filter>().toggleCategory(content[index]);
+                },
+              ),
+            );
+          },
+          childCount: content.length,
+        ),
       ),
     );
   }
 }
 
 class _RangeSelection extends StatelessWidget {
-  final RangeValues _values;
-
-  const _RangeSelection({Key? key, required RangeValues rangeValues})
-      : _values = rangeValues,
+  const _RangeSelection({
+    Key? key,
+    required RangeValues rangeValues,
+  })  : _values = rangeValues,
         super(key: key);
+
+  final RangeValues _values;
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +254,7 @@ class _FilterShowResultButton extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
           child: Button(
             text: '${AppStrings.filterScreenFilterShow} ${'(${sights.length})'}'
                 .toUpperCase(),
@@ -193,29 +264,12 @@ class _FilterShowResultButton extends StatelessWidget {
             ),
             onPressed: sights.isNotEmpty
                 ? () {
-                    print('Filter show button clicked. Data saved');
                     context.read<Filter>().setNearbyPlaces(sights);
                     Navigator.of(context).pop();
                   }
                 : null,
             buttonPadding: const EdgeInsets.symmetric(vertical: 18),
           ),
-          // child: ElevatedButton(
-          //   onPressed: sights.isNotEmpty
-          //       ? () {
-          //           print("Filter show button clicked. Data saved");
-          //           context.read<Filter>().setNearbyPlaces(sights);
-          //           Navigator.of(context).pop();
-          //         }
-          //       : null,
-          //   // onPressed: () {
-          //   //   print("Filter show button clicked. Data saved");
-          //   //   context.read<Filter>().setNearbyPlaces(sights);
-          //   // },
-          //   child: Text(
-          //     "${AppStrings.filterScreenFilterShow} ${"(${sights.length})"}",
-          //   ),
-          // ),
         ),
       ),
     );
