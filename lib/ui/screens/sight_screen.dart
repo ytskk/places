@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place_model.dart';
+import 'package:places/data/repository/place_network_repository.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
@@ -12,7 +13,6 @@ import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/searchbar.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
-import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
   const SightScreen({Key? key}) : super(key: key);
@@ -22,10 +22,30 @@ class SightScreen extends StatefulWidget {
 }
 
 class _SightScreenState extends State<SightScreen> {
+  late final List<PlaceDto> places;
+
+  @override
+  initState() {
+    super.initState();
+
+    parsePlaces();
+  }
+
+  Future<void> parsePlaces() async {
+    final List<PlaceDto> filteredPlaces =
+        await PlaceInteractor(placeRepository: PlaceNetworkRepository())
+            .getPlaces(
+      radius: 10000.0,
+      types: ['park'],
+    );
+
+    places = filteredPlaces;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final sights = context.watch<Filter>().nearbyPlaces;
-    print('sights: $sights');
+    // final sights = context.watch<Filter>().nearbyPlaces;
+    // print('sights: $sights');
 
     return Scaffold(
       floatingActionButton: const _AddPlaceFloatingButton(),
@@ -48,11 +68,11 @@ class _SightScreenState extends State<SightScreen> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) => Align(
                           alignment: Alignment.topLeft,
-                          child: _SightListItem(
-                            sight: sights.elementAt(index),
-                          ),
+                          // child: _SightListItem(
+                          //   sight: sights.elementAt(index),
+                          // ),
                         ),
-                        childCount: sights.length,
+                        childCount: places.length,
                       ),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisSpacing: 36.0,

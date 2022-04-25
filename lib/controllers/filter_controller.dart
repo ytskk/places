@@ -38,7 +38,7 @@ class Filter extends ChangeNotifier {
       _filterOptions.where((option) => option.isSelected).toList();
 
   List get selectedCategories =>
-      selectedOptions.map((category) => category.name).toList();
+      selectedOptions.map((category) => category.nameFilter).toList();
 
   void clearFilterOptions() {
     _filterOptions.forEach((category) {

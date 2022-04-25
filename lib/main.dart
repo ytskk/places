@@ -6,7 +6,6 @@ import 'package:places/controllers/onboarding_controller.dart';
 import 'package:places/controllers/settings_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
 import 'package:places/controllers/visiting_places_controller.dart';
-import 'package:places/dio_test.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/ui/components/custom_navigation_bar.dart';
 import 'package:places/ui/screens/res/themes.dart';
@@ -38,9 +37,9 @@ class MyApp extends StatelessWidget {
       child: Consumer(
         builder: (BuildContext context, value, Widget? child) {
           return MaterialApp(
-            // routes: routes,
-            // initialRoute: AppRoutes.onboarding,
-            home: DioTestScreen(),
+            routes: routes,
+            initialRoute: AppRoutes.onboarding,
+            // home: DioTestScreen(),
             theme: context.watch<Settings>().isDarkTheme
                 ? AppThemeData.dark()
                 : AppThemeData.light(),
