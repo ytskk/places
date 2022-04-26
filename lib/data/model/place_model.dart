@@ -1,4 +1,6 @@
 // Model for Place.
+import 'package:places/models/sight.dart';
+
 class Place {
   final int id;
   final double lat;
@@ -14,9 +16,9 @@ class Place {
     required this.lng,
     required this.name,
     required this.urls,
-    required this.type,
+    required String type,
     required this.description,
-  });
+  }) : this.type = localizeType(type);
 
   factory Place.fromJson(Map<String, dynamic> json) => Place(
         id: json['id'],
@@ -26,6 +28,16 @@ class Place {
         urls: List<String>.from(json['urls']),
         type: json['placeType'],
         description: json['description'],
+      );
+
+  factory Place.fromDto(PlaceDto placeDto) => Place(
+        id: placeDto.id,
+        lat: placeDto.lat,
+        lng: placeDto.lng,
+        name: placeDto.name,
+        urls: List<String>.from(placeDto.urls),
+        type: placeDto.type,
+        description: placeDto.description,
       );
 
   Map<String, dynamic> toJson() {
@@ -42,8 +54,40 @@ class Place {
 
   @override
   String toString() {
-    return 'Place#$id: $name';
+    return 'Place#$id: $name ($type)';
   }
+}
+
+String localizeType(String type) {
+  if (type == SightCategories.museum.engName) {
+    return SightCategories.museum.name;
+  }
+  if (type == SightCategories.park.engName) {
+    return SightCategories.park.name;
+  }
+  if (type == SightCategories.restaurant.engName) {
+    return SightCategories.restaurant.name;
+  }
+  if (type == SightCategories.theater.engName) {
+    return SightCategories.theater.name;
+  }
+  if (type == SightCategories.hotel.engName) {
+    return SightCategories.hotel.name;
+  }
+  if (type == SightCategories.poi.engName) {
+    return SightCategories.poi.name;
+  }
+  if (type == SightCategories.movie.engName) {
+    return SightCategories.movie.name;
+  }
+  if (type == SightCategories.park.engName) {
+    return SightCategories.park.name;
+  }
+  if (type == 'other') {
+    return 'Другое';
+  }
+
+  return type;
 }
 
 class PlaceDto extends Place {

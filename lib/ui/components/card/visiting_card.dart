@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/models/card_info.dart';
-import 'package:places/models/sight.dart';
 import 'package:places/ui/components/card/card.dart';
 
 /// Model for sight card in visiting screen
 class VisitingCard extends StatelessWidget {
   const VisitingCard(
-    this.sight, {
+    this.place, {
     Key? key,
     this.actions = const [],
     this.scheduledAt = '',
@@ -15,7 +15,7 @@ class VisitingCard extends StatelessWidget {
     this.onTap,
   }) : super(key: key);
 
-  final Sight sight;
+  final Place place;
   final List<Widget> actions;
   final String scheduledAt;
   final String workingStatus;
@@ -34,11 +34,11 @@ class VisitingCard extends StatelessWidget {
         isVisited ? theme.textTheme.bodyText1!.color! : theme.cardColor;
 
     return MyCard(
-      sight,
+      place,
       onTap: onTap,
       actions: actions,
       cardInfo: CardInfo(
-        title: sight.name,
+        title: place.name,
         subtitle: scheduledAt,
         subtitleColor: scheduledAtColor,
         text: workingStatus,

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/visiting_places_controller.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/picker.dart';
 import 'package:places/ui/components/visiting/visiting_list_item.dart';
-import 'package:provider/provider.dart';
 
 class VisitingWantToVisitScreen extends StatefulWidget {
   const VisitingWantToVisitScreen({Key? key}) : super(key: key);
@@ -19,12 +17,21 @@ class VisitingWantToVisitScreen extends StatefulWidget {
 
 class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
   @override
+  initState() {
+    super.initState();
+
+    // context.read<VisitingPlaces>().loadFavorites();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textColor = Theme.of(context).textTheme.bodyText2!.color;
-    final List<Sight> wantToVisitPlaces =
-        context.watch<VisitingPlaces>().wantToVisitPlaces;
+    // final List<Sight> wantToVisitPlaces = [];
+    // context.watch<VisitingPlaces>().wantToVisitPlaces;
+    final List<Place> favoritesPlaces = [];
+    // context.watch<VisitingPlaces>().favoritesList;
 
-    return wantToVisitPlaces.isNotEmpty
+    return favoritesPlaces.isNotEmpty
         ? ReorderableListView(
             padding: const EdgeInsets.all(16),
             onReorder: (int oldIndex, int newIndex) {
@@ -32,22 +39,22 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
-                final Sight item = wantToVisitPlaces.removeAt(oldIndex);
-                wantToVisitPlaces.insert(newIndex, item);
+                // final Place item = wantToVisitPlaces.removeAt(oldIndex);
+                // wantToVisitPlaces.insert(newIndex, item);
               });
             },
             children: [
-              ...wantToVisitPlaces.map(
-                (sight) => VisitingListItem(
-                  key: ValueKey(sight),
-                  sight: sight,
+              ...favoritesPlaces.map(
+                (place) => VisitingListItem(
+                  key: ValueKey(place),
+                  place: place,
                   cardActions: [
                     Button.icon(
                       icon: AppIcons.calendar,
                       iconColor: Colors.white,
                       background: Colors.transparent,
                       onPressed: () async {
-                        DateTime? remindDate = await Picker.Cupertino(
+                        DateTime? remindDate = await Picker.Adaptive(
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),
                           lastDate:
@@ -55,7 +62,7 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
                         ).show(context);
 
                         print(
-                            '$sight is planned to visit on ${remindDate?.toLocal()}');
+                            '$place is planned to visit on ${remindDate?.toLocal()}');
                       },
                     ),
                   ],
@@ -65,9 +72,7 @@ class _VisitingWantToVisitScreenState extends State<VisitingWantToVisitScreen> {
                   workingStatus:
                       '${AppStrings.visitingVisitedClosedUntil} 09:00',
                   onDeleteButtonPressed: () {
-                    context
-                        .read<VisitingPlaces>()
-                        .deleteWantToVisitPlaceById(sight.id);
+                    // context.read<VisitingPlaces>().removeFromFavorites(place);
                   },
                 ),
               ),

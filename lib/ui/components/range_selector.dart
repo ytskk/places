@@ -7,6 +7,7 @@ class RangeSelector extends StatefulWidget {
     this.onChanged,
     required this.initialRangeValues,
     required this.values,
+    this.onChangeEnd,
   }) : super(key: key);
 
   /// Min and max values of slider.
@@ -15,6 +16,8 @@ class RangeSelector extends StatefulWidget {
   /// Current slider values.
   final RangeValues values;
   final ValueChanged<RangeValues>? onChanged;
+
+  final ValueChanged<RangeValues>? onChangeEnd;
 
   @override
   _RangeSelectorState createState() => _RangeSelectorState();
@@ -28,6 +31,7 @@ class _RangeSelectorState extends State<RangeSelector> {
       max: widget.initialRangeValues.end,
       values: widget.values,
       onChanged: widget.onChanged,
+      onChangeEnd: widget.onChangeEnd,
     );
   }
 }

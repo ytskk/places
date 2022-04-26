@@ -11,4 +11,8 @@ abstract class PlaceRepository {
   Future<Place> getPlaceById({
     required int id,
   });
+
+  Future<void> addNewPlace({
+    required Place place,
+  });
 }

@@ -32,17 +32,39 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: Roboto
+    - family: Roboto-Black
       fonts:
         - asset: assets/res/fonts/Roboto-Black.ttf
+    - family: Roboto-BlackItalic
+      fonts:
         - asset: assets/res/fonts/Roboto-BlackItalic.ttf
+    - family: Roboto-Bold
+      fonts:
         - asset: assets/res/fonts/Roboto-Bold.ttf
+    - family: Roboto-BoldItalic
+      fonts:
         - asset: assets/res/fonts/Roboto-BoldItalic.ttf
+    - family: Roboto-Italic
+      fonts:
         - asset: assets/res/fonts/Roboto-Italic.ttf
+    - family: Roboto-Light
+      fonts:
         - asset: assets/res/fonts/Roboto-Light.ttf
+    - family: Roboto-LightItalic
+      fonts:
         - asset: assets/res/fonts/Roboto-LightItalic.ttf
+    - family: Roboto-Medium
+      fonts:
         - asset: assets/res/fonts/Roboto-Medium.ttf
+    - family: Roboto-MediumItalic
+      fonts:
         - asset: assets/res/fonts/Roboto-MediumItalic.ttf
+    - family: Roboto-Regular
+      fonts:
         - asset: assets/res/fonts/Roboto-Regular.ttf
+    - family: Roboto-Thin
+      fonts:
         - asset: assets/res/fonts/Roboto-Thin.ttf
+    - family: Roboto-ThinItalic
+      fonts:
         - asset: assets/res/fonts/Roboto-ThinItalic.ttf

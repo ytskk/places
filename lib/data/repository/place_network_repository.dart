@@ -38,4 +38,11 @@ class PlaceNetworkRepository extends PlaceRepository {
         .map<PlaceDto>((json) => PlaceDto.fromJson(json))
         .toList();
   }
+
+  @override
+  Future<void> addNewPlace({required Place place}) async {
+    final String postBody = jsonEncode(place.toJson());
+
+    clientApi.post(ApiConstants.placeUrl, data: postBody);
+  }
 }

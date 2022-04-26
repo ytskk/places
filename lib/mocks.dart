@@ -62,7 +62,7 @@ final List<Sight> mocks = [
   ),
 ];
 
-final List filterCategories = [
+final List<PlaceCategory> filterCategories = [
   SightCategories.hotel,
   SightCategories.restaurant,
   SightCategories.poi,

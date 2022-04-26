@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/coordinates.dart';
 import 'package:places/models/filter_option.dart';
 import 'package:places/models/sight.dart';
-import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/filter_button.dart';
 import 'package:places/ui/components/range_selector.dart';
@@ -54,7 +54,10 @@ class FilterScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               child: _RangeSelection(
-                rangeValues: RangeValues(100, 30000),
+                rangeValues: RangeValues(
+                  context.read<Filter>().initialRangeValueStart,
+                  context.read<Filter>().initialRangeValueEnd,
+                ),
               ),
             ),
             const SliverFillRemaining(
@@ -139,7 +142,8 @@ class _FilterButtonsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = resolveScreenSize(MediaQuery.of(context).size.height);
+    final screenSize =
+        resolveScreenHeightSize(MediaQuery.of(context).size.height);
 
     switch (screenSize) {
       case ScreenSizes.Small:
@@ -221,8 +225,8 @@ class _FilterButtonsTableMedium extends StatelessWidget {
   }
 }
 
-class _RangeSelection extends StatelessWidget {
-  const _RangeSelection({
+class _RangeSelection extends StatefulWidget {
+  _RangeSelection({
     Key? key,
     required RangeValues rangeValues,
   })  : _values = rangeValues,
@@ -231,9 +235,14 @@ class _RangeSelection extends StatelessWidget {
   final RangeValues _values;
 
   @override
+  State<_RangeSelection> createState() => _RangeSelectionState();
+}
+
+class _RangeSelectionState extends State<_RangeSelection> {
+  @override
   Widget build(BuildContext context) {
     return RangeSelector(
-      initialRangeValues: _values,
+      initialRangeValues: widget._values,
       values: context.watch<Filter>().rangeValues,
       onChanged: (newValues) {
         context.read<Filter>().setRangeValues(newValues);
@@ -242,33 +251,47 @@ class _RangeSelection extends StatelessWidget {
   }
 }
 
-class _FilterShowResultButton extends StatelessWidget {
+class _FilterShowResultButton extends StatefulWidget {
   const _FilterShowResultButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final List<Sight> sights = _getMatchedResults(context);
+  State<_FilterShowResultButton> createState() =>
+      _FilterShowResultButtonState();
+}
 
+class _FilterShowResultButtonState extends State<_FilterShowResultButton> {
+  @override
+  Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-          child: Button(
-            text: '${AppStrings.filterScreenFilterShow} ${'(${sights.length})'}'
-                .toUpperCase(),
-            textStyle: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-            ),
-            onPressed: sights.isNotEmpty
-                ? () {
-                    context.read<Filter>().setNearbyPlaces(sights);
-                    Navigator.of(context).pop();
-                  }
-                : null,
-            buttonPadding: const EdgeInsets.symmetric(vertical: 18),
+          child: FutureBuilder(
+            future: context.watch<Filter>().parseFilteredPlaces(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Has an error: ${snapshot.error}');
+              }
+
+              bool isLoaded = snapshot.connectionState == ConnectionState.done;
+              List<Place> candidates = isLoaded ? snapshot.data : [];
+
+              return ElevatedButton(
+                onPressed: isLoaded && candidates.isNotEmpty
+                    ? () {
+                        Navigator.of(context).pop();
+                        context.read<Filter>().setFilteredPlaces(candidates);
+                      }
+                    : null,
+                child: Text(
+                  isLoaded
+                      ? '${AppStrings.filterScreenFilterShow} ${candidates.length}'
+                      : 'Загрузка...',
+                ),
+              );
+            },
           ),
         ),
       ),

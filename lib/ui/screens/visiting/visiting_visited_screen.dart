@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/visiting_places_controller.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/visiting/visiting_list_item.dart';
-import 'package:provider/provider.dart';
 
 class VisitingVisitedScreen extends StatefulWidget {
   const VisitingVisitedScreen({Key? key}) : super(key: key);
@@ -16,12 +14,21 @@ class VisitingVisitedScreen extends StatefulWidget {
 }
 
 class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
+  final List<Place> visitedPlaces = [];
+
+  @override
+  initState() {
+    super.initState();
+
+    // context.read<VisitingPlaces>().loadFavorites();
+  }
+
   @override
   Widget build(BuildContext context) {
     final textColor = Theme.of(context).textTheme.bodyText2!.color;
 
-    final List<Sight> visitedPlaces =
-        context.watch<VisitingPlaces>().visitedPlaces;
+    // final List<Sight> visitedPlaces = [];
+    // context.watch<VisitingPlaces>().visitedPlaces;
 
     return visitedPlaces.isNotEmpty
         ? ReorderableListView(
@@ -31,22 +38,22 @@ class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
                 }
-                final Sight item = visitedPlaces.removeAt(oldIndex);
+                final Place item = visitedPlaces.removeAt(oldIndex);
                 visitedPlaces.insert(newIndex, item);
               });
             },
             children: [
               ...visitedPlaces.map(
-                (sight) => VisitingListItem(
-                  key: ValueKey(sight),
-                  sight: sight,
+                (place) => VisitingListItem(
+                  key: ValueKey(place),
+                  place: place,
                   cardActions: [
                     Button.icon(
                       icon: AppIcons.share,
                       iconColor: Colors.white,
                       background: Colors.transparent,
                       onPressed: () {
-                        print('for $sight pressed share button');
+                        print('for $place pressed share button');
                       },
                     ),
                   ],
@@ -56,9 +63,7 @@ class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
                   workingStatus:
                       '${AppStrings.visitingVisitedClosedUntil} 09:00',
                   onDeleteButtonPressed: () {
-                    context
-                        .read<VisitingPlaces>()
-                        .deleteVisitedPlaceById(sight.id);
+                    // context.read<VisitingPlaces>().removeFromFavorites(place);
                   },
                 ),
               ),
