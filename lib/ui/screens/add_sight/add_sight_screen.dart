@@ -5,13 +5,11 @@ import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/mocks.dart';
 import 'package:places/models/dialog.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/dialog/custom_dialog.dart';
-import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/rounded_box.dart';
 import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/screens/add_sight/select_category_screen.dart';
@@ -346,7 +344,6 @@ class _AddSightCreateButtonDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            mocks.add(context.read<AddSight>().createSight());
             context.read<AddSight>().clearFields();
             Navigator.of(context)
               ..pop()

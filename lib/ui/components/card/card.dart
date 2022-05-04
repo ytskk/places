@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/models/card_info.dart';
-import 'package:places/models/sight.dart';
 import 'package:places/ui/components/card/card_header.dart';
 import 'package:places/ui/components/card/card_information.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
@@ -8,20 +8,20 @@ import 'package:places/ui/components/image/network_image_box.dart';
 class MyCard extends StatelessWidget {
   /// Creates card widget.
   ///
-  /// If card info is null, uses [sight] data.
+  /// If card info is null, uses [place] data.
   MyCard(
-    this.sight, {
+    this.place, {
     Key? key,
     this.actions = const [],
     cardInfo,
     this.onTap,
   })  : this.cardInfo =
-            cardInfo ?? CardInfo(title: sight.name, text: sight.details),
+            cardInfo ?? CardInfo(title: place.name, text: place.description),
         super(key: key);
 
   /// Contains displayable card info.
   final CardInfo cardInfo;
-  final Sight sight;
+  final Place place;
 
   /// Top right list of widgets, typically buttons.
   final List<Widget> actions;
@@ -41,7 +41,7 @@ class MyCard extends StatelessWidget {
           // mainAxisSize: MainAxisSize.min,
           children: [
             // header + photo
-            NetworkImageBox(sight.url, height: 200),
+            NetworkImageBox(place.urls.first, height: 200),
             // card info
             CardInformation(cardInfo: cardInfo),
           ],
@@ -56,7 +56,7 @@ class MyCard extends StatelessWidget {
           ),
         ),
         // text + action buttons
-        CardHeader(title: sight.type, actions: actions),
+        CardHeader(title: place.type, actions: actions),
       ],
     );
   }

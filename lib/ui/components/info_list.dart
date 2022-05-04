@@ -55,6 +55,7 @@ class InfoList extends StatelessWidget {
                   title.data!,
                   style: defaultTitleStyle.merge(title.style),
                   textAlign: title.textAlign,
+                  maxLines: title.maxLines,
                 ),
                 if (subtitle != null)
                   Padding(
@@ -62,6 +63,7 @@ class InfoList extends StatelessWidget {
                     child: Text(
                       subtitle!.data!,
                       textAlign: subtitle?.textAlign,
+                      maxLines: subtitle?.maxLines,
                       style: defaultSubtitleStyle!.merge(subtitle!.style),
                     ),
                   ),

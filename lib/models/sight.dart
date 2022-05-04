@@ -38,12 +38,23 @@ class Sight {
 }
 
 class SightCategories {
-  static const movie = 'Кинотеатр';
-  static const restaurant = 'Ресторан';
-  static const poi = 'Особое место';
-  static const theatre = 'Театр';
-  static const hotel = 'Отель';
-  static const museum = 'Музей';
-  static const cafe = 'Кафе';
-  static const park = 'Парк';
+  static const movie = PlaceCategory(name: 'Кинотеатр', engName: 'movie');
+  static const restaurant =
+      PlaceCategory(name: 'Ресторан', engName: 'restaurant');
+  static const poi = PlaceCategory(name: 'Особое место', engName: 'poi');
+  static const theater = PlaceCategory(name: 'Театр', engName: 'theatre');
+  static const hotel = const PlaceCategory(name: 'Отель', engName: 'hotel');
+  static const museum = PlaceCategory(name: 'Музей', engName: 'museum');
+  static const cafe = PlaceCategory(name: 'Кафе', engName: 'cafe');
+  static const park = PlaceCategory(name: 'Парк', engName: 'park');
+}
+
+class PlaceCategory {
+  final String name;
+  final String engName;
+
+  const PlaceCategory({
+    required this.name,
+    required this.engName,
+  });
 }

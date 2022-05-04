@@ -31,3 +31,10 @@ const double largeBorderRadius = 24.0;
 
 const double bottomAppBarHeight = 52.0;
 const double largeLeadingWidth = 80.0;
+
+// Most relevant Date formats.
+class DateFormats {
+  DateFormats._();
+
+  static const String dayShortMonthYearDateFormat = 'd MMM, yyyy';
+}

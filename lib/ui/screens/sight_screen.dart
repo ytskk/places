@@ -1,17 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/interactor/favorites_interactor.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/models/sight.dart';
-import 'package:places/ui/components/bottom_sheet/bottom_sheet_header.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/searchbar.dart';
-import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
@@ -22,11 +21,18 @@ class SightScreen extends StatefulWidget {
 }
 
 class _SightScreenState extends State<SightScreen> {
+  // Will parse only on create.
+  late final Future future;
+
+  @override
+  initState() {
+    super.initState();
+
+    future = context.read<Filter>().getFilteredPlaces(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final sights = context.watch<Filter>().nearbyPlaces;
-    print('sights: $sights');
-
     return Scaffold(
       floatingActionButton: const _AddPlaceFloatingButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -42,29 +48,7 @@ class _SightScreenState extends State<SightScreen> {
             builder: (BuildContext context, Orientation orientation) {
               return CustomScrollView(
                 slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 78),
-                    sliver: SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => Align(
-                          alignment: Alignment.topLeft,
-                          child: _SightListItem(
-                            sight: sights.elementAt(index),
-                          ),
-                        ),
-                        childCount: sights.length,
-                      ),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisSpacing: 36.0,
-                        mainAxisSpacing: 16.0,
-                        mainAxisExtent: 200,
-                        crossAxisCount: MediaQuery.of(context).orientation ==
-                                Orientation.portrait
-                            ? 1
-                            : 2,
-                      ),
-                    ),
-                  ),
+                  _PlaceFutureList(future: future),
                 ],
               );
             },
@@ -75,39 +59,143 @@ class _SightScreenState extends State<SightScreen> {
   }
 }
 
-class _SightListItem extends StatelessWidget {
-  const _SightListItem({
+class _PlaceFutureList extends StatelessWidget {
+  const _PlaceFutureList({
     Key? key,
-    required this.sight,
+    required this.future,
   }) : super(key: key);
 
-  final Sight sight;
+  final Future future;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: future,
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return SliverToBoxAdapter(
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return SliverToBoxAdapter(
+            child: InfoList(
+              iconName: AppIcons.error,
+              title: Text('Error :('),
+              subtitle: Text(
+                snapshot.error.toString(),
+                textAlign: TextAlign.center,
+                maxLines: 10,
+              ),
+            ),
+          );
+        }
+
+        if (!snapshot.hasData) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text('No data'),
+            ),
+          );
+        }
+
+        return _PlaceList();
+      },
+    );
+  }
+}
+
+class _PlaceList extends StatelessWidget {
+  const _PlaceList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Place> places = context.watch<Filter>().filteredPlaces;
+
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 78),
+      sliver: SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => Align(
+            alignment: Alignment.topLeft,
+            child: _PlaceListItem(
+              place: places.elementAt(index),
+            ),
+          ),
+          childCount: places.length,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 36.0,
+          mainAxisSpacing: 16.0,
+          mainAxisExtent: 200,
+          crossAxisCount:
+              MediaQuery.of(context).orientation == Orientation.portrait
+                  ? 1
+                  : 2,
+        ),
+      ),
+    );
+  }
+}
+
+class _PlaceListItem extends StatelessWidget {
+  const _PlaceListItem({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
     return SightCard(
-      sight,
+      place,
       onTap: () {
-        // TODO: replace with surf bottom sheet.
-        showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          builder: (context) => BottomSheetHeader(
-            child: SightDetailsScreen(id: sight.id),
-          ),
-        );
+        Navigator.pushNamed(context, AppRoutes.sightDetails,
+            arguments: place.id);
       },
       actions: [
-        Button.icon(
-          icon: AppIcons.heart,
+        _SightHeartIconButtonToggleable(
+          place: place,
+        ),
+      ],
+    );
+  }
+}
+
+class _SightHeartIconButtonToggleable extends StatefulWidget {
+  _SightHeartIconButtonToggleable({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final Place place;
+
+  @override
+  State<_SightHeartIconButtonToggleable> createState() =>
+      __SightHeartIconButtonToggleableState();
+}
+
+class __SightHeartIconButtonToggleableState
+    extends State<_SightHeartIconButtonToggleable> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: context.watch<FavoritesInteractor>().isFavorite(widget.place),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return Button.icon(
+          icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
           iconColor: Colors.white,
           background: Colors.transparent,
           onPressed: () {
-            print("Wishlist icon clicked");
+            // print("Wishlist icon clicked");
+            context.read<FavoritesInteractor>().toggleFavorite(widget.place);
           },
-        ),
-      ],
+        );
+      },
     );
   }
 }

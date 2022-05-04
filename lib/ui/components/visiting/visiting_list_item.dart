@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/utils/string_manipulations.dart';
 
 class VisitingListItem extends StatelessWidget {
-  final Sight sight;
-  final List<Widget>? cardActions;
-  final VoidCallback onDeleteButtonPressed;
-  final bool isVisited;
-  final String scheduledAt;
-  final String workingStatus;
-
   const VisitingListItem({
     Key? key,
-    required this.sight,
+    required this.place,
     this.cardActions,
     required this.onDeleteButtonPressed,
     this.isVisited = false,
     required this.scheduledAt,
     required this.workingStatus,
   }) : super(key: key);
+
+  final Place place;
+  final List<Widget>? cardActions;
+  final VoidCallback onDeleteButtonPressed;
+  final bool isVisited;
+  final DateTime? scheduledAt;
+  final String workingStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +35,21 @@ class VisitingListItem extends StatelessWidget {
         borderRadius:
             const BorderRadius.all(Radius.circular(smallBorderRadius)),
         child: Dismissible(
-          key: ValueKey(sight),
+          key: ValueKey(place),
           direction: DismissDirection.endToStart,
           onDismissed: (DismissDirection directions) {
             onDeleteButtonPressed();
           },
           background: const _DismissibleBackground(),
           child: VisitingCard(
-            sight,
+            place,
             onTap: () {
               Navigator.of(context).pushNamed(
                 AppRoutes.sightDetails,
-                arguments: sight.id,
+                arguments: place.id,
               );
             },
-            key: ValueKey(sight),
+            key: ValueKey(place),
             actions: [
               ...?cardActions,
               Button.icon(
@@ -59,7 +60,12 @@ class VisitingListItem extends StatelessWidget {
               ),
             ],
             isVisited: isVisited,
-            scheduledAt: scheduledAt,
+            scheduledAt: scheduledAt != null
+                ? '${AppStrings.visitingWantToVisitPlannedAt} ${formatDate(
+                    scheduledAt!,
+                    pattern: DateFormats.dayShortMonthYearDateFormat,
+                  )}'
+                : null,
             workingStatus: workingStatus,
           ),
         ),

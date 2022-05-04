@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/filter_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -121,10 +120,10 @@ class _SearchResults extends StatefulWidget {
 class _SearchResultsState extends State<_SearchResults> {
   @override
   Widget build(BuildContext context) {
-    final List<Sight> filteredSights = context.watch<Filter>().nearbyPlaces;
+    // final List<Sight> filteredSights = context.watch<Filter>().nearbyPlaces;
     final List<Sight> results = context
         .read<SightSearch>()
-        .searchByName(widget.controller.text.trim(), domain: filteredSights);
+        .searchByName(widget.controller.text.trim(), domain: []);
     final theme = Theme.of(context);
 
     return results.isEmpty

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:places/mocks.dart';
 import 'package:places/models/sight.dart';
 
 class SightSearch extends ChangeNotifier {
@@ -47,9 +46,9 @@ class SightSearch extends ChangeNotifier {
     );
   }
 
-  List<Sight> searchByName(String query, {List<Sight>? domain}) {
+  List<Sight> searchByName(String query, {required List<Sight> domain}) {
     // TODO: search from filtered results
-    return (domain ?? mocks)
+    return (domain)
         .where((Sight element) =>
             element.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
