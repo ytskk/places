@@ -7,6 +7,7 @@ import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/utils/string_manipulations.dart';
 
 class VisitingListItem extends StatelessWidget {
   const VisitingListItem({
@@ -23,7 +24,7 @@ class VisitingListItem extends StatelessWidget {
   final List<Widget>? cardActions;
   final VoidCallback onDeleteButtonPressed;
   final bool isVisited;
-  final String scheduledAt;
+  final DateTime? scheduledAt;
   final String workingStatus;
 
   @override
@@ -59,7 +60,12 @@ class VisitingListItem extends StatelessWidget {
               ),
             ],
             isVisited: isVisited,
-            scheduledAt: scheduledAt,
+            scheduledAt: scheduledAt != null
+                ? '${AppStrings.visitingWantToVisitPlannedAt} ${formatDate(
+                    scheduledAt!,
+                    pattern: DateFormats.dayShortMonthYearDateFormat,
+                  )}'
+                : null,
             workingStatus: workingStatus,
           ),
         ),

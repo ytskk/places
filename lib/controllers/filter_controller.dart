@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
-import 'package:places/data/repository/place_network_repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/filter_option.dart';
+import 'package:provider/provider.dart';
 
 class Filter extends ChangeNotifier {
   List<FilterOption> _filterOptions = filterCategories
@@ -15,21 +15,20 @@ class Filter extends ChangeNotifier {
   final List<Place> filteredPlaces = [];
   final List<Place> foundedFilteredPlaces = [];
 
-  Future parseFilteredPlaces() async {
-    final response = await PlaceInteractor(
-      placeRepository: PlaceNetworkRepository(),
-    ).getPlaces(
-      radius: _rangeValues.end,
-      types: selectedCategories,
-    );
+  Future parseFilteredPlaces(BuildContext context) async {
+    final response = await context.read<PlaceInteractor>().getPlaces(
+          radiusFrom: _rangeValues.start,
+          radiusTo: _rangeValues.end,
+          types: selectedCategories,
+        );
 
     // log('${response.take(3)}', name: 'filter controller - parseFilteredPlaces');
 
     return response;
   }
 
-  Future getFilteredPlaces() async {
-    final response = await parseFilteredPlaces();
+  Future getFilteredPlaces(BuildContext context) async {
+    final response = await parseFilteredPlaces(context);
 
     filteredPlaces
       ..clear()

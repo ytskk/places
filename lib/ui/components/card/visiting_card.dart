@@ -9,7 +9,7 @@ class VisitingCard extends StatelessWidget {
     this.place, {
     Key? key,
     this.actions = const [],
-    this.scheduledAt = '',
+    this.scheduledAt,
     this.workingStatus = '',
     this.isVisited = false,
     this.onTap,
@@ -17,7 +17,7 @@ class VisitingCard extends StatelessWidget {
 
   final Place place;
   final List<Widget> actions;
-  final String scheduledAt;
+  final String? scheduledAt;
   final String workingStatus;
   final VoidCallback? onTap;
 

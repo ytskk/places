@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -20,13 +21,14 @@ class SightScreen extends StatefulWidget {
 }
 
 class _SightScreenState extends State<SightScreen> {
+  // Will parse only on create.
   late final Future future;
 
   @override
   initState() {
     super.initState();
 
-    future = context.read<Filter>().getFilteredPlaces();
+    future = context.read<Filter>().getFilteredPlaces(context);
   }
 
   @override
@@ -46,7 +48,7 @@ class _SightScreenState extends State<SightScreen> {
             builder: (BuildContext context, Orientation orientation) {
               return CustomScrollView(
                 slivers: [
-                  _PlaceList(future: future),
+                  _PlaceFutureList(future: future),
                 ],
               );
             },
@@ -57,8 +59,8 @@ class _SightScreenState extends State<SightScreen> {
   }
 }
 
-class _PlaceList extends StatelessWidget {
-  const _PlaceList({
+class _PlaceFutureList extends StatelessWidget {
+  const _PlaceFutureList({
     Key? key,
     required this.future,
   }) : super(key: key);
@@ -86,6 +88,7 @@ class _PlaceList extends StatelessWidget {
               subtitle: Text(
                 snapshot.error.toString(),
                 textAlign: TextAlign.center,
+                maxLines: 10,
               ),
             ),
           );
@@ -99,32 +102,41 @@ class _PlaceList extends StatelessWidget {
           );
         }
 
-        final List<Place> places = context.watch<Filter>().filteredPlaces;
+        return _PlaceList();
+      },
+    );
+  }
+}
 
-        return SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 78),
-          sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => Align(
-                alignment: Alignment.topLeft,
-                child: _PlaceListItem(
-                  place: places.elementAt(index),
-                ),
-              ),
-              childCount: places.length,
-            ),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 36.0,
-              mainAxisSpacing: 16.0,
-              mainAxisExtent: 200,
-              crossAxisCount:
-                  MediaQuery.of(context).orientation == Orientation.portrait
-                      ? 1
-                      : 2,
+class _PlaceList extends StatelessWidget {
+  const _PlaceList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Place> places = context.watch<Filter>().filteredPlaces;
+
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 78),
+      sliver: SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => Align(
+            alignment: Alignment.topLeft,
+            child: _PlaceListItem(
+              place: places.elementAt(index),
             ),
           ),
-        );
-      },
+          childCount: places.length,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 36.0,
+          mainAxisSpacing: 16.0,
+          mainAxisExtent: 200,
+          crossAxisCount:
+              MediaQuery.of(context).orientation == Orientation.portrait
+                  ? 1
+                  : 2,
+        ),
+      ),
     );
   }
 }
@@ -146,16 +158,44 @@ class _PlaceListItem extends StatelessWidget {
             arguments: place.id);
       },
       actions: [
-        Button.icon(
-          icon: AppIcons.heart,
+        _SightHeartIconButtonToggleable(
+          place: place,
+        ),
+      ],
+    );
+  }
+}
+
+class _SightHeartIconButtonToggleable extends StatefulWidget {
+  _SightHeartIconButtonToggleable({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final Place place;
+
+  @override
+  State<_SightHeartIconButtonToggleable> createState() =>
+      __SightHeartIconButtonToggleableState();
+}
+
+class __SightHeartIconButtonToggleableState
+    extends State<_SightHeartIconButtonToggleable> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: context.watch<FavoritesInteractor>().isFavorite(widget.place),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return Button.icon(
+          icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
           iconColor: Colors.white,
           background: Colors.transparent,
           onPressed: () {
-            print("Wishlist icon clicked");
-            // context.read<VisitingPlaces>().toggleFavorite(place);
+            // print("Wishlist icon clicked");
+            context.read<FavoritesInteractor>().toggleFavorite(widget.place);
           },
-        ),
-      ],
+        );
+      },
     );
   }
 }

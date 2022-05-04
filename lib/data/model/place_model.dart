@@ -9,6 +9,10 @@ class Place {
   final List<String> urls;
   final String type;
   final String description;
+  bool isFavorite;
+  bool isVisited;
+  DateTime? plannedAt;
+  DateTime? visitedAt;
 
   Place({
     required this.id,
@@ -18,7 +22,15 @@ class Place {
     required this.urls,
     required String type,
     required this.description,
-  }) : this.type = localizeType(type);
+    bool? isFavorite,
+    bool? isVisited,
+    DateTime? plannedAt,
+    DateTime? visitedAt,
+  })  : this.type = localizeType(type),
+        this.isFavorite = isFavorite ?? false,
+        this.isVisited = isVisited ?? false,
+        this.plannedAt = plannedAt,
+        this.visitedAt = visitedAt;
 
   factory Place.fromJson(Map<String, dynamic> json) => Place(
         id: json['id'],
@@ -54,8 +66,29 @@ class Place {
 
   @override
   String toString() {
-    return 'Place#$id: $name ($type)';
+    return 'Place#$id: $name ($type) ($isFavorite, $plannedAt, $isVisited)';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      other is Place &&
+      this.id == other.id &&
+      this.lat == other.lat &&
+      this.lng == other.lng &&
+      this.name == other.name &&
+      this.urls == other.urls &&
+      this.type == other.type &&
+      this.description == other.description;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      lat.hashCode ^
+      lng.hashCode ^
+      name.hashCode ^
+      urls.hashCode ^
+      type.hashCode ^
+      description.hashCode;
 }
 
 String localizeType(String type) {

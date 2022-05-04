@@ -6,10 +6,17 @@ import 'package:places/data/model/place_model.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/models/places_filter_request_dto.dart';
 
-class PlaceNetworkRepository extends PlaceRepository {
-  final ClientApi clientApi = ClientApi();
+/// Represents place network repository.
+///
+/// Inherits from interface [PlaceRepository].
+///
+/// Load data from network with [ClientApi].
+class PlaceNetworkRepository implements PlaceRepository {
+  final ClientApi clientApi;
 
-  @override
+  PlaceNetworkRepository(this.clientApi);
+
+  /// Returns all places from network. Without filters.
   Future<List<Place>> getAllPlaces() async {
     final response = await clientApi.get(ApiConstants.placeUrl);
 
@@ -19,16 +26,19 @@ class PlaceNetworkRepository extends PlaceRepository {
     return places;
   }
 
-  @override
+  /// Returns place by id from network.
+  ///
+  /// TODO: handle id error.
   Future<Place> getPlaceById({required int id}) async {
     final response = await clientApi.get('${ApiConstants.placeUrl}/$id');
 
     return Place.fromJson(response.data);
   }
 
-  @override
-  Future<List<PlaceDto>> getFilteredPlaces(
-      {required PlacesFilterRequestDto filterOptions}) async {
+  /// Returns [PlaceDto] by filter with [PlacesFilterRequestDto].
+  Future<List<PlaceDto>> getFilteredPlaces({
+    required PlacesFilterRequestDto filterOptions,
+  }) async {
     final String postBody = jsonEncode(filterOptions.toJson());
 
     final response =
@@ -39,7 +49,6 @@ class PlaceNetworkRepository extends PlaceRepository {
         .toList();
   }
 
-  @override
   Future<void> addNewPlace({required Place place}) async {
     final String postBody = jsonEncode(place.toJson());
 

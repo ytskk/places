@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/visiting/visiting_list_item.dart';
+import 'package:provider/provider.dart';
 
 class VisitingVisitedScreen extends StatefulWidget {
   const VisitingVisitedScreen({Key? key}) : super(key: key);
@@ -58,12 +60,11 @@ class _VisitingVisitedScreenState extends State<VisitingVisitedScreen> {
                     ),
                   ],
                   isVisited: true,
-                  scheduledAt:
-                      '${AppStrings.visitingVisitedAchieved} 12 окт. 2020',
+                  scheduledAt: place.plannedAt,
                   workingStatus:
                       '${AppStrings.visitingVisitedClosedUntil} 09:00',
                   onDeleteButtonPressed: () {
-                    // context.read<VisitingPlaces>().removeFromFavorites(place);
+                    context.read<FavoritesInteractor>().removeFavorite(place);
                   },
                 ),
               ),

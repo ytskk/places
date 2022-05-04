@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
-import 'package:places/data/repository/place_network_repository.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
@@ -10,7 +12,10 @@ import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
 import 'package:places/ui/components/info_list.dart';
+import 'package:places/ui/components/picker.dart';
 import 'package:places/utils/screen_sizes.dart';
+import 'package:places/utils/string_manipulations.dart';
+import 'package:provider/provider.dart';
 
 // BUG: when its no internet, throws error!
 // TODO: hide sliver image carousel when its bad link.
@@ -31,8 +36,9 @@ class _SightDetailsScreenState extends State<SightDetailsScreen> {
     final placeId = ModalRoute.of(context)!.settings.arguments as int;
 
     final response =
-        await PlaceInteractor(placeRepository: PlaceNetworkRepository())
-            .getPlaceDetails(id: placeId);
+        await context.read<PlaceInteractor>().getPlaceDetails(id: placeId);
+
+    print('response: $response');
 
     return response;
   }
@@ -59,6 +65,7 @@ class _SightDetailsScreenState extends State<SightDetailsScreen> {
               subtitle: Text(
                 snapshot.error.toString(),
                 textAlign: TextAlign.center,
+                maxLines: 10,
               ),
             );
           }
@@ -113,7 +120,9 @@ class _SightDetailsScreenState extends State<SightDetailsScreen> {
                               child: _DirectionButton(),
                             ),
                             const HorizontalDivider(),
-                            const _SightManipulationButtons(),
+                            _SightManipulationButtons(
+                              place: sight,
+                            ),
                           ],
                         ),
                       ),
@@ -144,7 +153,6 @@ class _SightSliverAppBar extends StatelessWidget {
     final isImagesEmpty = sightImages.isEmpty;
 
     return SliverAppBar(
-      // leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
       leading: useBackButton ? const _RoundedBackButton() : null,
       automaticallyImplyLeading: false,
       pinned: true,
@@ -294,7 +302,12 @@ class _DirectionButton extends StatelessWidget {
 }
 
 class _SightManipulationButtons extends StatelessWidget {
-  const _SightManipulationButtons({Key? key}) : super(key: key);
+  const _SightManipulationButtons({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
@@ -310,24 +323,50 @@ class _SightManipulationButtons extends StatelessWidget {
           child: Button.icon(
             icon: AppIcons.calendar,
             iconSize: screenDependentIconSize,
-            text: AppStrings.sightDetailsSchedule,
+            text: place.plannedAt != null
+                ? '${formatDate(
+                    place.plannedAt!,
+                    pattern: DateFormats.dayShortMonthYearDateFormat,
+                  )}'
+                : AppStrings.sightDetailsSchedule,
             textStyle: TextStyle(
               fontSize: screenDependentFontSize,
             ),
             background: Colors.transparent,
+            onPressed: () async {
+              DateTime? remindDate = await Picker.Adaptive(
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+              ).show(context);
+
+              context
+                  .read<FavoritesInteractor>()
+                  .setPlannedAt(place, remindDate);
+            },
           ),
         ),
         Expanded(
-          child: Button.icon(
-            icon: AppIcons.heart,
-            iconSize: screenDependentIconSize,
-            text: AppStrings.sightDetailsAddToWishlist,
-            textStyle: TextStyle(
-              fontSize: screenDependentFontSize,
-            ),
-            background: Colors.transparent,
-            onPressed: () {
-              print("To Wishlist button clicked");
+          child: FutureBuilder(
+            future: context.watch<FavoritesInteractor>().isFavorite(place),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              return Button.icon(
+                icon: snapshot.data == true
+                    ? AppIcons.heartFilled
+                    : AppIcons.heart,
+                iconSize: screenDependentIconSize,
+                text: snapshot.data == true
+                    ? AppStrings.sightDetailsInWishlist
+                    : AppStrings.sightDetailsAddToWishlist,
+                textStyle: TextStyle(
+                  fontSize: screenDependentFontSize,
+                ),
+                background: Colors.transparent,
+                onPressed: () {
+                  log("To Wishlist button clicked");
+                  context.read<FavoritesInteractor>().toggleFavorite(place);
+                },
+              );
             },
           ),
         ),

@@ -20,6 +20,8 @@ dependencies:
 
   dio: ^4.0.6
 
+  intl: ^0.17.0
+
 dev_dependencies:
   dart_code_metrics: ^4.13.0
   analyzer: ^3.3.1

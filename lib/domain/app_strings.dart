@@ -17,7 +17,9 @@ class AppStrings {
   static const sightDetailsWorkingStatusOpened = 'Открыто до';
   static const sightDetailsGetDirections = 'Построить маршрут';
   static const sightDetailsSchedule = 'Запланировать';
+  static const sightDetailsScheduledAt = 'Запланировано на';
   static const sightDetailsAddToWishlist = 'В избранное';
+  static const sightDetailsInWishlist = 'В избранном';
 
   //  visiting screen
   static const visitingAppBarTitle = 'Избранное';

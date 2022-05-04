@@ -121,8 +121,9 @@ class _SearchResultsState extends State<_SearchResults> {
   @override
   Widget build(BuildContext context) {
     // final List<Sight> filteredSights = context.watch<Filter>().nearbyPlaces;
-    final List<Sight> results =
-        context.read<SightSearch>().searchByName(widget.controller.text.trim());
+    final List<Sight> results = context
+        .read<SightSearch>()
+        .searchByName(widget.controller.text.trim(), domain: []);
     final theme = Theme.of(context);
 
     return results.isEmpty
