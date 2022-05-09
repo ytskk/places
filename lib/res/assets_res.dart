@@ -2,4 +2,6 @@
 
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: lines_longer_than_80_chars
-class AssetsRes {}
+class AssetsRes {
+  static const String DELETE = 'assets/icons/delete.svg';
+}

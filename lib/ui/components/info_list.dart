@@ -14,6 +14,7 @@ class InfoList extends StatelessWidget {
     this.iconSize = 64,
     this.iconPaddingBottom = 24,
     required this.title,
+    this.titleColor,
     this.subtitle,
   }) : super(key: key);
 
@@ -22,6 +23,7 @@ class InfoList extends StatelessWidget {
   final double iconSize;
   final double iconPaddingBottom;
   final Text title;
+  final Color? titleColor;
   final Text? subtitle;
 
   @override
@@ -53,7 +55,9 @@ class InfoList extends StatelessWidget {
                   ),
                 Text(
                   title.data!,
-                  style: defaultTitleStyle.merge(title.style),
+                  style: defaultTitleStyle
+                      .copyWith(color: titleColor)
+                      .merge(title.style),
                   textAlign: title.textAlign,
                   maxLines: title.maxLines,
                 ),

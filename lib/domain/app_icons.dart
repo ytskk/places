@@ -2,11 +2,14 @@
 ///
 /// Name convention: snake_case.
 class AppIcons {
+  AppIcons._();
+
   static const check = 'assets/icons/check.svg';
   static const calendar = 'assets/icons/calendar.svg';
   static const heart = 'assets/icons/heart.svg';
   static const heartFilled = 'assets/icons/heart-fill.svg';
   static const close = 'assets/icons/close.svg';
+  static const delete = 'assets/icons/delete.svg';
   static const card = 'assets/icons/card.svg';
   static const share = 'assets/icons/share.svg';
   static const go = 'assets/icons/go.svg';

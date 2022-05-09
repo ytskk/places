@@ -15,19 +15,20 @@ class Filter extends ChangeNotifier {
   final List<Place> filteredPlaces = [];
   final List<Place> foundedFilteredPlaces = [];
 
-  Future parseFilteredPlaces(BuildContext context) async {
-    final response = await context.read<PlaceInteractor>().getPlaces(
-          radiusFrom: _rangeValues.start,
-          radiusTo: _rangeValues.end,
-          types: selectedCategories,
-        );
+  Future<List<Place>> parseFilteredPlaces(BuildContext context) async {
+    final List<Place> response =
+        await context.read<PlaceInteractor>().getPlaces(
+              radiusFrom: _rangeValues.start,
+              radiusTo: _rangeValues.end,
+              types: selectedCategories,
+            );
 
-    // log('${response.take(3)}', name: 'filter controller - parseFilteredPlaces');
+    log('${response.take(3)}', name: 'filter controller - parseFilteredPlaces');
 
     return response;
   }
 
-  Future getFilteredPlaces(BuildContext context) async {
+  Future<List<Place>> getFilteredPlaces(BuildContext context) async {
     final response = await parseFilteredPlaces(context);
 
     filteredPlaces
@@ -35,6 +36,8 @@ class Filter extends ChangeNotifier {
       ..addAll(response);
 
     notifyListeners();
+
+    log('places loaded');
 
     return filteredPlaces;
   }

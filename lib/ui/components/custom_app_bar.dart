@@ -30,7 +30,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    // final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     final TextStyle titleTextStyle = theme.textTheme.bodyText2!.copyWith(
       fontWeight: FontWeight.w500,

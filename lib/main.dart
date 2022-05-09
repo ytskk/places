@@ -69,20 +69,16 @@ class MyApp extends StatelessWidget {
           return FutureBuilder(
             future: context.watch<SettingsInteractor>().isDarkMode(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              final theme = snapshot.data ?? false;
+              final isDarkMode = snapshot.data ?? false;
 
               return MaterialApp(
-                routes: routes,
-                initialRoute: AppRoutes.onboarding,
-                // theme: AppThemeData.light(),
-                theme: theme ? AppThemeData.dark() : AppThemeData.light(),
-                // theme: context.watch<SettingsInteractor>().isDarkMode
-                //     ? AppThemeData.dark()
-                //     : AppThemeData.light(),
-                // home: MyHomePage(),
-                // home: const SplashScreen(),
-                // home: OnboardingScreen(),
-              );
+                  routes: routes,
+                  initialRoute: AppRoutes.onboarding,
+                  theme: isDarkMode ? AppThemeData.dark() : AppThemeData.light()
+                  // home: MyHomePage(),
+                  // home: const SplashScreen(),
+                  // home: OnboardingScreen(),
+                  );
             },
           );
         },
