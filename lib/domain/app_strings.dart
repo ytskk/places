@@ -13,6 +13,9 @@ class AppStrings {
   static const sightClosedUntil = 'Закрыто до';
   static const sightLoadingError = 'Что-то пошло не так\nПопробуйте позже.';
 
+  // Request status
+  static const requestError = 'Ошибка';
+
   // SightDetails screen
   static const sightDetailsWorkingStatusClosed = 'Закрыто до';
   static const sightDetailsWorkingStatusOpened = 'Открыто до';

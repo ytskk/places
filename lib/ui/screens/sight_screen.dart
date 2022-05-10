@@ -115,7 +115,7 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
                 child: InfoList(
                   iconName: AppIcons.delete,
                   iconColor: theme.textTheme.bodyText1!.color,
-                  title: Text('Some error'),
+                  title: Text(AppStrings.requestError),
                   titleColor: theme.textTheme.bodyText1!.color,
                   subtitle: Text(
                     AppStrings.sightLoadingError,
