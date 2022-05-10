@@ -31,6 +31,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/icons/
+    - assets/icons/delete.svg
   uses-material-design: true
 
   fonts:

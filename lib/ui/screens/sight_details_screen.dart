@@ -340,9 +340,11 @@ class _SightManipulationButtons extends StatelessWidget {
                 lastDate: DateTime.now().add(const Duration(days: 365)),
               ).show(context);
 
-              context
-                  .read<FavoritesInteractor>()
-                  .setPlannedAt(place, remindDate);
+              log('Remind date: $remindDate', name: 'SightManipulationButtons');
+
+              // context
+              //     .read<FavoritesInteractor>()
+              //     .setPlannedAt(place, remindDate);
             },
           ),
         ),
@@ -364,7 +366,7 @@ class _SightManipulationButtons extends StatelessWidget {
                 background: Colors.transparent,
                 onPressed: () {
                   log("To Wishlist button clicked");
-                  context.read<FavoritesInteractor>().toggleFavorite(place);
+                  // context.read<FavoritesInteractor>().toggleFavorite(place);
                 },
               );
             },

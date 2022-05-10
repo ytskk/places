@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
-import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -22,13 +23,13 @@ class SightScreen extends StatefulWidget {
 
 class _SightScreenState extends State<SightScreen> {
   // Will parse only on create.
-  late final Future future;
+  // late final Future future;
 
   @override
   initState() {
     super.initState();
 
-    future = context.read<Filter>().getFilteredPlaces(context);
+    // future = context.read<Filter>().getFilteredPlaces(context);
   }
 
   @override
@@ -44,14 +45,10 @@ class _SightScreenState extends State<SightScreen> {
               _SightListSliverAppBar(isScrolled: innerBoxIsScrolled),
             ];
           },
-          body: OrientationBuilder(
-            builder: (BuildContext context, Orientation orientation) {
-              return CustomScrollView(
-                slivers: [
-                  _PlaceFutureList(future: future),
-                ],
-              );
-            },
+          body: CustomScrollView(
+            slivers: [
+              _PlaceFutureList(),
+            ],
           ),
         ),
       ),
@@ -59,62 +56,96 @@ class _SightScreenState extends State<SightScreen> {
   }
 }
 
-class _PlaceFutureList extends StatelessWidget {
-  const _PlaceFutureList({
-    Key? key,
-    required this.future,
-  }) : super(key: key);
+class _PlaceFutureList extends StatefulWidget {
+  const _PlaceFutureList({Key? key}) : super(key: key);
 
-  final Future future;
+  @override
+  State<_PlaceFutureList> createState() => _PlaceFutureListState();
+}
+
+class _PlaceFutureListState extends State<_PlaceFutureList> {
+  late final StreamController<List<Place>> _controller = StreamController();
+
+  @override
+  initState() {
+    super.initState();
+
+    loadPlaces();
+  }
+
+  loadPlaces() async {
+    _controller.sink
+        .add(await context.read<Filter>().getFilteredPlaces(context));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _controller.close();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: future,
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return SliverToBoxAdapter(
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
+    final theme = Theme.of(context);
 
-        if (snapshot.hasError) {
-          return SliverToBoxAdapter(
-            child: InfoList(
-              iconName: AppIcons.error,
-              title: Text('Error :('),
-              subtitle: Text(
-                snapshot.error.toString(),
-                textAlign: TextAlign.center,
-                maxLines: 10,
+    return StreamBuilder<List<Place>>(
+      stream: _controller.stream,
+      // initialData: [],
+      builder: (_, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: SizedBox(
+                height: 100,
+                width: 100,
+                child: CircularProgressIndicator(
+                  backgroundColor: theme.backgroundColor,
+                  color: theme.primaryColor,
+                  strokeWidth: 16,
+                ),
               ),
             ),
           );
         }
 
-        if (!snapshot.hasData) {
-          return SliverToBoxAdapter(
-            child: Center(
-              child: Text('No data'),
-            ),
+        if (snapshot.hasData) {
+          return _PlaceList(
+            places: snapshot.data,
           );
         }
 
-        return _PlaceList();
+        // tmp
+        return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: InfoList(
+                iconName: AppIcons.delete,
+                iconColor: theme.textTheme.bodyText1!.color,
+                title: Text('Some error'),
+                titleColor: theme.textTheme.bodyText1!.color,
+                subtitle: Text(
+                  'Что-то пошло не так\nПопробуйте позже.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ));
       },
     );
   }
 }
 
 class _PlaceList extends StatelessWidget {
-  const _PlaceList({Key? key}) : super(key: key);
+  const _PlaceList({
+    Key? key,
+    required this.places,
+  }) : super(key: key);
+
+  final List<Place> places;
 
   @override
   Widget build(BuildContext context) {
-    final List<Place> places = context.watch<Filter>().filteredPlaces;
-
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 78),
       sliver: SliverGrid(
@@ -181,10 +212,27 @@ class _SightHeartIconButtonToggleable extends StatefulWidget {
 
 class __SightHeartIconButtonToggleableState
     extends State<_SightHeartIconButtonToggleable> {
+  late final StreamController<bool> _likeButtonController;
+
+  @override
+  initState() {
+    super.initState();
+
+    _likeButtonController = StreamController<bool>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _likeButtonController.close();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: context.watch<FavoritesInteractor>().isFavorite(widget.place),
+    return StreamBuilder<bool>(
+      initialData: false,
+      stream: _likeButtonController.stream,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return Button.icon(
           icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
@@ -192,11 +240,27 @@ class __SightHeartIconButtonToggleableState
           background: Colors.transparent,
           onPressed: () {
             // print("Wishlist icon clicked");
-            context.read<FavoritesInteractor>().toggleFavorite(widget.place);
+            // context.read<FavoritesInteractor>().toggleFavorite(widget.place);
+            _likeButtonController.sink.add(!snapshot.data);
           },
         );
       },
     );
+    // TODO: return
+    // return FutureBuilder(
+    //   future: context.watch<FavoritesInteractor>().isFavorite(widget.place),
+    //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    //     return Button.icon(
+    //       icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
+    //       iconColor: Colors.white,
+    //       background: Colors.transparent,
+    //       onPressed: () {
+    //         // print("Wishlist icon clicked");
+    //         context.read<FavoritesInteractor>().toggleFavorite(widget.place);
+    //       },
+    //     );
+    //   },
+    // );
   }
 }
 
