@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/api/client_api.dart';
+import 'package:places/data/api/network_exception.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/models/places_filter_request_dto.dart';
@@ -41,8 +43,8 @@ class PlaceNetworkRepository implements PlaceRepository {
   }) async {
     final String postBody = jsonEncode(filterOptions.toJson());
 
-    final response =
-        await clientApi.post(ApiConstants.filteredPlacesUrl, data: postBody);
+    final response = await clientApi
+        .post(ApiConstants.filteredPlacesUrl + 'some', data: postBody);
 
     return response.data
         .map<PlaceDto>((json) => PlaceDto.fromJson(json))
@@ -53,5 +55,9 @@ class PlaceNetworkRepository implements PlaceRepository {
     final String postBody = jsonEncode(place.toJson());
 
     clientApi.post(ApiConstants.placeUrl, data: postBody);
+  }
+
+  NetworkException handleError(DioError error) {
+    return clientApi.handleError(error);
   }
 }

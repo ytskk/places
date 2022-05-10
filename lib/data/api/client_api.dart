@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:places/data/api/api_constants.dart';
+import 'package:places/data/api/network_exception.dart';
 
 BaseOptions _baseOptions = BaseOptions(
   connectTimeout: 5000,
@@ -10,18 +11,18 @@ BaseOptions _baseOptions = BaseOptions(
 
 InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
   onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
-    print('onRequest: ${options.method} ${options.path}, ${options.data}');
+    // print('onRequest: ${options.method} ${options.path}, ${options.data}');
 
     return handler.next(options);
   },
   onResponse: (Response response, ResponseInterceptorHandler handler) {
-    print('onResponse: ${response.statusCode} ${response.statusMessage}');
+    // print('onResponse: ${response.statusCode} ${response.statusMessage}');
 
     return handler.next(response);
   },
   onError: (DioError error, ErrorInterceptorHandler handler) {
-    print(
-        'onError: ${error.response?.statusCode} ${error.response?.statusMessage}');
+    // print(
+    //     'onError: ${error.response?.statusCode} ${error.response?.statusMessage}');
 
     return handler.next(error);
   },
@@ -70,4 +71,14 @@ class ClientApi {
     required dynamic data,
   }) async =>
       dioWithInterceptors.post(path, data: data);
+
+  NetworkException handleError(DioError error) {
+    final exception = NetworkException(
+      name: error.requestOptions.path,
+      code: error.response?.statusCode,
+      message: error.error.toString(),
+    );
+
+    return exception;
+  }
 }

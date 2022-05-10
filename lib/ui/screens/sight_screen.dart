@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -64,25 +65,22 @@ class _PlaceFutureList extends StatefulWidget {
 }
 
 class _PlaceFutureListState extends State<_PlaceFutureList> {
-  late final StreamController<List<Place>> _controller = StreamController();
-
   @override
-  initState() {
+  void initState() {
     super.initState();
 
-    loadPlaces();
+    getPlaces();
   }
 
-  loadPlaces() async {
-    _controller.sink
-        .add(await context.read<Filter>().getFilteredPlaces(context));
+  Future getPlaces() async {
+    context.read<Filter>().parseFilteredPlaces(context);
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    _controller.close();
+    context.read<PlaceInteractor>().disposePlacesController();
   }
 
   @override
@@ -90,8 +88,8 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
     final theme = Theme.of(context);
 
     return StreamBuilder<List<Place>>(
-      stream: _controller.stream,
-      // initialData: [],
+      stream: context.watch<PlaceInteractor>().placesStream,
+      initialData: [],
       builder: (_, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SliverFillRemaining(
@@ -110,27 +108,26 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
           );
         }
 
-        if (snapshot.hasData) {
-          return _PlaceList(
-            places: snapshot.data,
-          );
+        if (snapshot.hasError) {
+          return SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: InfoList(
+                  iconName: AppIcons.delete,
+                  iconColor: theme.textTheme.bodyText1!.color,
+                  title: Text('Some error'),
+                  titleColor: theme.textTheme.bodyText1!.color,
+                  subtitle: Text(
+                    AppStrings.sightLoadingError,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ));
         }
 
-        // tmp
-        return SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: InfoList(
-                iconName: AppIcons.delete,
-                iconColor: theme.textTheme.bodyText1!.color,
-                title: Text('Some error'),
-                titleColor: theme.textTheme.bodyText1!.color,
-                subtitle: Text(
-                  'Что-то пошло не так\nПопробуйте позже.',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ));
+        return _PlaceList(
+          places: snapshot.data,
+        );
       },
     );
   }
