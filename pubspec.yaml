@@ -18,6 +18,10 @@ dependencies:
 
   substring_highlight: ^1.0.33
 
+  dio: ^4.0.6
+
+  intl: ^0.17.0
+
 dev_dependencies:
   dart_code_metrics: ^4.13.0
   analyzer: ^3.3.1
@@ -27,9 +31,46 @@ dev_dependencies:
 flutter:
   assets:
     - assets/icons/
+    - assets/icons/delete.svg
   uses-material-design: true
 
   fonts:
     - family: Roboto-Black
       fonts:
         - asset: assets/res/fonts/Roboto-Black.ttf
+<<<<<<< HEAD
+=======
+    - family: Roboto-BlackItalic
+      fonts:
+        - asset: assets/res/fonts/Roboto-BlackItalic.ttf
+    - family: Roboto-Bold
+      fonts:
+        - asset: assets/res/fonts/Roboto-Bold.ttf
+    - family: Roboto-BoldItalic
+      fonts:
+        - asset: assets/res/fonts/Roboto-BoldItalic.ttf
+    - family: Roboto-Italic
+      fonts:
+        - asset: assets/res/fonts/Roboto-Italic.ttf
+    - family: Roboto-Light
+      fonts:
+        - asset: assets/res/fonts/Roboto-Light.ttf
+    - family: Roboto-LightItalic
+      fonts:
+        - asset: assets/res/fonts/Roboto-LightItalic.ttf
+    - family: Roboto-Medium
+      fonts:
+        - asset: assets/res/fonts/Roboto-Medium.ttf
+    - family: Roboto-MediumItalic
+      fonts:
+        - asset: assets/res/fonts/Roboto-MediumItalic.ttf
+    - family: Roboto-Regular
+      fonts:
+        - asset: assets/res/fonts/Roboto-Regular.ttf
+    - family: Roboto-Thin
+      fonts:
+        - asset: assets/res/fonts/Roboto-Thin.ttf
+    - family: Roboto-ThinItalic
+      fonts:
+        - asset: assets/res/fonts/Roboto-ThinItalic.ttf
+>>>>>>> 1eefaf7fe2606b9041a2f905191e62c99e32de10

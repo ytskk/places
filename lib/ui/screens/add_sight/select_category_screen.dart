@@ -88,10 +88,10 @@ class _CategoriesTableState extends State<_CategoriesTable> {
                         : null,
                 onTap: () {
                   setState(() {
-                    widget.selectedCategory.text = filterCategories[index];
+                    widget.selectedCategory.text = filterCategories[index].name;
                   });
                 },
-                title: Text(filterCategories[index]),
+                title: Text(filterCategories[index].name),
               ),
               const HorizontalDivider(),
             ],

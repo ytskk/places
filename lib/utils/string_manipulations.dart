@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 /// Returns range string from [RangeValues].
 ///
@@ -11,4 +12,9 @@ import 'package:flutter/material.dart';
 /// ```
 String getRangeValuesString(RangeValues values, {String units = "км"}) {
   return "От ${max(1, values.start ~/ 1000)} до ${max(1, values.end ~/ 1000)} $units";
+}
+
+/// Format date by pattern.
+String formatDate(DateTime date, {String pattern = "dd.MM.yyyy"}) {
+  return DateFormat(pattern).format(date);
 }

@@ -21,12 +21,14 @@ class CardInformation extends StatelessWidget {
         child: ConstrainedBox(
           constraints: BoxConstraints(minWidth: double.infinity),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // title
               Text(
                 cardInfo.title,
                 style: textTheme.headline4,
+                maxLines: 2,
               ),
 
               // subtitle

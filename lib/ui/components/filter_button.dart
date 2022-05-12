@@ -46,7 +46,7 @@ class _FilterButtonState extends State<FilterButton> {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: IconBox(
-                    icon: _getCategoryIcon(widget.category.name),
+                    icon: _getCategoryIcon(widget.category.engName),
                     color: theme.cardColor,
                     size: 32,
                   ),
@@ -85,24 +85,32 @@ class _FilterButtonState extends State<FilterButton> {
         : name;
   }
 
-  /// Returns relevant icon for [category]
+  /// Returns relevant icon for [category]. If [category] is not found,
+  /// returns [AppIcons.error].
+  ///
+  /// TMP!
   String _getCategoryIcon(String category) {
-    switch (category) {
-      case SightCategories.hotel:
-        return AppIcons.hotel;
-      case SightCategories.restaurant:
-        return AppIcons.restaurant;
-      case SightCategories.park:
-        return AppIcons.park;
-      case SightCategories.museum:
-        return AppIcons.museum;
-      case SightCategories.cafe:
-        return AppIcons.cafe;
-      case SightCategories.poi:
-        return AppIcons.poi;
-      default:
-        return AppIcons.error;
+    // log('_getCategoryIcon: $category');
+    if (category == SightCategories.hotel.engName) {
+      return AppIcons.hotel;
     }
+    if (category == SightCategories.restaurant.engName) {
+      return AppIcons.restaurant;
+    }
+    if (category == SightCategories.museum.engName) {
+      return AppIcons.museum;
+    }
+    if (category == SightCategories.park.engName) {
+      return AppIcons.park;
+    }
+    if (category == SightCategories.cafe.engName) {
+      return AppIcons.cafe;
+    }
+    if (category == SightCategories.poi.engName) {
+      return AppIcons.poi;
+    }
+
+    return AppIcons.error;
   }
 }
 

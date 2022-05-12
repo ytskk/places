@@ -1,6 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
@@ -8,8 +11,8 @@ import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/searchbar.dart';
-import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
@@ -20,11 +23,18 @@ class SightScreen extends StatefulWidget {
 }
 
 class _SightScreenState extends State<SightScreen> {
+  // Will parse only on create.
+  // late final Future future;
+
+  @override
+  initState() {
+    super.initState();
+
+    // future = context.read<Filter>().getFilteredPlaces(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final sights = context.watch<Filter>().nearbyPlaces;
-    print('sights: $sights');
-
     return Scaffold(
       floatingActionButton: const _AddPlaceFloatingButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -38,110 +48,216 @@ class _SightScreenState extends State<SightScreen> {
           },
           body: CustomScrollView(
             slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 72),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => SightCard(
-                      sights.elementAt(index),
-                      onTap: () {
-                        // BUG: does not scrolls when description is large.
-                        showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            isScrollControlled: true,
-                            builder: (context) => Padding(
-                                  padding: const EdgeInsets.only(top: 64),
-                                  child: ClipRRect(
-                                    clipBehavior: Clip.antiAlias,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft:
-                                          Radius.circular(smallBorderRadius),
-                                      topRight:
-                                          Radius.circular(smallBorderRadius),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        SightDetailsScreen(
-                                            id: sights.elementAt(index).id),
-                                        DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Colors.black.withOpacity(0.5),
-                                                Colors.black.withOpacity(0.0),
-                                              ],
-                                            ),
-                                          ),
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 12),
-                                                    child: DecoratedBox(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    largeBorderRadius)),
-                                                      ),
-                                                      child: SizedBox(
-                                                        height: 4,
-                                                        width: 40,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              IconButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                iconSize: 40,
-                                                icon: Icon(
-                                                  CupertinoIcons
-                                                      .xmark_circle_fill,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ));
-                      },
-                      actions: [
-                        Button.icon(
-                          icon: AppIcons.heart,
-                          iconColor: Colors.white,
-                          background: Colors.transparent,
-                          onPressed: () {
-                            print("Wishlist icon clicked");
-                          },
-                        ),
-                      ],
-                    ),
-                    childCount: sights.length,
-                  ),
-                ),
-              ),
+              _PlaceFutureList(),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class _PlaceFutureList extends StatefulWidget {
+  const _PlaceFutureList({Key? key}) : super(key: key);
+
+  @override
+  State<_PlaceFutureList> createState() => _PlaceFutureListState();
+}
+
+class _PlaceFutureListState extends State<_PlaceFutureList> {
+  @override
+  void initState() {
+    super.initState();
+
+    getPlaces();
+  }
+
+  Future getPlaces() async {
+    context.read<Filter>().parseFilteredPlaces(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    context.read<PlaceInteractor>().disposePlacesController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return StreamBuilder<List<Place>>(
+      stream: context.watch<PlaceInteractor>().placesStream,
+      initialData: [],
+      builder: (_, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: SizedBox(
+                height: 100,
+                width: 100,
+                child: CircularProgressIndicator(
+                  backgroundColor: theme.backgroundColor,
+                  color: theme.primaryColor,
+                  strokeWidth: 16,
+                ),
+              ),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: InfoList(
+                  iconName: AppIcons.delete,
+                  iconColor: theme.textTheme.bodyText1!.color,
+                  title: Text(AppStrings.requestError),
+                  titleColor: theme.textTheme.bodyText1!.color,
+                  subtitle: Text(
+                    AppStrings.sightLoadingError,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ));
+        }
+
+        return _PlaceList(
+          places: snapshot.data,
+        );
+      },
+    );
+  }
+}
+
+class _PlaceList extends StatelessWidget {
+  const _PlaceList({
+    Key? key,
+    required this.places,
+  }) : super(key: key);
+
+  final List<Place> places;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 78),
+      sliver: SliverGrid(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => Align(
+            alignment: Alignment.topLeft,
+            child: _PlaceListItem(
+              place: places.elementAt(index),
+            ),
+          ),
+          childCount: places.length,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 36.0,
+          mainAxisSpacing: 16.0,
+          mainAxisExtent: 200,
+          crossAxisCount:
+              MediaQuery.of(context).orientation == Orientation.portrait
+                  ? 1
+                  : 2,
+        ),
+      ),
+    );
+  }
+}
+
+class _PlaceListItem extends StatelessWidget {
+  const _PlaceListItem({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final Place place;
+
+  @override
+  Widget build(BuildContext context) {
+    return SightCard(
+      place,
+      onTap: () {
+        Navigator.pushNamed(context, AppRoutes.sightDetails,
+            arguments: place.id);
+      },
+      actions: [
+        _SightHeartIconButtonToggleable(
+          place: place,
+        ),
+      ],
+    );
+  }
+}
+
+class _SightHeartIconButtonToggleable extends StatefulWidget {
+  _SightHeartIconButtonToggleable({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final Place place;
+
+  @override
+  State<_SightHeartIconButtonToggleable> createState() =>
+      __SightHeartIconButtonToggleableState();
+}
+
+class __SightHeartIconButtonToggleableState
+    extends State<_SightHeartIconButtonToggleable> {
+  late final StreamController<bool> _likeButtonController;
+
+  @override
+  initState() {
+    super.initState();
+
+    _likeButtonController = StreamController<bool>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _likeButtonController.close();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<bool>(
+      initialData: false,
+      stream: _likeButtonController.stream,
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return Button.icon(
+          icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
+          iconColor: Colors.white,
+          background: Colors.transparent,
+          onPressed: () {
+            // print("Wishlist icon clicked");
+            // context.read<FavoritesInteractor>().toggleFavorite(widget.place);
+            _likeButtonController.sink.add(!snapshot.data);
+          },
+        );
+      },
+    );
+    // TODO: return
+    // return FutureBuilder(
+    //   future: context.watch<FavoritesInteractor>().isFavorite(widget.place),
+    //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    //     return Button.icon(
+    //       icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
+    //       iconColor: Colors.white,
+    //       background: Colors.transparent,
+    //       onPressed: () {
+    //         // print("Wishlist icon clicked");
+    //         context.read<FavoritesInteractor>().toggleFavorite(widget.place);
+    //       },
+    //     );
+    //   },
+    // );
   }
 }
 

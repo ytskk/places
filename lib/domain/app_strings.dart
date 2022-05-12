@@ -11,13 +11,19 @@ class AppStrings {
   static const sightTitleExpanded = 'Список\nинтересных мест';
   static const sightFloatingButtonLabel = 'новое место';
   static const sightClosedUntil = 'Закрыто до';
+  static const sightLoadingError = 'Что-то пошло не так\nПопробуйте позже.';
+
+  // Request status
+  static const requestError = 'Ошибка';
 
   // SightDetails screen
   static const sightDetailsWorkingStatusClosed = 'Закрыто до';
   static const sightDetailsWorkingStatusOpened = 'Открыто до';
   static const sightDetailsGetDirections = 'Построить маршрут';
   static const sightDetailsSchedule = 'Запланировать';
+  static const sightDetailsScheduledAt = 'Запланировано на';
   static const sightDetailsAddToWishlist = 'В избранное';
+  static const sightDetailsInWishlist = 'В избранном';
 
   //  visiting screen
   static const visitingAppBarTitle = 'Избранное';

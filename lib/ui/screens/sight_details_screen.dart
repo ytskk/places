@@ -1,89 +1,138 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/favorites_interactor.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/mocks.dart';
-import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
+import 'package:places/ui/components/info_list.dart';
+import 'package:places/ui/components/picker.dart';
+import 'package:places/utils/screen_sizes.dart';
+import 'package:places/utils/string_manipulations.dart';
+import 'package:provider/provider.dart';
 
 // BUG: when its no internet, throws error!
 // TODO: hide sliver image carousel when its bad link.
 
-/// A page detailing the [Sight].
+/// A page detailing the [Place].
 class SightDetailsScreen extends StatefulWidget {
   const SightDetailsScreen({
-    Key? key,
-    this.id,
+    key,
   }) : super(key: key);
-
-  final Key? id;
 
   @override
   State<SightDetailsScreen> createState() => _SightDetailsScreenState();
 }
 
 class _SightDetailsScreenState extends State<SightDetailsScreen> {
+  // tmp
+  Future getPlaceDetails(BuildContext context) async {
+    final placeId = ModalRoute.of(context)!.settings.arguments as int;
+
+    final response =
+        await context.read<PlaceInteractor>().getPlaceDetails(id: placeId);
+
+    print('response: $response');
+
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final Key sightId =
-        widget.id ?? ModalRoute.of(context)!.settings.arguments as Key;
-    final Sight sight = mocks.firstWhere((sight) => sight.id == sightId);
 
     return Scaffold(
-      // extendBodyBehindAppBar: true,
-      body: CustomScrollView(
-        primary: false,
-        slivers: [
-          _SightSliverAppBar(
-            sightImages: sight.images.isEmpty ? [sight.url] : sight.images,
-            useBackButton: widget.id == null,
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              SafeArea(
-                top: false,
-                child: Padding(
-                  padding: largeWrappingPadding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: Text(
-                          sight.name,
-                          style: textTheme.headline3,
-                        ),
-                      ),
-                      _SightSubtitle(
-                        sightType: sight.type,
-                        sightWorkingStatus:
-                            '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
-                      ),
-                      if (sight.details.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 24),
-                          child: Text(
-                            sight.details,
-                            style: textTheme.bodyText2,
-                          ),
-                        ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8),
-                        child: _DirectionButton(),
-                      ),
-                      const HorizontalDivider(),
-                      const _SightManipulationButtons(),
-                    ],
-                  ),
-                ),
+      extendBodyBehindAppBar: true,
+      body: FutureBuilder(
+        future: getPlaceDetails(context),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return InfoList(
+              iconName: AppIcons.error,
+              title: Text('Error :('),
+              subtitle: Text(
+                snapshot.error.toString(),
+                textAlign: TextAlign.center,
+                maxLines: 10,
               ),
-            ]),
-          ),
-        ],
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text('No data'),
+            );
+          }
+          final Place sight = snapshot.data;
+
+          return Scaffold(
+            body: CustomScrollView(
+              primary: false,
+              slivers: [
+                _SightSliverAppBar(
+                  sightImages:
+                      sight.urls.isEmpty ? [sight.urls.first] : sight.urls,
+                  useBackButton: true,
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    SafeArea(
+                      top: false,
+                      child: Padding(
+                        padding: largeWrappingPadding,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                sight.name,
+                                style: textTheme.headline3,
+                              ),
+                            ),
+                            _SightSubtitle(
+                              sightType: sight.type,
+                              sightWorkingStatus:
+                                  '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
+                            ),
+                            if (sight.description.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 24),
+                                child: Text(
+                                  sight.description,
+                                  style: textTheme.bodyText2,
+                                ),
+                              ),
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 8),
+                              child: _DirectionButton(),
+                            ),
+                            const HorizontalDivider(),
+                            _SightManipulationButtons(
+                              place: sight,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -104,7 +153,6 @@ class _SightSliverAppBar extends StatelessWidget {
     final isImagesEmpty = sightImages.isEmpty;
 
     return SliverAppBar(
-      // leading: Navigator.canPop(context) ? const _RoundedBackButton() : null,
       leading: useBackButton ? const _RoundedBackButton() : null,
       automaticallyImplyLeading: false,
       pinned: true,
@@ -254,32 +302,92 @@ class _DirectionButton extends StatelessWidget {
 }
 
 class _SightManipulationButtons extends StatelessWidget {
-  const _SightManipulationButtons({Key? key}) : super(key: key);
+  const _SightManipulationButtons({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
+    final screenDependentFontSize = _getScreenDependentFontSize(context);
+    final screenDependentIconSize = screenDependentFontSize != null
+        ? screenDependentFontSize * 1.72
+        : smallIconSize;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: Button.icon(
             icon: AppIcons.calendar,
-            text: AppStrings.sightDetailsSchedule,
+            iconSize: screenDependentIconSize,
+            text: place.plannedAt != null
+                ? '${formatDate(
+                    place.plannedAt!,
+                    pattern: DateFormats.dayShortMonthYearDateFormat,
+                  )}'
+                : AppStrings.sightDetailsSchedule,
+            textStyle: TextStyle(
+              fontSize: screenDependentFontSize,
+            ),
             background: Colors.transparent,
+            onPressed: () async {
+              DateTime? remindDate = await Picker.Adaptive(
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+              ).show(context);
+
+              log('Remind date: $remindDate', name: 'SightManipulationButtons');
+
+              // context
+              //     .read<FavoritesInteractor>()
+              //     .setPlannedAt(place, remindDate);
+            },
           ),
         ),
         Expanded(
-          child: Button.icon(
-            icon: AppIcons.heart,
-            text: AppStrings.sightDetailsAddToWishlist,
-            background: Colors.transparent,
-            onPressed: () {
-              print("To Wishlist button clicked");
+          child: FutureBuilder(
+            future: context.watch<FavoritesInteractor>().isFavorite(place),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              return Button.icon(
+                icon: snapshot.data == true
+                    ? AppIcons.heartFilled
+                    : AppIcons.heart,
+                iconSize: screenDependentIconSize,
+                text: snapshot.data == true
+                    ? AppStrings.sightDetailsInWishlist
+                    : AppStrings.sightDetailsAddToWishlist,
+                textStyle: TextStyle(
+                  fontSize: screenDependentFontSize,
+                ),
+                background: Colors.transparent,
+                onPressed: () {
+                  log("To Wishlist button clicked");
+                  // context.read<FavoritesInteractor>().toggleFavorite(place);
+                },
+              );
             },
           ),
         ),
       ],
     );
+  }
+}
+
+double? _getScreenDependentFontSize(BuildContext context) {
+  final screenWidth = resolveScreenWidthSize(MediaQuery.of(context).size.width);
+
+  switch (screenWidth) {
+    case ScreenSizes.Small:
+      return 12;
+    case ScreenSizes.Large:
+      return 17;
+
+    default:
+      return null;
   }
 }
 

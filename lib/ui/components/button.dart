@@ -29,6 +29,7 @@ class Button extends StatelessWidget {
     this.textStyle,
     this.contentAlignment = MainAxisAlignment.center,
     this.borderRadius = smallBorderRadius,
+    this.iconSize,
   })  : icon = null,
         iconColor = null,
         iconAlignment = null,
@@ -58,6 +59,7 @@ class Button extends StatelessWidget {
     this.textStyle,
     this.contentAlignment = MainAxisAlignment.center,
     this.borderRadius = smallBorderRadius,
+    this.iconSize,
   })  : padding = buttonPadding ?? ButtonPadding.Narrow,
         gap = gap ?? 8,
         isTransparent = background == Colors.transparent,
@@ -72,6 +74,8 @@ class Button extends StatelessWidget {
   final String? icon;
 
   final Color? iconColor;
+
+  final double? iconSize;
 
   /// decides in which direction icon and text are placed. By default [IconAlignment.Horizontal].
   final IconAlignment? iconAlignment;
@@ -121,11 +125,13 @@ class Button extends StatelessWidget {
       }
     }
 
-    final buttonTextStyle = textStyle ??
-        theme.textTheme.bodyText2!.copyWith(
+    final buttonTextStyle = theme.textTheme.bodyText2!
+        .copyWith(
           fontSize: 14,
           color: onPrimary,
-        );
+        )
+        .merge(textStyle);
+
     final buttonText = text != null
         ? Text(
             text!,
@@ -136,6 +142,7 @@ class Button extends StatelessWidget {
         ? IconBox(
             icon: icon!,
             color: iconColor ?? onPrimary,
+            size: iconSize ?? smallIconSize,
           )
         : null;
 
