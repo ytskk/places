@@ -11,6 +11,10 @@ class AppStrings {
   static const sightTitleExpanded = 'Список\nинтересных мест';
   static const sightFloatingButtonLabel = 'новое место';
   static const sightClosedUntil = 'Закрыто до';
+  static const sightLoadingError = 'Что-то пошло не так\nПопробуйте позже.';
+
+  // Request status
+  static const requestError = 'Ошибка';
 
   // SightDetails screen
   static const sightDetailsWorkingStatusClosed = 'Закрыто до';
