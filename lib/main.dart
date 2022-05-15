@@ -9,6 +9,7 @@ import 'package:places/data/api/client_api.dart';
 import 'package:places/data/db/app_db.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/interactor/place_network_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/data/repository/local_repository.dart';
 import 'package:places/data/repository/place_network_repository.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
         ProxyProvider2<PlaceNetworkRepository, PlaceStorageRepository,
             PlaceInteractor>(
           update: (_, placeNetworkRepository, placeStorageRepository, __) =>
-              PlaceInteractor(placeNetworkRepository, placeStorageRepository),
+              PlaceNetworkInteractor(
+                  placeNetworkRepository, placeStorageRepository),
         ),
         ProxyProvider<PlaceStorageRepository, FavoritesInteractor>(
           update: (_, placeStorageRepository, favoritesInteractor) =>
@@ -72,13 +74,10 @@ class MyApp extends StatelessWidget {
               final isDarkMode = snapshot.data ?? false;
 
               return MaterialApp(
-                  routes: routes,
-                  initialRoute: AppRoutes.onboarding,
-                  theme: isDarkMode ? AppThemeData.dark() : AppThemeData.light()
-                  // home: MyHomePage(),
-                  // home: const SplashScreen(),
-                  // home: OnboardingScreen(),
-                  );
+                routes: routes,
+                initialRoute: AppRoutes.onboarding,
+                theme: isDarkMode ? AppThemeData.dark() : AppThemeData.light(),
+              );
             },
           );
         },

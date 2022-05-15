@@ -3,8 +3,6 @@ import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/sliding_tabbar.dart';
-import 'package:places/ui/screens/visiting/visiting_visited_screen.dart';
-import 'package:places/ui/screens/visiting/visiting_want_to_visit_screen.dart';
 
 class VisitingScreen extends StatefulWidget {
   const VisitingScreen({Key? key}) : super(key: key);
@@ -14,11 +12,16 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> {
+  final favoriteFactories = [
+    Center(child: Text(AppStrings.visitingAppBarTitle)),
+    Center(child: Text(AppStrings.visitingAppBarTitle)),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: AppStrings.visitingTabTitles.length,
-      child: const Scaffold(
+      child: Scaffold(
         appBar: const CustomAppBar(
           title: Text(
             AppStrings.visitingAppBarTitle,
@@ -30,11 +33,12 @@ class _VisitingScreenState extends State<VisitingScreen> {
         ),
         body: SafeArea(
           child: TabBarView(
-            children: [
-              // TODO: merge base;
-              VisitingWantToVisitScreen(),
-              VisitingVisitedScreen(),
-            ],
+            children: favoriteFactories,
+            // children: [
+            //   // TODO: merge base;
+            //   VisitingWantToVisitScreen(),
+            //   VisitingVisitedScreen(),
+            // ],
           ),
         ),
       ),

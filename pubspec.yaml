@@ -38,8 +38,6 @@ flutter:
     - family: Roboto-Black
       fonts:
         - asset: assets/res/fonts/Roboto-Black.ttf
-<<<<<<< HEAD
-=======
     - family: Roboto-BlackItalic
       fonts:
         - asset: assets/res/fonts/Roboto-BlackItalic.ttf
@@ -73,4 +71,3 @@ flutter:
     - family: Roboto-ThinItalic
       fonts:
         - asset: assets/res/fonts/Roboto-ThinItalic.ttf
->>>>>>> 1eefaf7fe2606b9041a2f905191e62c99e32de10

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:places/data/api/network_exception.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/mocks.dart';
@@ -15,6 +17,16 @@ class Filter extends ChangeNotifier {
   final List<Place> filteredPlaces = [];
   final List<Place> foundedFilteredPlaces = [];
 
+  final StreamController<List<Place>> _filteredPlacesController =
+      StreamController.broadcast();
+
+  Stream<List<Place>> get filteredPlacesStream =>
+      _filteredPlacesController.stream;
+
+  void disposeStream() {
+    _filteredPlacesController.close();
+  }
+
   Future<List<Place>> parseFilteredPlaces(BuildContext context) async {
     final List<Place> response =
         await context.read<PlaceInteractor>().getPlaces(
@@ -28,18 +40,13 @@ class Filter extends ChangeNotifier {
     return response;
   }
 
-  Future<List<Place>> getFilteredPlaces(BuildContext context) async {
-    final response = await parseFilteredPlaces(context);
-
-    filteredPlaces
-      ..clear()
-      ..addAll(response);
-
-    notifyListeners();
-
-    log('places loaded');
-
-    return filteredPlaces;
+  Future<void> getFilteredPlaces(BuildContext context) async {
+    try {
+      final response = await parseFilteredPlaces(context);
+      _filteredPlacesController.sink.add(response);
+    } on NetworkException catch (e) {
+      _filteredPlacesController.sink.addError(e);
+    }
   }
 
   final double _rangeValueStart = 0.0;

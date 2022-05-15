@@ -43,8 +43,8 @@ class PlaceNetworkRepository implements PlaceRepository {
   }) async {
     final String postBody = jsonEncode(filterOptions.toJson());
 
-    final response = await clientApi
-        .post(ApiConstants.filteredPlacesUrl + 'some', data: postBody);
+    final response =
+        await clientApi.post(ApiConstants.filteredPlacesUrl, data: postBody);
 
     return response.data
         .map<PlaceDto>((json) => PlaceDto.fromJson(json))
