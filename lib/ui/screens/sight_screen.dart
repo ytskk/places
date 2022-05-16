@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:places/controllers/filter_controller.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -12,6 +11,7 @@ import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/info_list.dart';
+import 'package:places/ui/components/loading_progress_indicator.dart';
 import 'package:places/ui/components/searchbar.dart';
 import 'package:provider/provider.dart';
 
@@ -23,16 +23,6 @@ class SightScreen extends StatefulWidget {
 }
 
 class _SightScreenState extends State<SightScreen> {
-  // Will parse only on create.
-  // late final Future future;
-
-  @override
-  initState() {
-    super.initState();
-
-    // future = context.read<Filter>().getFilteredPlaces(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,18 +59,13 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
   void initState() {
     super.initState();
 
-    getPlaces();
-  }
-
-  Future getPlaces() async {
-    context.read<Filter>().parseFilteredPlaces(context);
+    context.read<Filter>().getFilteredPlaces(context);
   }
 
   @override
-  void dispose() {
+  dispose() {
     super.dispose();
-
-    context.read<PlaceInteractor>().disposePlacesController();
+    context.read<Filter>().disposeStream();
   }
 
   @override
@@ -88,23 +73,13 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
     final theme = Theme.of(context);
 
     return StreamBuilder<List<Place>>(
-      stream: context.watch<PlaceInteractor>().placesStream,
+      stream: context.read<Filter>().filteredPlacesStream,
       initialData: [],
       builder: (_, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: Center(
-              child: SizedBox(
-                height: 100,
-                width: 100,
-                child: CircularProgressIndicator(
-                  backgroundColor: theme.backgroundColor,
-                  color: theme.primaryColor,
-                  strokeWidth: 16,
-                ),
-              ),
-            ),
+            child: LoadingProgressIndicator(),
           );
         }
 
