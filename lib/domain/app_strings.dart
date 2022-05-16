@@ -12,6 +12,8 @@ class AppStrings {
   static const sightFloatingButtonLabel = 'новое место';
   static const sightClosedUntil = 'Закрыто до';
   static const sightLoadingError = 'Что-то пошло не так\nПопробуйте позже.';
+  static const emptyListTitle = 'Нет мест для отображения';
+  static const emptyListSubtitle = 'Попробуйте изменить параметры поиска.';
 
   // Request status
   static const requestError = 'Ошибка';

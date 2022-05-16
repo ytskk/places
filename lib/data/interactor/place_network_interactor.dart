@@ -10,7 +10,10 @@ class PlaceNetworkInteractor extends PlaceInteractor {
   /// Current user coordinates.
   ///
   /// TODO: replace with location request.
-  static final Coordinates _coordinates = Coordinates(55.754093, 37.620407);
+  static final Coordinates _coordinates = Coordinates(
+    55.754093,
+    37.620407,
+  );
 
   PlaceNetworkInteractor(
     placeNetworkRepository,
