@@ -1,12 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:places/stores/sight_screen/sight_screen_store.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -55,35 +59,47 @@ class _PlaceFutureList extends StatefulWidget {
 }
 
 class _PlaceFutureListState extends State<_PlaceFutureList> {
+  late SightListStore _store;
+
   @override
   void initState() {
     super.initState();
 
-    context.read<Filter>().getFilteredPlaces(context);
+    _store = SightListStore(context.read<PlaceInteractor>());
+    _getPlaces();
+    // context.read<Filter>().getFilteredPlaces(context);
+  }
+
+  Future _getPlaces() async {
+    await _store.fetchPlaces(
+      radiusTo: 100000,
+      radiusFrom: 40000,
+      types: context.read<Filter>().selectedCategories,
+    );
   }
 
   @override
   dispose() {
     super.dispose();
-    context.read<Filter>().disposeStream();
+    // context.read<Filter>().disposeStream();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return StreamBuilder<List<Place>>(
-      stream: context.read<Filter>().filteredPlacesStream,
-      initialData: [],
-      builder: (_, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return Observer(
+      builder: (BuildContext context) {
+        final future = _store.placesFuture;
+
+        if (future == null || future.status == FutureStatus.pending) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: LoadingProgressIndicator(),
+            child: const LoadingProgressIndicator(),
           );
         }
 
-        if (snapshot.hasError) {
+        if (future.status == FutureStatus.rejected) {
           return SliverFillRemaining(
               hasScrollBody: false,
               child: Center(
@@ -100,9 +116,30 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
               ));
         }
 
-        return _PlaceList(
-          places: snapshot.data,
-        );
+        final List<Place> places = future.result;
+
+        if (places.isEmpty) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: InfoList(
+                iconName: AppIcons.delete,
+                iconColor: theme.textTheme.bodyText1!.color,
+                title: Text(
+                  AppStrings.emptyListTitle,
+                  textAlign: TextAlign.center,
+                ),
+                titleColor: theme.textTheme.bodyText1!.color,
+                subtitle: Text(
+                  AppStrings.emptyListSubtitle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          );
+        }
+
+        return _PlaceList(places: places);
       },
     );
   }
