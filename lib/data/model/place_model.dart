@@ -60,7 +60,7 @@ class Place {
       'name': name,
       'urls': urls,
       'placeType': type,
-      'description': description,
+      // 'description': description,
     };
   }
 
@@ -77,8 +77,9 @@ class Place {
       this.lng == other.lng &&
       this.name == other.name &&
       this.urls == other.urls &&
-      this.type == other.type &&
-      this.description == other.description;
+      this.type == other.type;
+
+  // this.description == other.description;
 
   @override
   int get hashCode =>

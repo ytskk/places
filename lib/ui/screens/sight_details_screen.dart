@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
@@ -60,12 +59,14 @@ class _SightDetailsScreenState extends State<SightDetailsScreen> {
 
           if (snapshot.hasError) {
             return InfoList(
-              iconName: AppIcons.error,
-              title: Text('Error :('),
-              subtitle: Text(
-                snapshot.error.toString(),
-                textAlign: TextAlign.center,
-                maxLines: 10,
+              infoListData: InfoListData(
+                iconName: AppIcons.error,
+                title: Text('Error :('),
+                subtitle: Text(
+                  snapshot.error.toString(),
+                  textAlign: TextAlign.center,
+                  maxLines: 10,
+                ),
               ),
             );
           }
@@ -350,7 +351,7 @@ class _SightManipulationButtons extends StatelessWidget {
         ),
         Expanded(
           child: FutureBuilder(
-            future: context.watch<FavoritesInteractor>().isFavorite(place),
+            // future: context.watch<FavoritesInteractor>().isFavorite(place),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               return Button.icon(
                 icon: snapshot.data == true

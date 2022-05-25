@@ -3,9 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/controllers/settings_controller.dart';
 import 'package:places/domain/app_constants.dart';
-import 'package:provider/provider.dart';
 
 String _defaultCancelText = 'Cancel';
 String _defaultConfirmText = 'Select';
@@ -164,9 +162,6 @@ class CupertinoPicker extends CustomPicker {
   // ignore: long-method
   Widget create(BuildContext context) {
     final theme = Theme.of(context);
-    final brightness = context.read<Settings>().isDarkTheme
-        ? Brightness.dark
-        : Brightness.light;
 
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
@@ -213,7 +208,7 @@ class CupertinoPicker extends CustomPicker {
                       height: 240.0,
                       child: CupertinoTheme(
                         data: CupertinoThemeData(
-                          brightness: brightness,
+                          brightness: theme.brightness,
                         ),
                         child: CupertinoDatePicker(
                           mode: mode,

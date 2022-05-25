@@ -129,15 +129,17 @@ class _SearchResultsState extends State<_SearchResults> {
     return results.isEmpty
         ? Center(
             child: InfoList(
-              iconName: AppIcons.search,
-              iconColor: theme.textTheme.bodyText2!.color,
-              title: Text(
-                AppStrings.searchScreenNotFoundTitle,
-                textAlign: TextAlign.center,
-              ),
-              subtitle: Text(
-                AppStrings.searchScreenNotFoundSubtitle,
-                textAlign: TextAlign.center,
+              infoListData: InfoListData(
+                iconName: AppIcons.search,
+                iconColor: theme.textTheme.bodyText2!.color,
+                title: Text(
+                  AppStrings.searchScreenNotFoundTitle,
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  AppStrings.searchScreenNotFoundSubtitle,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           )

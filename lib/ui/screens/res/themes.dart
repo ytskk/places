@@ -18,8 +18,10 @@ class AppThemeData {
   );
 
   // ignore: long-method
-  static ThemeData _themeData(AppColors appColors) {
+  static ThemeData _themeData(AppColors appColors,
+      {Brightness brightness = Brightness.light}) {
     return ThemeData(
+      brightness: brightness,
       primaryColor: appColors.green,
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
@@ -150,7 +152,7 @@ class AppThemeData {
   }
 
   static ThemeData dark() {
-    return _themeData(AppColorsDark());
+    return _themeData(AppColorsDark(), brightness: Brightness.dark);
   }
 
   /**

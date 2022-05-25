@@ -2,22 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/ui/components/icon_box.dart';
 
-/// Widget displaying a message content
-class InfoList extends StatelessWidget {
-  /// Creates widget, displaying [icon], [title] and [subtitle].
-  ///
-  /// [title] must be not null.
-  const InfoList({
-    Key? key,
-    this.iconName,
-    this.iconColor,
-    this.iconSize = 64,
-    this.iconPaddingBottom = 24,
-    required this.title,
-    this.titleColor,
-    this.subtitle,
-  }) : super(key: key);
-
+class InfoListData {
   final String? iconName;
   final Color? iconColor;
   final double iconSize;
@@ -25,6 +10,29 @@ class InfoList extends StatelessWidget {
   final Text title;
   final Color? titleColor;
   final Text? subtitle;
+
+  InfoListData({
+    this.iconName,
+    this.iconColor,
+    this.iconSize = 64,
+    this.iconPaddingBottom = 24,
+    this.title = const Text('Info'),
+    this.titleColor,
+    this.subtitle,
+  });
+}
+
+/// Widget displaying a message content
+class InfoList extends StatelessWidget {
+  /// Creates widget, displaying [icon], [title] and [subtitle].
+  ///
+  /// [title] must be not null.
+  const InfoList({
+    Key? key,
+    required this.infoListData,
+  }) : super(key: key);
+
+  final InfoListData infoListData;
 
   @override
   Widget build(BuildContext context) {
@@ -44,31 +52,33 @@ class InfoList extends StatelessWidget {
             width: maxContentWidth,
             child: Column(
               children: [
-                if (iconName != null)
+                if (infoListData.iconName != null)
                   Padding(
-                    padding: EdgeInsets.only(bottom: iconPaddingBottom),
+                    padding:
+                        EdgeInsets.only(bottom: infoListData.iconPaddingBottom),
                     child: IconBox(
-                      icon: iconName!,
-                      color: iconColor,
-                      size: iconSize,
+                      icon: infoListData.iconName!,
+                      color: infoListData.iconColor,
+                      size: infoListData.iconSize,
                     ),
                   ),
                 Text(
-                  title.data!,
+                  infoListData.title.data!,
                   style: defaultTitleStyle
-                      .copyWith(color: titleColor)
-                      .merge(title.style),
-                  textAlign: title.textAlign,
-                  maxLines: title.maxLines,
+                      .copyWith(color: infoListData.titleColor)
+                      .merge(infoListData.title.style),
+                  textAlign: infoListData.title.textAlign,
+                  maxLines: infoListData.title.maxLines,
                 ),
-                if (subtitle != null)
+                if (infoListData.subtitle != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      subtitle!.data!,
-                      textAlign: subtitle?.textAlign,
-                      maxLines: subtitle?.maxLines,
-                      style: defaultSubtitleStyle!.merge(subtitle!.style),
+                      infoListData.subtitle!.data!,
+                      textAlign: infoListData.subtitle?.textAlign,
+                      maxLines: infoListData.subtitle?.maxLines,
+                      style: defaultSubtitleStyle!
+                          .merge(infoListData.subtitle!.style),
                     ),
                   ),
               ],

@@ -45,11 +45,11 @@ class PlaceNetworkInteractor extends PlaceInteractor {
       // Exclude places with distance less than [radiusFrom].
       final radiusDependentPlaces = _excludeByRadius(places, radiusFrom);
 
-      // Add favorites to places.
-      final favoritesPlaces = await _fillFavorites(radiusDependentPlaces);
+      // // Add favorites to places.
+      // final favoritesPlaces = await _fillFavorites(radiusDependentPlaces);
 
       // Sort by distance ascending.
-      final sortedPlaces = _sortByDistance(favoritesPlaces);
+      final sortedPlaces = _sortByDistance(radiusDependentPlaces);
 
       // Convert [PlaceDto] to [Place] and return result.
       final convertedPlaces =
@@ -67,14 +67,14 @@ class PlaceNetworkInteractor extends PlaceInteractor {
     return places..where((place) => place.distance >= radius);
   }
 
-  Future<List<PlaceDto>> _fillFavorites(List<PlaceDto> places) async {
-    return await places
-      ..map((place) async {
-        place.isFavorite = await placeStorageRepository.isFavorite(place);
-
-        return place;
-      });
-  }
+  // Future<List<PlaceDto>> _fillFavorites(List<PlaceDto> places) async {
+  //   return await places
+  //     ..map((place) async {
+  //       place.isFavorite = await placeStorageRepository.isFavorite(place);
+  //
+  //       return place;
+  //     });
+  // }
 
   List<PlaceDto> _sortByDistance(List<PlaceDto> places) {
     return places..sort((a, b) => a.distance.compareTo(b.distance));
@@ -83,8 +83,8 @@ class PlaceNetworkInteractor extends PlaceInteractor {
   Future getPlaceDetails({required int id}) async {
     final response = await placeNetworkRepository.getPlaceById(id: id);
 
-    final place = await placeStorageRepository.getFavorite(response);
+    // final place = await placeStorageRepository.getFavorite(response);
 
-    return place;
+    return response;
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/controllers/onboarding_controller.dart';
 import 'package:places/domain/app_constants.dart';
-import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
@@ -146,18 +145,20 @@ class _OnboardingPagesState extends State<_OnboardingPages> {
                 // To center content vertically. And to avoid overlapping of text and indicator.
                 padding: const EdgeInsets.only(bottom: 120),
                 child: InfoList(
-                  iconName: onboardingProvider.tutorContent[index].icon,
-                  iconColor: theme.textTheme.bodyText2!.color,
-                  iconSize: 128,
-                  iconPaddingBottom: 40,
-                  title: Text(
-                    onboardingProvider.tutorContent[index].title,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.headline3,
-                  ),
-                  subtitle: Text(
-                    onboardingProvider.tutorContent[index].subtitle,
-                    textAlign: TextAlign.center,
+                  infoListData: InfoListData(
+                    iconName: onboardingProvider.tutorContent[index].icon,
+                    iconColor: theme.textTheme.bodyText2!.color,
+                    iconSize: 128,
+                    iconPaddingBottom: 40,
+                    title: Text(
+                      onboardingProvider.tutorContent[index].title,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.headline3,
+                    ),
+                    subtitle: Text(
+                      onboardingProvider.tutorContent[index].subtitle,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),

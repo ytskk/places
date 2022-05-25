@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:places/controllers/filter_controller.dart';
+import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
@@ -17,6 +18,7 @@ import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/loading_progress_indicator.dart';
 import 'package:places/ui/components/searchbar.dart';
+import 'package:places/ui/navigation/main_navitation_route_names.dart';
 import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
@@ -42,6 +44,13 @@ class _SightScreenState extends State<SightScreen> {
           },
           body: CustomScrollView(
             slivers: [
+              SliverToBoxAdapter(
+                child: Button(
+                  onPressed: () => Navigator.pushNamed(
+                      context, MainNavigationRouteNames.favorites),
+                  text: 'To favorites',
+                ),
+              ),
               _PlaceFutureList(),
             ],
           ),
@@ -66,8 +75,8 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
     super.initState();
 
     _store = SightListStore(context.read<PlaceInteractor>());
+    print('Component created');
     _getPlaces();
-    // context.read<Filter>().getFilteredPlaces(context);
   }
 
   Future _getPlaces() async {
@@ -81,7 +90,6 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
   @override
   dispose() {
     super.dispose();
-    // context.read<Filter>().disposeStream();
   }
 
   @override
@@ -104,13 +112,15 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
               hasScrollBody: false,
               child: Center(
                 child: InfoList(
-                  iconName: AppIcons.delete,
-                  iconColor: theme.textTheme.bodyText1!.color,
-                  title: Text(AppStrings.requestError),
-                  titleColor: theme.textTheme.bodyText1!.color,
-                  subtitle: Text(
-                    AppStrings.sightLoadingError,
-                    textAlign: TextAlign.center,
+                  infoListData: InfoListData(
+                    iconName: AppIcons.delete,
+                    iconColor: theme.textTheme.bodyText1!.color,
+                    title: Text(AppStrings.requestError),
+                    titleColor: theme.textTheme.bodyText1!.color,
+                    subtitle: Text(
+                      AppStrings.sightLoadingError,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ));
@@ -123,16 +133,18 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
             hasScrollBody: false,
             child: Center(
               child: InfoList(
-                iconName: AppIcons.delete,
-                iconColor: theme.textTheme.bodyText1!.color,
-                title: Text(
-                  AppStrings.emptyListTitle,
-                  textAlign: TextAlign.center,
-                ),
-                titleColor: theme.textTheme.bodyText1!.color,
-                subtitle: Text(
-                  AppStrings.emptyListSubtitle,
-                  textAlign: TextAlign.center,
+                infoListData: InfoListData(
+                  iconName: AppIcons.delete,
+                  iconColor: theme.textTheme.bodyText1!.color,
+                  title: Text(
+                    AppStrings.emptyListTitle,
+                    textAlign: TextAlign.center,
+                  ),
+                  titleColor: theme.textTheme.bodyText1!.color,
+                  subtitle: Text(
+                    AppStrings.emptyListSubtitle,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),
@@ -221,55 +233,23 @@ class _SightHeartIconButtonToggleable extends StatefulWidget {
 
 class __SightHeartIconButtonToggleableState
     extends State<_SightHeartIconButtonToggleable> {
-  late final StreamController<bool> _likeButtonController;
-
-  @override
-  initState() {
-    super.initState();
-
-    _likeButtonController = StreamController<bool>();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _likeButtonController.close();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: false,
-      stream: _likeButtonController.stream,
+    return FutureBuilder(
+      future: context.read<FavoritesInteractor>().isFavorite(widget.place),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return Button.icon(
           icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
           iconColor: Colors.white,
           background: Colors.transparent,
           onPressed: () {
-            // print("Wishlist icon clicked");
-            // context.read<FavoritesInteractor>().toggleFavorite(widget.place);
-            _likeButtonController.sink.add(!snapshot.data);
+            context.read<FavoritesInteractor>().toggleFavorite(widget.place);
+            // _likeButtonController.sink
+            //     .add(context.read<FavoritesInteractor>().isFavorite());
           },
         );
       },
     );
-    // TODO: return
-    // return FutureBuilder(
-    //   future: context.watch<FavoritesInteractor>().isFavorite(widget.place),
-    //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-    //     return Button.icon(
-    //       icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
-    //       iconColor: Colors.white,
-    //       background: Colors.transparent,
-    //       onPressed: () {
-    //         // print("Wishlist icon clicked");
-    //         context.read<FavoritesInteractor>().toggleFavorite(widget.place);
-    //       },
-    //     );
-    //   },
-    // );
   }
 }
 
