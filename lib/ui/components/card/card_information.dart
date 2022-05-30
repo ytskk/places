@@ -43,6 +43,7 @@ class CardInformation extends StatelessWidget {
                     ),
                   ),
                 ),
+
               // text
               if (cardInfo.text != null && cardInfo.text!.isNotEmpty)
                 Padding(

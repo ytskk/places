@@ -5,7 +5,26 @@ class AppDb extends ChangeNotifier {
   // # Favorites.
 
   // definitions
-  List<Place> _favorites = [];
+  List<Place> _favorites = [
+    Place(
+      id: 123,
+      lat: 2.13,
+      lng: 13.123,
+      name: "name",
+      urls: [""],
+      type: "cafe",
+      description: "description",
+    ),
+    Place(
+      id: 12312321,
+      lat: 2.13,
+      lng: 13.123,
+      name: "Second",
+      urls: [""],
+      type: "hotel",
+      description: "description",
+    ),
+  ];
 
   bool _isDarkMode = false;
 

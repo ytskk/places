@@ -14,13 +14,13 @@ import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/data/repository/local_repository.dart';
 import 'package:places/data/repository/place_network_repository.dart';
 import 'package:places/data/repository/place_storage_repository.dart';
-import 'package:places/domain/app_routes.dart';
 import 'package:places/ui/components/custom_navigation_bar.dart';
+import 'package:places/ui/navigation/main_navigation.dart';
+import 'package:places/ui/navigation/main_navitation_route_names.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
-import 'package:places/ui/screens/visiting/visiting_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -74,9 +74,9 @@ class MyApp extends StatelessWidget {
               final isDarkMode = snapshot.data ?? false;
 
               return MaterialApp(
-                routes: routes,
-                initialRoute: AppRoutes.onboarding,
-                theme: isDarkMode ? AppThemeData.dark() : AppThemeData.light(),
+                initialRoute: MainNavigationRouteNames.onBoarding,
+                routes: MainNavigation().routes,
+                theme: isDarkMode ? AppThemeData.dark() : AppThemeData.dark(),
               );
             },
           );
@@ -95,7 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> pages = [
     SightScreen(),
     SightDetailsScreen(),
-    VisitingScreen(),
+    // VisitingScreen(),
+    // ScreenFactory().makeFavoritesScreen(),
     SettingsScreen(),
   ];
 

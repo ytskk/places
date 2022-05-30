@@ -24,8 +24,14 @@ dependencies:
 
   mobx: ^2.0.7+2
   flutter_mobx: ^2.0.6+1
+
   _fe_analyzer_shared: ^39.0.0
   async: ^2.8.2
+
+
+  equatable: ^2.0.3
+  bloc: ^8.0.3
+  flutter_bloc: ^8.0.1
 
 
 dev_dependencies:
@@ -37,6 +43,8 @@ dev_dependencies:
 
   mobx_codegen: ^2.0.6+2
   build_runner: ^2.1.10
+
+
 
 flutter:
   assets:
