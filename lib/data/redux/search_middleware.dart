@@ -17,5 +17,7 @@ class SearchMiddleware implements MiddlewareClass<AppState> {
             ),
           );
     }
+
+    next(action);
   }
 }
