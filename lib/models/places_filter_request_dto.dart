@@ -11,11 +11,11 @@ class PlacesFilterRequestDto {
     this.lng,
     this.typeFilter,
     this.nameFilter,
-  }) :
+  });
 
-        /// assert if one of them is specified, then the other two become mandatory
-        assert((radius != null || lat != null || lng != null) &&
-            (radius != null && lat != null && lng != null));
+  // /// assert if one of them is specified, then the other two become mandatory
+  // assert((radius != null || lat != null || lng != null) &&
+  //     (radius != null && lat != null && lng != null));
 
   // to json
   Map<String, dynamic> toJson() => {

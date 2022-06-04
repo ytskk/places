@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/controllers/filter_controller.dart';
 import 'package:places/controllers/sight_search_controller.dart';
+import 'package:places/data/model/place_model.dart';
+import 'package:places/data/redux/app_state.dart';
+import 'package:places/data/redux/search_action.dart';
 import 'package:places/domain/app_constants.dart';
-import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/models/sight.dart';
+import 'package:places/models/places_filter_request_dto.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
-import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/components/searchbar.dart';
 import 'package:provider/provider.dart';
+import 'package:redux/redux.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 class SightSearchScreen extends StatefulWidget {
@@ -31,8 +35,6 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 
     _searchFieldController = TextEditingController();
     _searchFieldController.addListener(() => setState(() {}));
-
-    context.read<SightSearch>().bindSearchController(_searchFieldController);
   }
 
   @override
@@ -55,11 +57,17 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(bottomAppBarHeight),
           child: SearchBar(
-            onEditingComplete: () {
-              print('searched for ${_searchFieldController.text}');
-              context
-                  .read<SightSearch>()
-                  .addActivity(_searchFieldController.text);
+            onChange: (value) {
+              print('onChange: $value');
+              StoreProvider.of<AppState>(context).dispatch(LoadSearchAction(
+                PlacesFilterRequestDto(
+                  nameFilter: value,
+                  radius: 100000.0,
+                  lat: 55.754093,
+                  lng: 37.620407,
+                  typeFilter: context.read<Filter>().selectedCategories,
+                ),
+              ));
             },
             controller: _searchFieldController,
             suffix: ClearButton(
@@ -99,8 +107,17 @@ class _SearchContent extends StatelessWidget {
         ? SliverToBoxAdapter(
             child: _SearchRecentActivity(),
           )
-        : SliverFillRemaining(
-            child: _SearchResults(controller: controller),
+        : StoreConnector(
+            converter: (Store<AppState> store) {
+              return store.state.searchState;
+            },
+            builder: (BuildContext context, vm) {
+              print('vm: $vm');
+
+              return SliverFillRemaining(
+                child: _SearchResults(controller: controller),
+              );
+            },
           );
   }
 }
@@ -120,39 +137,18 @@ class _SearchResults extends StatefulWidget {
 class _SearchResultsState extends State<_SearchResults> {
   @override
   Widget build(BuildContext context) {
-    // final List<Sight> filteredSights = context.watch<Filter>().nearbyPlaces;
-    final List<Sight> results = context
-        .read<SightSearch>()
-        .searchByName(widget.controller.text.trim(), domain: []);
     final theme = Theme.of(context);
 
-    return results.isEmpty
-        ? Center(
-            child: InfoList(
-              infoListData: InfoListData(
-                iconName: AppIcons.search,
-                iconColor: theme.textTheme.bodyText2!.color,
-                title: Text(
-                  AppStrings.searchScreenNotFoundTitle,
-                  textAlign: TextAlign.center,
-                ),
-                subtitle: Text(
-                  AppStrings.searchScreenNotFoundSubtitle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          )
-        : _SearchResultsList(content: results);
+    return Text('123A;');
   }
 }
 
 class _SearchResultsList extends StatelessWidget {
-  final List<Sight> content;
+  final List<PlaceDto> content;
 
   const _SearchResultsList({
     Key? key,
-    required List<Sight> this.content,
+    required this.content,
   }) : super(key: key);
 
   @override
@@ -170,11 +166,11 @@ class _SearchResultsList extends StatelessWidget {
 }
 
 class _SearchResultListTile extends StatelessWidget {
-  final Sight sight;
+  final PlaceDto sight;
 
   const _SearchResultListTile({
     Key? key,
-    required Sight this.sight,
+    required this.sight,
   }) : super(key: key);
 
   @override
@@ -205,7 +201,7 @@ class _SearchResultListTile extends StatelessWidget {
           style: textTheme.bodyText1,
         ),
         // leading: _SightImageBox(imageUrl: sight.url),
-        leading: RoundedNetworkImageBox(imageUrl: sight.url),
+        leading: RoundedNetworkImageBox(imageUrl: sight.urls.first),
       ),
     );
   }

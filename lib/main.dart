@@ -8,9 +8,11 @@ import 'package:places/controllers/visiting_places_controller.dart';
 import 'package:places/data/api/client_api.dart';
 import 'package:places/data/db/app_db.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/place_network_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:places/data/redux/app_state.dart';
+import 'package:places/data/redux/reducer.dart';
+import 'package:places/data/redux/search_middleware.dart';
 import 'package:places/data/repository/local_repository.dart';
 import 'package:places/data/repository/place_network_repository.dart';
 import 'package:places/data/repository/place_storage_repository.dart';
@@ -22,6 +24,7 @@ import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:redux/redux.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,7 +46,7 @@ class MyApp extends StatelessWidget {
           update: (_, appDb, __) => PlaceStorageRepository(appDb),
         ),
         ProxyProvider2<PlaceNetworkRepository, PlaceStorageRepository,
-            PlaceInteractor>(
+            PlaceNetworkInteractor>(
           update: (_, placeNetworkRepository, placeStorageRepository, __) =>
               PlaceNetworkInteractor(
                   placeNetworkRepository, placeStorageRepository),
@@ -58,6 +61,15 @@ class MyApp extends StatelessWidget {
         ProxyProvider<LocalRepository, SettingsInteractor>(
           update: (_, localRepository, settingsInteractor) =>
               SettingsInteractor(localRepository),
+        ),
+        ProxyProvider<PlaceNetworkInteractor, Store<AppState>>(
+          update: (_, placeNetworkInteractor, store) => Store<AppState>(
+            reducer,
+            initialState: AppState(),
+            middleware: [
+              SearchMiddleware(placeNetworkInteractor),
+            ],
+          ),
         ),
         ChangeNotifierProvider(create: (_) => Navigation()),
         ChangeNotifierProvider(create: (_) => Filter()),

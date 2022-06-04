@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/data/repository/place_network_repository.dart';
 import 'package:places/data/repository/place_storage_repository.dart';
+import 'package:places/models/places_filter_request_dto.dart';
 
 abstract class PlaceInteractor {
   final PlaceNetworkRepository placeNetworkRepository;
@@ -17,4 +18,6 @@ abstract class PlaceInteractor {
   });
 
   Future getPlaceDetails({required int id});
+
+  Future searchPlace({required PlacesFilterRequestDto filterOptions});
 }

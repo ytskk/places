@@ -5,7 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:places/controllers/filter_controller.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/interactor/place_network_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -74,7 +74,7 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
   void initState() {
     super.initState();
 
-    _store = SightListStore(context.read<PlaceInteractor>());
+    _store = SightListStore(context.read<PlaceNetworkInteractor>());
     print('Component created');
     _getPlaces();
   }
@@ -304,7 +304,8 @@ class _SightListSliverAppBar extends StatelessWidget {
             ),
             SearchBar(
               onTap: () {
-                Navigator.of(context).pushNamed(AppRoutes.search);
+                Navigator.of(context)
+                    .pushNamed(MainNavigationRouteNames.search);
               },
               suffix: IconButton(
                 padding: EdgeInsets.zero,

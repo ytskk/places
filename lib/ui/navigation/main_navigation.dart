@@ -12,5 +12,7 @@ class MainNavigation {
         _screenFactory.makeSightScreen(),
     MainNavigationRouteNames.favorites: (context) =>
         _screenFactory.makeFavoritesScreen(),
+    MainNavigationRouteNames.search: (context) =>
+        _screenFactory.makeSearchScreen(context),
   };
 }
