@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/ui/navigation/main_navitation_route_names.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
 
 /// Controller for onboarding screen.
 ///
@@ -62,7 +62,7 @@ class Onboarding extends ChangeNotifier {
 
   void completeOnboarding(BuildContext context) {
     clearOnboardingProgress();
-    Navigator.of(context).pushReplacementNamed(MainNavigationRouteNames.home);
+    Navigator.of(context).pushReplacementNamed(AppRouteNames.home);
   }
 }
 

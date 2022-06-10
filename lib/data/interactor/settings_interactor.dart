@@ -5,8 +5,8 @@ class SettingsInteractor {
 
   final LocalRepository _localRepository;
 
-  Future<bool> isDarkMode() async {
-    return await _localRepository.isDarkMode;
+  bool isDarkMode() {
+    return _localRepository.isDarkMode;
   }
 
   Future<void> setDarkMode(bool value) async {

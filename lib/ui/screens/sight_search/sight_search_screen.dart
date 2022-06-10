@@ -11,10 +11,14 @@ import 'package:places/models/places_filter_request_dto.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
+import 'package:places/ui/components/image/network_image_box.dart';
 import 'package:places/ui/components/loading_progress_indicator.dart';
 import 'package:places/ui/components/searchbar.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
+import 'package:places/utils/extensions/list_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
+import 'package:substring_highlight/substring_highlight.dart';
 
 class SightSearchScreen extends StatefulWidget {
   const SightSearchScreen({Key? key}) : super(key: key);
@@ -121,7 +125,10 @@ class _SearchContent extends StatelessWidget {
                 print(results);
 
                 return SliverFillRemaining(
-                  child: _SearchResultsList(content: results),
+                  child: _SearchResultsList(
+                    content: results,
+                    searchText: controller.text.trim(),
+                  ),
                 );
               }
 
@@ -134,27 +141,21 @@ class _SearchContent extends StatelessWidget {
 }
 
 class _SearchResultsList extends StatelessWidget {
-  final List<PlaceDto> content;
-
   const _SearchResultsList({
     Key? key,
     required this.content,
+    required this.searchText,
   }) : super(key: key);
+
+  final List<PlaceDto> content;
+  final String searchText;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) {
-        // return _SearchResultListTile(sight: content[index]);
-        return ListTile(
-          title: Text(
-            content[index].name,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        );
+        return _SearchResultListTile(
+            sight: content[index], searchText: searchText);
       },
       separatorBuilder: (BuildContext context, int index) {
         return HorizontalDividerInset();
@@ -164,44 +165,49 @@ class _SearchResultsList extends StatelessWidget {
   }
 }
 
-// class _SearchResultListTile extends StatelessWidget {
-//   final PlaceDto sight;
-//
-//   const _SearchResultListTile({
-//     Key? key,
-//     required this.sight,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final textTheme = Theme.of(context).textTheme;
-//
-//     return InkWell(
-//       splashColor: Colors.black12,
-//       onTap: () {
-//         Navigator.of(context).pushNamed(
-//           AppRoutes.sightDetails,
-//           arguments: sight.id,
-//         );
-//       },
-//       child: ListTile(
-//         title: SubstringHighlight(
-//           text: sight.name,
-//           // term: context.read<SightSearch>().searchControllerText.trim(),
-//           textStyle: textTheme.bodyText2!,
-//           textStyleHighlight:
-//               textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w700),
-//         ),
-//         subtitle: Text(
-//           sight.type,
-//           style: textTheme.bodyText1,
-//         ),
-//         // leading: _SightImageBox(imageUrl: sight.url),
-//         leading: RoundedNetworkImageBox(imageUrl: sight.urls.first),
-//       ),
-//     );
-//   }
-// }
+class _SearchResultListTile extends StatelessWidget {
+  const _SearchResultListTile({
+    Key? key,
+    required this.sight,
+    required this.searchText,
+  }) : super(key: key);
+
+  final PlaceDto sight;
+  final String searchText;
+
+  @override
+  Widget build(BuildContext context) {
+    print('_SearchResultListTile: ${sight.urls}, ${sight.type}');
+    final textTheme = Theme.of(context).textTheme;
+
+    return InkWell(
+      splashColor: Colors.black12,
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          AppRouteNames.placeDetails,
+          arguments: sight.id,
+        );
+      },
+      child: ListTile(
+        title: SubstringHighlight(
+          text: sight.name,
+          term: searchText,
+          textStyle: textTheme.bodyText2!,
+          textStyleHighlight:
+              textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w700),
+        ),
+        subtitle: Text(
+          sight.type,
+          style: textTheme.bodyText1,
+        ),
+        // leading: _SightImageBox(imageUrl: sight.url),
+        leading: RoundedNetworkImageBox(
+          imageUrl: ListExtension(sight.urls).takeFirstImgOrTemp,
+        ),
+      ),
+    );
+  }
+}
 //
 // /// Recent activity component, empty if it's no history.
 // class _SearchRecentActivity extends StatelessWidget {

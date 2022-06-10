@@ -1,27 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/navigation_controller.dart';
+import 'package:places/domain/app_icons.dart';
 import 'package:places/ui/components/icon_box.dart';
-import 'package:provider/provider.dart';
 
 /// TODO: implement BottomNavigationBarButton model with dynamic icon state.
 class CustomNavigationBar extends StatelessWidget {
-  const CustomNavigationBar({Key? key}) : super(key: key);
+  const CustomNavigationBar({
+    Key? key,
+    required this.onTap,
+    required this.currentIndex,
+  }) : super(key: key);
+
+  final void Function(int)? onTap;
+  final int currentIndex;
+
+  static final List bottomButtons = [
+    {
+      'icon': {
+        'name': {
+          'selected': AppIcons.list_fill,
+          'unselected': AppIcons.list,
+        },
+      },
+      'label': 'Sight List',
+    },
+    {
+      'icon': {
+        'name': {
+          'selected': AppIcons.map_fill,
+          'unselected': AppIcons.map,
+        },
+      },
+      'label': 'Map',
+    },
+    {
+      'icon': {
+        'name': {
+          'selected': AppIcons.heartFilled,
+          'unselected': AppIcons.heart,
+        },
+      },
+      'label': 'Favorites',
+    },
+    {
+      'icon': {
+        'name': {
+          'selected': AppIcons.settingsFilled,
+          'unselected': AppIcons.settings,
+        },
+      },
+      'label': 'Settings',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bottomButtons =
-        context.read<Navigation>().bottomNavigationBarItemsData;
 
     return BottomNavigationBar(
       backgroundColor: theme.backgroundColor,
       showSelectedLabels: false,
       showUnselectedLabels: false,
-      currentIndex: context.watch<Navigation>().selectedPageIndex,
+      currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
-      onTap: (int value) {
-        context.read<Navigation>().setSelectedPageIndex(value);
-      },
+      onTap: onTap,
       items: [
         for (var barItem in bottomButtons)
           BottomNavigationBarItem(
