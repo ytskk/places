@@ -88,7 +88,7 @@ class _SettingsDarkModeSwitcherState extends State<_SettingsDarkModeSwitcher> {
           value: isDarkMode,
           onChanged: (bool newValue) {
             // tmp !isDarkMode cos setter is async.
-            log('Theme changed to ${!isDarkMode ? 'dark' : 'light'}');
+            // log('Theme changed to ${!isDarkMode ? 'dark' : 'light'}');
 
             setState(() {
               context.read<SettingsInteractor>().setDarkMode(!isDarkMode);

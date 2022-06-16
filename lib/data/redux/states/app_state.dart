@@ -1,4 +1,4 @@
-import 'package:places/data/redux/search_state.dart';
+import 'package:places/data/redux/states/search_state.dart';
 
 class AppState {
   final SearchState searchState;

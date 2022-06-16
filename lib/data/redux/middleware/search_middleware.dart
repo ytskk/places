@@ -1,6 +1,6 @@
 import 'package:places/data/interactor/place_network_interactor.dart';
-import 'package:places/data/redux/app_state.dart';
-import 'package:places/data/redux/search_action.dart';
+import 'package:places/data/redux/actions/search_action.dart';
+import 'package:places/data/redux/states/app_state.dart';
 import 'package:redux/redux.dart';
 
 class SearchMiddleware implements MiddlewareClass<AppState> {

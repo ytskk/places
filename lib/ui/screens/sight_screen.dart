@@ -66,8 +66,8 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
   void initState() {
     super.initState();
 
+    // BUG: store recreating every time.
     _store = SightListStore(context.read<PlaceNetworkInteractor>());
-    print('Component created');
     _getPlaces();
   }
 
