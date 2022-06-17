@@ -87,4 +87,10 @@ class PlaceNetworkInteractor extends PlaceInteractor {
 
     return response;
   }
+
+  @override
+  Future searchPlace({required PlacesFilterRequestDto filterOptions}) {
+    return placeNetworkRepository.getFilteredPlaces(
+        filterOptions: filterOptions);
+  }
 }

@@ -72,6 +72,7 @@ class AppStrings {
       'Уверены что хотите закрыть? Вы потеряете введённые данные.';
   static const addSightScreenSightDialogCloseActionClose = 'Да';
   static const addSightScreenSightDialogCloseActionStay = 'Нет';
+
   // image picker options
   static const addSightScreenImagePickerOptionsCameraTitle = 'Камера';
   static const addSightScreenImagePickerOptionsGalleryTitle = 'Фотография';

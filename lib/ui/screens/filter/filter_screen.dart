@@ -28,7 +28,7 @@ class FilterScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              context.read<Filter>().clearFilterOptions();
+              // context.read<Filter>().clearFilterOptions();
             },
             child: Text(AppStrings.filterScreenActionClear),
           ),

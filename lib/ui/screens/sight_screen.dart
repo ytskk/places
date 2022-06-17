@@ -5,11 +5,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:places/controllers/filter_controller.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/interactor/place_network_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
-import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/stores/sight_screen/sight_screen_store.dart';
 import 'package:places/ui/components/button.dart';
@@ -18,7 +17,7 @@ import 'package:places/ui/components/icon_box.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/loading_progress_indicator.dart';
 import 'package:places/ui/components/searchbar.dart';
-import 'package:places/ui/navigation/main_navitation_route_names.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
 import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
@@ -44,13 +43,6 @@ class _SightScreenState extends State<SightScreen> {
           },
           body: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: Button(
-                  onPressed: () => Navigator.pushNamed(
-                      context, MainNavigationRouteNames.favorites),
-                  text: 'To favorites',
-                ),
-              ),
               _PlaceFutureList(),
             ],
           ),
@@ -74,8 +66,8 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
   void initState() {
     super.initState();
 
-    _store = SightListStore(context.read<PlaceInteractor>());
-    print('Component created');
+    // BUG: store recreating every time.
+    _store = SightListStore(context.read<PlaceNetworkInteractor>());
     _getPlaces();
   }
 
@@ -206,8 +198,10 @@ class _PlaceListItem extends StatelessWidget {
     return SightCard(
       place,
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.sightDetails,
-            arguments: place.id);
+        Navigator.of(context).pushNamed(
+          AppRouteNames.placeDetails,
+          arguments: place.id,
+        );
       },
       actions: [
         _SightHeartIconButtonToggleable(
@@ -244,8 +238,6 @@ class __SightHeartIconButtonToggleableState
           background: Colors.transparent,
           onPressed: () {
             context.read<FavoritesInteractor>().toggleFavorite(widget.place);
-            // _likeButtonController.sink
-            //     .add(context.read<FavoritesInteractor>().isFavorite());
           },
         );
       },
@@ -304,7 +296,7 @@ class _SightListSliverAppBar extends StatelessWidget {
             ),
             SearchBar(
               onTap: () {
-                Navigator.of(context).pushNamed(AppRoutes.search);
+                Navigator.of(context).pushNamed(AppRouteNames.search);
               },
               suffix: IconButton(
                 padding: EdgeInsets.zero,
@@ -312,7 +304,7 @@ class _SightListSliverAppBar extends StatelessWidget {
                   icon: AppIcons.filter,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(AppRoutes.sightFilter);
+                  // Navigator.of(context).pushNamed(AppRoutes.sightFilter);
                 },
               ),
             ),
@@ -350,9 +342,9 @@ class _AddPlaceFloatingButton extends StatelessWidget {
         ],
       ),
       onPressed: () {
-        Navigator.of(context).pushNamed(
-          AppRoutes.addSight,
-        );
+        // Navigator.of(context).pushNamed(
+        //   AppRoutes.addSight,
+        // );
       },
     );
   }

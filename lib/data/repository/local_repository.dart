@@ -5,7 +5,7 @@ class LocalRepository {
 
   LocalRepository(this._appDb);
 
-  Future<bool> get isDarkMode async => await _appDb.isDarkMode;
+  bool get isDarkMode => _appDb.isDarkMode;
 
   Future<void> setDarkMode(bool value) async => _appDb.setDarkMode(value);
 }

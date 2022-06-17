@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
-import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/visiting_card.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
 import 'package:places/utils/string_manipulations.dart';
 
 class VisitingListItem extends StatelessWidget {
@@ -45,7 +45,7 @@ class VisitingListItem extends StatelessWidget {
             place,
             onTap: () {
               Navigator.of(context).pushNamed(
-                AppRoutes.sightDetails,
+                AppRouteNames.placeDetails,
                 arguments: place.id,
               );
             },

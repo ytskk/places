@@ -157,7 +157,7 @@ class AppThemeData {
 
   /**
    * Returns theme-based color from [AppColors]
-   * 
+   *
    * **Attributes**
    * - `isDark` — controls theme (light or dark). Default false.
    */

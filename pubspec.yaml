@@ -33,6 +33,9 @@ dependencies:
   bloc: ^8.0.3
   flutter_bloc: ^8.0.1
 
+  redux: ^5.0.0
+  flutter_redux: ^0.10.0
+
 
 dev_dependencies:
   flutter_test:

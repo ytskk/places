@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/interactor/place_network_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -12,6 +12,7 @@ import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
 import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/picker.dart';
+import 'package:places/utils/extensions/list_extension.dart';
 import 'package:places/utils/screen_sizes.dart';
 import 'package:places/utils/string_manipulations.dart';
 import 'package:provider/provider.dart';
@@ -34,8 +35,9 @@ class _SightDetailsScreenState extends State<SightDetailsScreen> {
   Future getPlaceDetails(BuildContext context) async {
     final placeId = ModalRoute.of(context)!.settings.arguments as int;
 
-    final response =
-        await context.read<PlaceInteractor>().getPlaceDetails(id: placeId);
+    final response = await context
+        .read<PlaceNetworkInteractor>()
+        .getPlaceDetails(id: placeId);
 
     print('response: $response');
 
@@ -83,8 +85,9 @@ class _SightDetailsScreenState extends State<SightDetailsScreen> {
               primary: false,
               slivers: [
                 _SightSliverAppBar(
-                  sightImages:
-                      sight.urls.isEmpty ? [sight.urls.first] : sight.urls,
+                  sightImages: sight.urls.isEmpty
+                      ? [ListExtension(sight.urls).takeFirstImgOrTemp]
+                      : sight.urls,
                   useBackButton: true,
                 ),
                 SliverList(

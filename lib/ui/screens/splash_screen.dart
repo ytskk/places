@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_constants.dart' as constants;
 import 'package:places/domain/app_icons.dart';
-import 'package:places/domain/app_routes.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -36,9 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
         print('navigating to the next screen');
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppRoutes.onboarding,
+          AppRouteNames.onBoarding,
           (route) => false,
-          arguments: AppRoutes.home,
+          arguments: AppRouteNames.home,
         );
       },
     );

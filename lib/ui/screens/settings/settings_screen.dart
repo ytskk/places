@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
-import 'package:places/domain/app_routes.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -42,7 +42,7 @@ class SettingsTableState extends State<SettingsTable> {
       children: [
         ListTile(
           title: Text(AppStrings.settingsScreenDarkThemeTitle),
-          trailing: _SettingsDarkModeSwither(),
+          trailing: _SettingsDarkModeSwitcher(),
         ),
         const HorizontalDivider(),
         ListTile(
@@ -55,9 +55,9 @@ class SettingsTableState extends State<SettingsTable> {
             onPressed: () {
               log('Info button pressed');
               Navigator.of(context).pushNamedAndRemoveUntil(
-                AppRoutes.onboarding,
+                AppRouteNames.onBoarding,
                 (route) => false,
-                arguments: AppRoutes.settings,
+                arguments: AppRouteNames.settings,
               );
             },
             icon: Icon(Icons.info_outline),
@@ -69,27 +69,27 @@ class SettingsTableState extends State<SettingsTable> {
   }
 }
 
-class _SettingsDarkModeSwither extends StatefulWidget {
-  const _SettingsDarkModeSwither({Key? key}) : super(key: key);
+class _SettingsDarkModeSwitcher extends StatefulWidget {
+  const _SettingsDarkModeSwitcher({Key? key}) : super(key: key);
 
   @override
-  State<_SettingsDarkModeSwither> createState() =>
-      _SettingsDarkModeSwitherState();
+  State<_SettingsDarkModeSwitcher> createState() =>
+      _SettingsDarkModeSwitcherState();
 }
 
-class _SettingsDarkModeSwitherState extends State<_SettingsDarkModeSwither> {
+class _SettingsDarkModeSwitcherState extends State<_SettingsDarkModeSwitcher> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: context.watch<SettingsInteractor>().isDarkMode(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        final bool isDarkMode = snapshot.data ?? false;
+    return Consumer<SettingsInteractor>(
+      builder: (BuildContext context, value, Widget? child) {
+        final isDarkMode = value.isDarkMode();
 
         return Switch.adaptive(
           value: isDarkMode,
           onChanged: (bool newValue) {
             // tmp !isDarkMode cos setter is async.
-            log('Theme changed to ${!isDarkMode ? 'dark' : 'light'}');
+            // log('Theme changed to ${!isDarkMode ? 'dark' : 'light'}');
+
             setState(() {
               context.read<SettingsInteractor>().setDarkMode(!isDarkMode);
             });
