@@ -126,7 +126,7 @@ String localizeType(String type) {
 
 class PlaceDto extends Place {
   PlaceDto({
-    required int id,
+    int? id,
     required double lat,
     required double lng,
     required String name,
@@ -135,7 +135,7 @@ class PlaceDto extends Place {
     required String description,
     this.distance = -1,
   }) : super(
-          id: id,
+          id: id ?? DateTime.now().millisecondsSinceEpoch,
           lat: lat,
           lng: lng,
           name: name,
@@ -161,6 +161,6 @@ class PlaceDto extends Place {
 
   @override
   String toString() {
-    return 'PlaceDto#$id: $name (distance: $distance)';
+    return 'PlaceDto#$id: $name ($type) ($distance: {$lat; $lng}) ($description)';
   }
 }

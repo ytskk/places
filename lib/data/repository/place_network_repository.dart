@@ -51,7 +51,7 @@ class PlaceNetworkRepository implements PlaceRepository {
         .toList();
   }
 
-  Future<void> addNewPlace({required Place place}) async {
+  Future<void> addPlace({required Place place}) async {
     final String postBody = jsonEncode(place.toJson());
 
     clientApi.post(ApiConstants.placeUrl, data: postBody);

@@ -93,4 +93,9 @@ class PlaceNetworkInteractor extends PlaceInteractor {
     return placeNetworkRepository.getFilteredPlaces(
         filterOptions: filterOptions);
   }
+
+  @override
+  Future addPlace({required Place place}) {
+    return placeNetworkRepository.addPlace(place: place);
+  }
 }

@@ -14,5 +14,7 @@ class AppRoutes {
     AppRouteNames.placeDetails: (context) =>
         _screenFactory.makePlaceDetailsScreen(),
     AppRouteNames.settings: (context) => _screenFactory.makeSettingsScreen(),
+    AppRouteNames.addNewPlace: (context) =>
+        _screenFactory.makeAddNewPlaceScreen(context),
   };
 }

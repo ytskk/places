@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:places/controllers/settings_controller.dart';
+import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:provider/provider.dart';
@@ -134,14 +134,18 @@ class ClearButton extends StatelessWidget {
 }
 
 class UnderlinedTextField extends StatefulWidget {
-  final TextEditingController controller;
-  final void Function()? onTap;
-
   const UnderlinedTextField({
     Key? key,
     required TextEditingController this.controller,
     void Function()? this.onTap,
+    this.readOnly = false,
+    this.validator,
   }) : super(key: key);
+
+  final TextEditingController controller;
+  final void Function()? onTap;
+  final bool readOnly;
+  final String? Function(String?)? validator;
 
   @override
   State<UnderlinedTextField> createState() => _UnderlinedTextFieldState();
@@ -153,17 +157,11 @@ class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
     final theme = Theme.of(context);
 
     return TextFormField(
-      readOnly: true,
+      readOnly: widget.readOnly,
       onTap: widget.onTap,
       style: theme.textTheme.bodyText2,
       controller: widget.controller,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "";
-        }
-
-        return null;
-      },
+      validator: widget.validator,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         enabledBorder: UnderlineInputBorder(
@@ -179,14 +177,14 @@ class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
         focusedErrorBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: AppThemeData.selectColor(
-              isDark: context.read<Settings>().isDarkTheme,
+              isDark: context.read<SettingsInteractor>().isDarkMode(),
             ).red,
           ),
         ),
         errorBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: AppThemeData.selectColor(
-              isDark: context.read<Settings>().isDarkTheme,
+              isDark: context.read<SettingsInteractor>().isDarkMode(),
             ).red,
           ),
         ),

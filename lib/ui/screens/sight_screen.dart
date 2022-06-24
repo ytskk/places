@@ -342,9 +342,9 @@ class _AddPlaceFloatingButton extends StatelessWidget {
         ],
       ),
       onPressed: () {
-        // Navigator.of(context).pushNamed(
-        //   AppRoutes.addSight,
-        // );
+        Navigator.of(context).pushNamed(
+          AppRouteNames.addNewPlace,
+        );
       },
     );
   }

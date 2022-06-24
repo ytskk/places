@@ -20,4 +20,6 @@ abstract class PlaceInteractor {
   Future getPlaceDetails({required int id});
 
   Future searchPlace({required PlacesFilterRequestDto filterOptions});
+
+  Future addPlace({required Place place});
 }
