@@ -107,4 +107,10 @@ class AppStrings {
 
   // buttons
   static const buttonTextCancel = 'Отмена';
+
+  static const addSightScreenSightDialogErrorActionTitle = 'Исправить';
+  static const addSightScreenSightDialogErrorContentTitle =
+      'При запросе произошла ошибка';
+  static const addSightScreenSightDialogErrorTryLater =
+      'Попробуйте исправить запрос';
 }

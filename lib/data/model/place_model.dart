@@ -1,5 +1,5 @@
 // Model for Place.
-import 'package:places/models/sight.dart';
+import 'dart:math';
 
 class Place {
   final int id;
@@ -20,17 +20,20 @@ class Place {
     required this.lng,
     required this.name,
     required this.urls,
-    required String type,
+    required this.type,
     required this.description,
     bool? isFavorite,
     bool? isVisited,
     DateTime? plannedAt,
     DateTime? visitedAt,
-  })  : this.type = localizeType(type),
-        this.isFavorite = isFavorite ?? false,
+  })  : this.isFavorite = isFavorite ?? false,
         this.isVisited = isVisited ?? false,
         this.plannedAt = plannedAt,
         this.visitedAt = visitedAt;
+
+  static int randomId() {
+    return Random().nextInt(1000000000);
+  }
 
   factory Place.fromJson(Map<String, dynamic> json) => Place(
         id: json['id'],
@@ -60,7 +63,7 @@ class Place {
       'name': name,
       'urls': urls,
       'placeType': type,
-      // 'description': description,
+      'description': description,
     };
   }
 
@@ -92,37 +95,37 @@ class Place {
       description.hashCode;
 }
 
-String localizeType(String type) {
-  if (type == SightCategories.museum.engName) {
-    return SightCategories.museum.name;
-  }
-  if (type == SightCategories.park.engName) {
-    return SightCategories.park.name;
-  }
-  if (type == SightCategories.restaurant.engName) {
-    return SightCategories.restaurant.name;
-  }
-  if (type == SightCategories.theater.engName) {
-    return SightCategories.theater.name;
-  }
-  if (type == SightCategories.hotel.engName) {
-    return SightCategories.hotel.name;
-  }
-  if (type == SightCategories.poi.engName) {
-    return SightCategories.poi.name;
-  }
-  if (type == SightCategories.movie.engName) {
-    return SightCategories.movie.name;
-  }
-  if (type == SightCategories.park.engName) {
-    return SightCategories.park.name;
-  }
-  if (type == 'other') {
-    return 'Другое';
-  }
-
-  return type;
-}
+// String localizeType(String type) {
+//   if (type == SightCategories.museum.engName) {
+//     return SightCategories.museum.name;
+//   }
+//   if (type == SightCategories.park.engName) {
+//     return SightCategories.park.name;
+//   }
+//   if (type == SightCategories.restaurant.engName) {
+//     return SightCategories.restaurant.name;
+//   }
+//   if (type == SightCategories.theater.engName) {
+//     return SightCategories.theater.name;
+//   }
+//   if (type == SightCategories.hotel.engName) {
+//     return SightCategories.hotel.name;
+//   }
+//   if (type == SightCategories.poi.engName) {
+//     return SightCategories.poi.name;
+//   }
+//   if (type == SightCategories.movie.engName) {
+//     return SightCategories.movie.name;
+//   }
+//   if (type == SightCategories.park.engName) {
+//     return SightCategories.park.name;
+//   }
+//   if (type == 'other') {
+//     return 'Другое';
+//   }
+//
+//   return type;
+// }
 
 class PlaceDto extends Place {
   PlaceDto({

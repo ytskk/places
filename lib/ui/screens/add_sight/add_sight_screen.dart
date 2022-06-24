@@ -318,12 +318,26 @@ class _AddSightButton extends StatelessWidget {
               return Button(
                 text: AppStrings.addSightScreenSightCreate.toUpperCase(),
                 onPressed: data
-                    ? () {
-                        context.read<AddSightWidgetModel>().addPlace();
-                        showAlertDialog(
-                          context,
-                          const _AddSightCreateButtonDialog(),
-                        );
+                    ? () async {
+                        final response = await context
+                            .read<AddSightWidgetModel>()
+                            .addPlace();
+
+                        if (response.state == WMState.loaded) {
+                          showAlertDialog(
+                            context,
+                            const _AddSightSuccessDialog(),
+                          );
+                        }
+
+                        if (response.state == WMState.error) {
+                          showAlertDialog(
+                            context,
+                            _AddSightErrorDialog(
+                              error: response.error!.message,
+                            ),
+                          );
+                        }
                       }
                     : null,
                 buttonPadding: ButtonPadding.UltraWide,
@@ -367,8 +381,8 @@ class _AddSightCloseButtonDialog extends StatelessWidget {
   }
 }
 
-class _AddSightCreateButtonDialog extends StatelessWidget {
-  const _AddSightCreateButtonDialog({Key? key}) : super(key: key);
+class _AddSightSuccessDialog extends StatelessWidget {
+  const _AddSightSuccessDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -388,6 +402,34 @@ class _AddSightCreateButtonDialog extends StatelessWidget {
           child: Text(
             AppStrings.addSightScreenSightDialogCreateActionTitle,
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AddSightErrorDialog extends StatelessWidget {
+  const _AddSightErrorDialog({
+    Key? key,
+    required this.error,
+  }) : super(key: key);
+
+  final String error;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomDialog(
+      dialogState: DialogState.Error,
+      content: Text(
+        '${AppStrings.addSightScreenSightDialogErrorContentTitle}: \'$error\'. ${AppStrings.addSightScreenSightDialogErrorTryLater}',
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        TextButton(
+          child: Text(AppStrings.addSightScreenSightDialogErrorActionTitle),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
       ],
     );

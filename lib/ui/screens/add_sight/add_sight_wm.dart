@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mwwm/mwwm.dart';
+import 'package:places/data/api/network_exception.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/models/sight.dart';
@@ -44,7 +46,6 @@ class AddSightWidgetModel extends WidgetModel {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late final FocusNode placeDescriptionFocusNode;
-  final List<String> _placeImages = [];
 
   // states
   final StreamedState<ValidationModel<PlaceCategory>> placeCategoryState =
@@ -156,16 +157,34 @@ class AddSightWidgetModel extends WidgetModel {
   }
 
   // create sight
-  Future<void> addPlace() async {
-    PlaceDto newPlace = PlaceDto(
+  Future<WMObservable<Place>> addPlace() async {
+    List<String> randomPhotos = [
+      'https://picsum.photos/1000/800?random=1',
+      'https://picsum.photos/1000/800?random=2',
+      'https://picsum.photos/1000/800?random=3',
+      'https://picsum.photos/1000/800?random=4',
+    ];
+
+    Place newPlace = Place(
+      id: Place.randomId(),
       name: placeNameState.value.value!,
-      type: placeCategoryState.value.value!.name,
+      type: placeCategoryState.value.value!.engName,
       lat: double.parse(placeCoordinatesLatState.value.value!),
       lng: double.parse(placeCoordinatesLonState.value.value!),
-      urls: [],
+      urls: randomPhotos,
       description: placeDescriptionState.value.value!,
     );
-    log('new place: $newPlace', name: 'AddSightWidgetModel::addPlace');
+    try {
+      final response = await _placeInteractor.addPlace(place: newPlace);
+      final Place place = Place.fromJson(response.data);
+
+      return WMObservable(state: WMState.loaded, result: place);
+    } on DioError catch (e) {
+      return WMObservable(
+        state: WMState.error,
+        error: _placeInteractor.handleError(e),
+      );
+    }
   }
 
   Future<void> _onSelectCategory(PlaceCategory? value) async {
@@ -206,4 +225,22 @@ class FieldsErrors {
 class FieldsPatterns {
   /// Pattern for double value.
   static final RegExp doublePattern = RegExp('([0-9]*[.]*)?[0-9]+\$');
+}
+
+class WMObservable<T> {
+  final T? result;
+  final NetworkException? error;
+  final WMState state;
+
+  WMObservable({
+    this.result,
+    this.error,
+    required this.state,
+  });
+}
+
+enum WMState {
+  loading,
+  loaded,
+  error,
 }
