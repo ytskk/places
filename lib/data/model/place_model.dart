@@ -1,8 +1,5 @@
-// Model for Place.
-import 'dart:math';
-
 class Place {
-  final int id;
+  final int? id;
   final double lat;
   final double lng;
   final String name;
@@ -15,7 +12,7 @@ class Place {
   DateTime? visitedAt;
 
   Place({
-    required this.id,
+    this.id,
     required this.lat,
     required this.lng,
     required this.name,
@@ -30,10 +27,6 @@ class Place {
         this.isVisited = isVisited ?? false,
         this.plannedAt = plannedAt,
         this.visitedAt = visitedAt;
-
-  static int randomId() {
-    return Random().nextInt(1000000000);
-  }
 
   factory Place.fromJson(Map<String, dynamic> json) => Place(
         id: json['id'],

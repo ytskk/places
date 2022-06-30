@@ -18,11 +18,6 @@ class AddSightWidgetModel extends WidgetModel {
   final PlaceInteractor _placeInteractor;
 
   @override
-  onLoad() {
-    super.onLoad();
-  }
-
-  @override
   onBind() {
     super.onBind();
     placeDescriptionFocusNode = FocusNode();
@@ -166,7 +161,6 @@ class AddSightWidgetModel extends WidgetModel {
     ];
 
     Place newPlace = Place(
-      id: Place.randomId(),
       name: placeNameState.value.value!,
       type: placeCategoryState.value.value!.engName,
       lat: double.parse(placeCoordinatesLatState.value.value!),
