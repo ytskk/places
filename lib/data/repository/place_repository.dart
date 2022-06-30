@@ -12,7 +12,7 @@ abstract class PlaceRepository {
     required int id,
   });
 
-  Future<void> addNewPlace({
+  Future<void> addPlace({
     required Place place,
   });
 }

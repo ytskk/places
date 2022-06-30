@@ -22,7 +22,7 @@ InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
   },
   onError: (DioError error, ErrorInterceptorHandler handler) {
     // print(
-    //     'onError: ${error.response?.statusCode} ${error.response?.statusMessage}');
+    // 'onError: ${error.response?.statusCode} ${error.response?.data['error'].toString()}');
 
     return handler.next(error);
   },
@@ -69,14 +69,17 @@ class ClientApi {
   Future<Response> post(
     String path, {
     required dynamic data,
-  }) async =>
-      dioWithInterceptors.post(path, data: data);
+  }) async {
+    final response = await dioWithInterceptors.post(path, data: data);
+
+    return response;
+  }
 
   NetworkException handleError(DioError error) {
     final exception = NetworkException(
       name: error.requestOptions.path,
       code: error.response?.statusCode,
-      message: error.error.toString(),
+      message: error.response!.data['error'].toString(),
     );
 
     return exception;

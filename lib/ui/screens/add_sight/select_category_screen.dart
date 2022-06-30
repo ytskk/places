@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:places/controllers/add_sight_controller.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/mocks.dart';
+import 'package:places/models/sight.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
-import 'package:provider/provider.dart';
 
 class SelectCategoryScreen extends StatefulWidget {
-  const SelectCategoryScreen({Key? key}) : super(key: key);
+  const SelectCategoryScreen({
+    Key? key,
+    required this.selectedCategory,
+  }) : super(key: key);
+
+  final PlaceCategory? selectedCategory;
 
   @override
   _SelectCategoryScreenState createState() => _SelectCategoryScreenState();
 }
 
 class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
-  late final TextEditingController selectedCategory;
+  late PlaceCategory? selectedCategory;
 
   @override
   void initState() {
     super.initState();
 
-    selectedCategory =
-        TextEditingController(text: context.read<AddSight>().category.value);
-
-    // to update the root value. It's removing at [CustomTextField] dispose.
-    selectedCategory.addListener(() => setState(() {}));
+    selectedCategory = widget.selectedCategory;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    print(selectedCategory.text);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -41,7 +40,14 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            _CategoriesTable(selectedCategory: selectedCategory),
+            _CategoriesTable(
+              selectedCategory: widget.selectedCategory,
+              onCategoryTap: (PlaceCategory newCategory) {
+                setState(() {
+                  selectedCategory = newCategory;
+                });
+              },
+            ),
             SliverFillRemaining(
               hasScrollBody: false,
               fillOverscroll: true,
@@ -57,18 +63,29 @@ class _SelectCategoryScreenState extends State<SelectCategoryScreen> {
 }
 
 class _CategoriesTable extends StatefulWidget {
-  final TextEditingController selectedCategory;
-
   const _CategoriesTable({
     Key? key,
-    required TextEditingController this.selectedCategory,
+    required this.selectedCategory,
+    required this.onCategoryTap,
   }) : super(key: key);
+
+  final PlaceCategory? selectedCategory;
+  final Function(PlaceCategory newValue) onCategoryTap;
 
   @override
   State<_CategoriesTable> createState() => _CategoriesTableState();
 }
 
 class _CategoriesTableState extends State<_CategoriesTable> {
+  late PlaceCategory? selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+
+    selectedCategory = widget.selectedCategory;
+  }
+
   @override
   Widget build(BuildContext context) {
     final checkColor = Theme.of(context).primaryColor;
@@ -79,16 +96,16 @@ class _CategoriesTableState extends State<_CategoriesTable> {
           return Column(
             children: [
               ListTile(
-                trailing:
-                    filterCategories[index] == widget.selectedCategory.text
-                        ? Icon(
-                            Icons.check,
-                            color: checkColor,
-                          )
-                        : null,
+                trailing: filterCategories[index] == selectedCategory
+                    ? Icon(
+                        Icons.check,
+                        color: checkColor,
+                      )
+                    : null,
                 onTap: () {
+                  widget.onCategoryTap(filterCategories[index]);
                   setState(() {
-                    widget.selectedCategory.text = filterCategories[index].name;
+                    selectedCategory = filterCategories[index];
                   });
                 },
                 title: Text(filterCategories[index].name),
@@ -104,16 +121,16 @@ class _CategoriesTableState extends State<_CategoriesTable> {
 }
 
 class _SightCategorySelectButton extends StatelessWidget {
-  final TextEditingController selectedCategory;
-
   const _SightCategorySelectButton({
     Key? key,
-    required TextEditingController this.selectedCategory,
+    required this.selectedCategory,
   }) : super(key: key);
+
+  final PlaceCategory? selectedCategory;
 
   @override
   Widget build(BuildContext context) {
-    bool isDisabled = !(selectedCategory.text.length > 0);
+    bool isDisabled = selectedCategory == null;
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -126,10 +143,7 @@ class _SightCategorySelectButton extends StatelessWidget {
             onPressed: isDisabled
                 ? null
                 : () {
-                    context
-                        .read<AddSight>()
-                        .validateCategory(selectedCategory.text);
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(selectedCategory);
                   },
             buttonPadding: ButtonPadding.UltraWide,
           ),

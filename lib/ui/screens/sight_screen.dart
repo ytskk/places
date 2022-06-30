@@ -74,7 +74,7 @@ class _PlaceFutureListState extends State<_PlaceFutureList> {
   Future _getPlaces() async {
     await _store.fetchPlaces(
       radiusTo: 100000,
-      radiusFrom: 40000,
+      radiusFrom: 10,
       types: context.read<Filter>().selectedCategories,
     );
   }
@@ -342,9 +342,9 @@ class _AddPlaceFloatingButton extends StatelessWidget {
         ],
       ),
       onPressed: () {
-        // Navigator.of(context).pushNamed(
-        //   AppRoutes.addSight,
-        // );
+        Navigator.of(context).pushNamed(
+          AppRouteNames.addNewPlace,
+        );
       },
     );
   }

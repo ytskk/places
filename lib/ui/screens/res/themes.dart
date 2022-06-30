@@ -138,6 +138,7 @@ class AppThemeData {
           borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         errorStyle: TextStyle(height: 0),
+        // errorMaxLines: 1,
         focusedBorder: OutlineInputBorder(
           borderSide:
               BorderSide(color: appColors.green.withOpacity(0.4), width: 2),

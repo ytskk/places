@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:places/data/api/network_exception.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/models/coordinates.dart';
@@ -11,8 +12,10 @@ class PlaceNetworkInteractor extends PlaceInteractor {
   ///
   /// TODO: replace with location request.
   static final Coordinates _coordinates = Coordinates(
-    55.754093,
-    37.620407,
+    // 55.754093,
+    // 37.620407,
+    12.0,
+    17.0,
   );
 
   PlaceNetworkInteractor(
@@ -92,5 +95,14 @@ class PlaceNetworkInteractor extends PlaceInteractor {
   Future searchPlace({required PlacesFilterRequestDto filterOptions}) {
     return placeNetworkRepository.getFilteredPlaces(
         filterOptions: filterOptions);
+  }
+
+  @override
+  Future addPlace({required Place place}) async =>
+      await placeNetworkRepository.addPlace(place: place);
+
+  @override
+  NetworkException handleError(DioError error) {
+    return placeNetworkRepository.handleError(error);
   }
 }

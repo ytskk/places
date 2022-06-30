@@ -1,8 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mwwm/mwwm.dart';
 import 'package:places/data/blocks/favorites/favorites_bloc.dart';
 import 'package:places/data/blocks/favorites/favorites_event.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
+import 'package:places/data/interactor/place_network_interactor.dart';
+import 'package:places/ui/screens/add_sight/add_sight_screen.dart';
+import 'package:places/ui/screens/add_sight/add_sight_wm.dart';
 import 'package:places/ui/screens/filter/filter_screen.dart';
 import 'package:places/ui/screens/main_screen.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
@@ -55,5 +59,18 @@ class ScreenFactory {
 
   Widget makeSettingsScreen() {
     return SettingsScreen();
+  }
+
+  Widget makeAddNewPlaceScreen(BuildContext context) {
+    final placeInteractor = context.read<PlaceNetworkInteractor>();
+
+    return AddSightScreen(
+      widgetModelBuilder: (BuildContext context) {
+        return AddSightWidgetModel(
+          WidgetModelDependencies(),
+          placeInteractor,
+        );
+      },
+    );
   }
 }

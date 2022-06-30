@@ -57,4 +57,9 @@ class PlaceCategory {
     required this.name,
     required this.engName,
   });
+
+  @override
+  String toString() {
+    return 'PlaceCategory{name: $name, engName: $engName}';
+  }
 }

@@ -51,10 +51,13 @@ class PlaceNetworkRepository implements PlaceRepository {
         .toList();
   }
 
-  Future<void> addNewPlace({required Place place}) async {
+  Future<dynamic> addPlace({required Place place}) async {
     final String postBody = jsonEncode(place.toJson());
 
-    clientApi.post(ApiConstants.placeUrl, data: postBody);
+    final response =
+        await clientApi.post(ApiConstants.placeUrl, data: postBody);
+
+    return response;
   }
 
   NetworkException handleError(DioError error) {

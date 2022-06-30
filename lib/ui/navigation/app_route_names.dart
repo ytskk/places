@@ -8,4 +8,5 @@ class AppRouteNames {
   static const String filter = '/filter';
   static const String placeDetails = '/placeDetails';
   static const String settings = '/settings';
+  static const String addNewPlace = '/add-new-place';
 }
