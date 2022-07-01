@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:places/data/model/place_model.dart';
 
-class AppDb extends ChangeNotifier {
+class AppDb {
   // # Favorites.
 
   // definitions
@@ -26,7 +25,9 @@ class AppDb extends ChangeNotifier {
     ),
   ];
 
-  bool _isDarkMode = false;
+  bool _isDarkMode = true;
+
+  bool _isFirstOpen = false;
 
   // getters
   List<Place> get favorites => _favorites;
@@ -41,10 +42,11 @@ class AppDb extends ChangeNotifier {
 
   bool get isDarkMode => _isDarkMode;
 
+  bool get isFirstOpen => _isFirstOpen;
+
   // setters
   void setDarkMode(bool value) {
     _isDarkMode = value;
-    notifyListeners();
   }
 
   // methods
@@ -56,18 +58,15 @@ class AppDb extends ChangeNotifier {
   void addFavorite(Place place) {
     _favorites.add(place);
     place.isFavorite = true;
-    notifyListeners();
   }
 
   void removeFavorite(Place place) {
     _favorites.removeWhere((element) => element.id == place.id);
     place.isFavorite = false;
-    notifyListeners();
   }
 
   void setPlannedAt(Place place, DateTime? plannedAt) {
     place.plannedAt = plannedAt;
-    notifyListeners();
   }
 
   Place getFavoriteById(int id) {

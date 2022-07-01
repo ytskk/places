@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/blocs.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/navigation/app_route_names.dart';
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -39,6 +37,7 @@ class SettingsTableState extends State<SettingsTable> {
         Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.2);
 
     return ListView(
+      primary: false,
       children: [
         ListTile(
           title: Text(AppStrings.settingsScreenDarkThemeTitle),
@@ -53,7 +52,6 @@ class SettingsTableState extends State<SettingsTable> {
             splashRadius: 24,
             color: iconColor,
             onPressed: () {
-              log('Info button pressed');
               Navigator.of(context).pushNamedAndRemoveUntil(
                 AppRouteNames.onBoarding,
                 (route) => false,
@@ -80,20 +78,13 @@ class _SettingsDarkModeSwitcher extends StatefulWidget {
 class _SettingsDarkModeSwitcherState extends State<_SettingsDarkModeSwitcher> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<SettingsInteractor>(
-      builder: (BuildContext context, value, Widget? child) {
-        final isDarkMode = value.isDarkMode();
+    return BlocBuilder<PreferencesCubit, PreferencesState>(
+      builder: (BuildContext context, state) {
+        final isDarkMode = state.isDarkMode;
 
         return Switch.adaptive(
           value: isDarkMode,
-          onChanged: (bool newValue) {
-            // tmp !isDarkMode cos setter is async.
-            // log('Theme changed to ${!isDarkMode ? 'dark' : 'light'}');
-
-            setState(() {
-              context.read<SettingsInteractor>().setDarkMode(!isDarkMode);
-            });
-          },
+          onChanged: (_) => context.read<PreferencesCubit>().toggleDarkMode(),
         );
       },
     );

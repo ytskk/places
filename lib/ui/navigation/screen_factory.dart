@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:places/data/blocks/favorites/favorites_bloc.dart';
-import 'package:places/data/blocks/favorites/favorites_event.dart';
+import 'package:places/data/blocs/blocs.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/interactor/place_network_interactor.dart';
 import 'package:places/ui/screens/add_sight/add_sight_screen.dart';
@@ -14,9 +13,14 @@ import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
 import 'package:places/ui/screens/sight_search/sight_search_screen.dart';
+import 'package:places/ui/screens/splash_screen.dart';
 import 'package:places/ui/screens/visiting/favorites_screen.dart';
 
 class ScreenFactory {
+  Widget makeSplashScreen() {
+    return const SplashScreen();
+  }
+
   Widget makeMainScreen() {
     return MainScreen();
   }

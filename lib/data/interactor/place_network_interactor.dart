@@ -28,21 +28,13 @@ class PlaceNetworkInteractor extends PlaceInteractor {
   /// Sorts by distance from [_coordinates].
   /// BUG: returns distance only if at least one type is provided.
   Future<List<Place>> getPlaces({
-    required double radiusTo,
+    required PlacesFilterRequestDto filterOptions,
     required double radiusFrom,
-    List<String>? types,
   }) async {
-    assert(radiusFrom <= radiusTo);
-
     try {
       final List<PlaceDto> places =
           await placeNetworkRepository.getFilteredPlaces(
-        filterOptions: PlacesFilterRequestDto(
-          radius: radiusTo,
-          lat: _coordinates.lat,
-          lng: _coordinates.lon,
-          typeFilter: types,
-        ),
+        filterOptions: filterOptions,
       );
 
       // Exclude places with distance less than [radiusFrom].

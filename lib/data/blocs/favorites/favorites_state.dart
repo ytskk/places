@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:places/data/model/place_model.dart';
+part of 'favorites_bloc.dart';
 
 abstract class FavoritesState extends Equatable {
   const FavoritesState();

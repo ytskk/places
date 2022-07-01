@@ -106,9 +106,6 @@ class _FilterButtonState extends State<FilterButton> {
     if (category == SightCategories.cafe.engName) {
       return AppIcons.cafe;
     }
-    if (category == SightCategories.poi.engName) {
-      return AppIcons.poi;
-    }
 
     return AppIcons.error;
   }

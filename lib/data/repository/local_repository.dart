@@ -7,5 +7,7 @@ class LocalRepository {
 
   bool get isDarkMode => _appDb.isDarkMode;
 
+  bool get isFirstOpen => _appDb.isFirstOpen;
+
   Future<void> setDarkMode(bool value) async => _appDb.setDarkMode(value);
 }

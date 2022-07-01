@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:places/controllers/filter_controller.dart';
 import 'package:places/data/model/place_model.dart';
-import 'package:places/data/redux/actions/search_action.dart';
 import 'package:places/data/redux/states/app_state.dart';
 import 'package:places/data/redux/states/search_state.dart';
-import 'package:places/domain/app_constants.dart';
-import 'package:places/domain/app_strings.dart';
-import 'package:places/models/places_filter_request_dto.dart';
-import 'package:places/ui/components/custom_app_bar.dart';
-import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
 import 'package:places/ui/components/loading_progress_indicator.dart';
-import 'package:places/ui/components/searchbar.dart';
 import 'package:places/ui/navigation/app_route_names.dart';
 import 'package:places/utils/extensions/list_extension.dart';
-import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
@@ -49,44 +40,47 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   Widget build(BuildContext context) {
     final backButtonColor = Theme.of(context).textTheme.bodyText2!.color;
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        leading: BackButton(
-          color: backButtonColor,
-        ),
-        title: Text(AppStrings.sightTitle),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(bottomAppBarHeight),
-          child: SearchBar(
-            onChange: (value) {
-              print('onChange: $value');
-              StoreProvider.of<AppState>(context).dispatch(LoadSearchAction(
-                PlacesFilterRequestDto(
-                  nameFilter: value,
-                  radius: 10000000.0,
-                  lat: 55.754093,
-                  lng: 37.620407,
-                  typeFilter: context.read<Filter>().selectedCategories,
-                ),
-              ));
-            },
-            controller: _searchFieldController,
-            suffix: ClearButton(
-              controller: _searchFieldController,
-            ),
-            autofocus: true,
-            readOnly: false,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            _SearchContent(controller: _searchFieldController),
-          ],
-        ),
-      ),
+    return Center(
+      child: Text('213'),
     );
+    // return Scaffold(
+    //   appBar: CustomAppBar(
+    //     leading: BackButton(
+    //       color: backButtonColor,
+    //     ),
+    //     title: Text(AppStrings.sightTitle),
+    //     bottom: PreferredSize(
+    //       preferredSize: Size.fromHeight(bottomAppBarHeight),
+    //       child: SearchBar(
+    //         onChange: (value) {
+    //           print('onChange: $value');
+    //           StoreProvider.of<AppState>(context).dispatch(LoadSearchAction(
+    //             PlacesFilterRequestDto(
+    //               nameFilter: value,
+    //               radius: 10000000.0,
+    //               lat: 55.754093,
+    //               lng: 37.620407,
+    //               typeFilter: context.read<Filter>().selectedCategories,
+    //             ),
+    //           ));
+    //         },
+    //         controller: _searchFieldController,
+    //         suffix: ClearButton(
+    //           controller: _searchFieldController,
+    //         ),
+    //         autofocus: true,
+    //         readOnly: false,
+    //       ),
+    //     ),
+    //   ),
+    //   body: SafeArea(
+    //     child: CustomScrollView(
+    //       slivers: [
+    //         _SearchContent(controller: _searchFieldController),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }
 

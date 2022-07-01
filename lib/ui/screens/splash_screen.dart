@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/blocs.dart';
 import 'package:places/domain/app_constants.dart' as constants;
 import 'package:places/domain/app_icons.dart';
 import 'package:places/ui/components/icon_box.dart';
-import 'package:places/ui/navigation/app_route_names.dart';
+import 'package:places/ui/navigation/screen_factory.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -12,16 +14,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  /// Controls app loading status.
-  ///
-  /// TODO: implement loading status.
-  late Future<bool> isInitialized;
-
   @override
   void initState() {
     super.initState();
 
-    _moveToNext();
+    _moveToNext(context);
   }
 
   /// Controls app loading progress. When it's done, it moves to the next screen.
@@ -29,16 +26,18 @@ class _SplashScreenState extends State<SplashScreen> {
   /// On loading shows an animation.
   ///
   /// On push, clears navigation stack.
-  Future<void> _moveToNext() async {
+  Future<void> _moveToNext(BuildContext context) async {
     await Future.delayed(
       const Duration(seconds: 2),
       () {
-        print('navigating to the next screen');
-        Navigator.pushNamedAndRemoveUntil(
+        Navigator.pushReplacement(
           context,
-          AppRouteNames.onBoarding,
-          (route) => false,
-          arguments: AppRouteNames.home,
+          MaterialPageRoute(
+            builder: (context) =>
+                context.read<PreferencesCubit>().state.isFirstOpen
+                    ? ScreenFactory().makeOnboardingScreen()
+                    : ScreenFactory().makeMainScreen(),
+          ),
         );
       },
     );

@@ -1,7 +1,11 @@
 import 'package:bloc/bloc.dart';
-import 'package:places/data/blocks/favorites/favorites_event.dart';
-import 'package:places/data/blocks/favorites/favorites_state.dart';
+import 'package:equatable/equatable.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
+import 'package:places/data/model/place_model.dart';
+
+part 'favorites_event.dart';
+
+part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   final FavoritesInteractor _favoritesInteractor;

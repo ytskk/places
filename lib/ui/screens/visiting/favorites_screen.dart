@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/blocks/favorites/favorites_bloc.dart';
-import 'package:places/data/blocks/favorites/favorites_state.dart';
+import 'package:places/data/blocs/blocs.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_icons.dart';

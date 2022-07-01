@@ -6,6 +6,7 @@ class AppRoutes {
   static final _screenFactory = ScreenFactory();
 
   final Map<String, WidgetBuilder> routes = {
+    AppRouteNames.splash: (context) => _screenFactory.makeSplashScreen(),
     AppRouteNames.onBoarding: (context) =>
         _screenFactory.makeOnboardingScreen(),
     AppRouteNames.home: (context) => _screenFactory.makeMainScreen(),
