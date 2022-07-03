@@ -1,4 +1,5 @@
 import 'package:places/data/model/place_model.dart';
+import 'package:places/models/sight.dart';
 
 class AppDb {
   // # Favorites.
@@ -11,7 +12,7 @@ class AppDb {
       lng: 13.123,
       name: "name",
       urls: [""],
-      type: "cafe",
+      type: SightCategories.cafe,
       description: "description",
     ),
     Place(
@@ -20,7 +21,7 @@ class AppDb {
       lng: 13.123,
       name: "Second",
       urls: [""],
-      type: "hotel",
+      type: SightCategories.hotel,
       description: "description",
     ),
   ];

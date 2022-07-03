@@ -18,7 +18,7 @@ abstract class PlaceInteractor {
     required double radiusFrom,
   });
 
-  Future getPlaceDetails({required int id});
+  Future getPlaceDetails({required String id});
 
   Future searchPlace({required PlacesFilterRequestDto filterOptions});
 

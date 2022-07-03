@@ -35,7 +35,14 @@ class _SightScreenState extends State<SightScreen> {
             ];
           },
           body: RefreshIndicator(
-            onRefresh: () async {},
+            onRefresh: () async {
+              // context.read<PlacesBloc>().add(
+              //       PlacesLoad(
+              //         filterOptions: filterOptions,
+              //         radiusFrom: radiusFrom,
+              //       ),
+              //     );
+            },
             child: CustomScrollView(
               slivers: [
                 const _PlacesList(),
@@ -160,7 +167,7 @@ class _PlaceListItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           AppRouteNames.placeDetails,
-          arguments: place.id,
+          arguments: place.id.toString(),
         );
       },
       actions: [
@@ -191,6 +198,7 @@ class __SightHeartIconButtonToggleableState
   Widget build(BuildContext context) {
     return Button.icon(
       icon: AppIcons.heart,
+      background: Colors.transparent,
       onPressed: () {},
     );
     // return FutureBuilder(

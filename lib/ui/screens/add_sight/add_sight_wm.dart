@@ -162,7 +162,7 @@ class AddSightWidgetModel extends WidgetModel {
 
     Place newPlace = Place(
       name: placeNameState.value.value!,
-      type: placeCategoryState.value.value!.engName,
+      type: PlaceCategory.fromJson(placeCategoryState.value.value!.engName),
       lat: double.parse(placeCoordinatesLatState.value.value!),
       lng: double.parse(placeCoordinatesLonState.value.value!),
       urls: randomPhotos,

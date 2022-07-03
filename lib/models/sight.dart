@@ -87,6 +87,36 @@ class PlaceCategory {
     required this.engName,
   });
 
+  factory PlaceCategory.fromJson(String engName) {
+    return localizeCategory(engName);
+  }
+
+  static PlaceCategory localizeCategory(String engName) {
+    switch (engName) {
+      case 'restaurant':
+        return SightCategories.restaurant;
+      case 'cafe':
+        return SightCategories.cafe;
+      case 'movie':
+        return SightCategories.movie;
+      case 'park':
+        return SightCategories.park;
+      case 'museum':
+        return SightCategories.museum;
+      case 'temple':
+        return SightCategories.temple;
+      case 'hotel':
+        return SightCategories.hotel;
+      case 'theatre':
+        return SightCategories.theater;
+      case 'monument':
+        return SightCategories.monument;
+      case 'other':
+      default:
+        return SightCategories.other;
+    }
+  }
+
   @override
   String toString() {
     return 'PlaceCategory{name: $name, engName: $engName}';

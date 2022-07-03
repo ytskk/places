@@ -4,20 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:places/data/api/network_exception.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place_model.dart';
-import 'package:places/models/coordinates.dart';
 import 'package:places/models/places_filter_request_dto.dart';
 
 class PlaceNetworkInteractor extends PlaceInteractor {
-  /// Current user coordinates.
-  ///
-  /// TODO: replace with location request.
-  static final Coordinates _coordinates = Coordinates(
-    // 55.754093,
-    // 37.620407,
-    12.0,
-    17.0,
-  );
-
   PlaceNetworkInteractor(
     placeNetworkRepository,
     placeStorageRepository,
@@ -75,10 +64,8 @@ class PlaceNetworkInteractor extends PlaceInteractor {
     return places..sort((a, b) => a.distance.compareTo(b.distance));
   }
 
-  Future getPlaceDetails({required int id}) async {
+  Future getPlaceDetails({required String id}) async {
     final response = await placeNetworkRepository.getPlaceById(id: id);
-
-    // final place = await placeStorageRepository.getFavorite(response);
 
     return response;
   }

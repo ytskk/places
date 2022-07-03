@@ -12,7 +12,6 @@ class PreferencesState extends Equatable {
   PreferencesState copyWith({
     bool? isDarkMode,
     bool? isFirstOpen,
-    bool? isAppReady,
   }) {
     return PreferencesState(
       isDarkMode: isDarkMode ?? this.isDarkMode,

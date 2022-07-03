@@ -4,6 +4,7 @@ import 'package:places/models/card_info.dart';
 import 'package:places/ui/components/card/card_header.dart';
 import 'package:places/ui/components/card/card_information.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
+import 'package:places/utils/extensions/list_extension.dart';
 
 class MyCard extends StatelessWidget {
   /// Creates card widget.
@@ -41,7 +42,8 @@ class MyCard extends StatelessWidget {
           // mainAxisSize: MainAxisSize.min,
           children: [
             // header + photo
-            NetworkImageBox(place.urls.first, height: 200),
+            NetworkImageBox(ListExtension(place.urls).takeFirstImgOrTemp,
+                height: 200),
             // card info
             CardInformation(cardInfo: cardInfo),
           ],
@@ -56,7 +58,7 @@ class MyCard extends StatelessWidget {
           ),
         ),
         // text + action buttons
-        CardHeader(title: place.type, actions: actions),
+        CardHeader(title: place.type.name, actions: actions),
       ],
     );
   }

@@ -191,7 +191,7 @@ class _SearchResultListTile extends StatelessWidget {
               textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w700),
         ),
         subtitle: Text(
-          sight.type,
+          sight.type.name,
           style: textTheme.bodyText1,
         ),
         // leading: _SightImageBox(imageUrl: sight.url),

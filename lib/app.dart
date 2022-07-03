@@ -55,6 +55,13 @@ class App extends StatelessWidget {
               )..add(PlacesLoadInitial());
             },
           ),
+          BlocProvider<PlaceDetailsCubit>(
+            create: (BuildContext context) {
+              return PlaceDetailsCubit(
+                placeInteractor: context.read<PlaceInteractor>(),
+              );
+            },
+          ),
         ],
         child: const MyApp(),
       ),

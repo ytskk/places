@@ -1,10 +1,12 @@
+import 'package:places/models/sight.dart';
+
 class Place {
   final int? id;
   final double lat;
   final double lng;
   final String name;
   final List<String> urls;
-  final String type;
+  final PlaceCategory type;
   final String description;
   bool isFavorite;
   bool isVisited;
@@ -34,7 +36,7 @@ class Place {
         lng: json['lng'],
         name: json['name'],
         urls: List<String>.from(json['urls']),
-        type: json['placeType'],
+        type: PlaceCategory.fromJson(json['placeType']),
         description: json['description'],
       );
 
@@ -127,7 +129,7 @@ class PlaceDto extends Place {
     required double lng,
     required String name,
     required List<String> urls,
-    required String type,
+    required PlaceCategory type,
     required String description,
     this.distance = -1,
   }) : super(
@@ -150,7 +152,7 @@ class PlaceDto extends Place {
         lng: json['lng'],
         name: json['name'],
         urls: List<String>.from(json['urls']),
-        type: json['placeType'],
+        type: PlaceCategory.fromJson(json['placeType']),
         description: json['description'],
         distance: json['distance'],
       );

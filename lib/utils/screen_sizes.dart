@@ -23,7 +23,6 @@ ScreenSizes resolveScreenHeightSize(double height) {
 }
 
 ScreenSizes resolveScreenWidthSize(double width) {
-  print('screensize: $width');
   if (width < _screenSizeWidthSmall) {
     return ScreenSizes.Small;
   } else if (width < _screenSizeWidthMedium) {

@@ -31,7 +31,7 @@ class PlaceNetworkRepository implements PlaceRepository {
   /// Returns place by id from network.
   ///
   /// TODO: handle id error.
-  Future<Place> getPlaceById({required int id}) async {
+  Future<Place> getPlaceById({required String id}) async {
     final response = await clientApi.get('${ApiConstants.placeUrl}/$id');
 
     return Place.fromJson(response.data);
