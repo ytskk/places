@@ -32,6 +32,9 @@ dependencies:
   equatable: ^2.0.3
   bloc: ^8.0.3
   flutter_bloc: ^8.0.1
+  formz: ^0.4.1
+
+  rxdart: ^0.27.4
 
   redux: ^5.0.0
   flutter_redux: ^0.10.0

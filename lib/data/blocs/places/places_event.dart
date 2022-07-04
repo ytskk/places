@@ -21,5 +21,5 @@ class PlacesLoad extends PlacesEvent {
   });
 
   @override
-  List<Object> get props => [filterOptions];
+  List<Object> get props => [filterOptions, radiusFrom];
 }

@@ -123,11 +123,12 @@ class _PlaceDetailsLoadSuccess extends StatelessWidget {
                         sightWorkingStatus:
                             '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
                       ),
-                      if (sight.description.isNotEmpty)
+                      if (sight.description != null &&
+                          sight.description!.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 24),
                           child: Text(
-                            sight.description,
+                            sight.description!,
                             style: textTheme.bodyText2,
                           ),
                         ),
@@ -450,7 +451,6 @@ class _RoundedBackButton extends StatelessWidget {
                 splashColor: Colors.black12,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 onTap: () {
-                  print("Back button clicked");
                   Navigator.pop(context);
                 },
                 child: Icon(

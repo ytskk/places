@@ -7,7 +7,7 @@ class Place {
   final String name;
   final List<String> urls;
   final PlaceCategory type;
-  final String description;
+  final String? description;
   bool isFavorite;
   bool isVisited;
   DateTime? plannedAt;
@@ -52,12 +52,11 @@ class Place {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'lat': lat,
       'lng': lng,
       'name': name,
       'urls': urls,
-      'placeType': type,
+      'placeType': type.engName,
       'description': description,
     };
   }

@@ -2,52 +2,86 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mwwm/mwwm.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/dialog.dart';
-import 'package:places/models/sight.dart';
-import 'package:places/models/validation_model.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/custom_text_field.dart';
 import 'package:places/ui/components/dialog/custom_dialog.dart';
 import 'package:places/ui/components/rounded_box.dart';
 import 'package:places/ui/components/row_group.dart';
-import 'package:places/ui/screens/add_sight/add_sight_wm.dart';
-import 'package:places/ui/screens/add_sight/select_category_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:relation/relation.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
+import 'package:places/ui/screens/add_sight/bloc/add_sight_bloc.dart';
+import 'package:places/ui/screens/add_sight/models/models.dart';
+import 'package:places/ui/screens/add_sight/models/place_category.dart';
+import 'package:places/ui/screens/add_sight/models/place_coordinates.dart';
+import 'package:places/ui/screens/add_sight/models/place_name.dart';
 
-class AddSightScreen extends CoreMwwmWidget<AddSightWidgetModel> {
-  AddSightScreen({
-    required WidgetModelBuilder<AddSightWidgetModel> widgetModelBuilder,
-  }) : super(widgetModelBuilder: widgetModelBuilder);
+import 'view.dart';
+
+class AddSightScreen extends StatefulWidget {
+  const AddSightScreen({Key? key}) : super(key: key);
 
   @override
-  WidgetState<CoreMwwmWidget<AddSightWidgetModel>, AddSightWidgetModel>
-      createWidgetState() {
-    return _AddSightScreenState();
-  }
+  State<AddSightScreen> createState() => _AddSightScreenState();
 }
 
-class _AddSightScreenState
-    extends WidgetState<AddSightScreen, AddSightWidgetModel> {
+class _AddSightScreenState extends State<AddSightScreen> {
+  late final FocusNode descriptionFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    descriptionFocusNode = FocusNode();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Provider<AddSightWidgetModel>(create: (BuildContext context) {
-      return wm;
-    }, builder: (BuildContext context, Widget? child) {
-      return WillPopScope(
-        onWillPop: () async {
-          bool willPop = await showAlertDialog(
-                context,
-                const _AddSightCloseButtonDialog(),
-              ) ??
-              false;
+    return WillPopScope(
+      onWillPop: () async {
+        bool willPop = await showDialog<bool>(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return const _AddSightCloseButtonDialog();
+              },
+            ) ??
+            false;
 
-          return willPop;
+        return willPop;
+      },
+      child: BlocListener<AddSightBloc, AddSightState>(
+        listenWhen: (previous, current) => previous.status.isValidated,
+        listener: (context, state) {
+          if (state.status.isSubmissionSuccess) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return _AddSightSubmissionSuccessDialog(
+                  placeId: state.placeId!,
+                );
+              },
+            );
+          }
+
+          if (state.status.isSubmissionFailure) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return _AddSightSubmissionFailureDialog(
+                  // error: context.read<AddSightBloc>().state.error!,
+                  error: state.error!,
+                );
+              },
+            );
+          }
         },
         child: Scaffold(
           appBar: CustomAppBar(
@@ -65,7 +99,7 @@ class _AddSightScreenState
               slivers: [
                 SliverToBoxAdapter(
                   child: Form(
-                    key: context.read<AddSightWidgetModel>().formKey,
+                    key: context.read<AddSightBloc>().state.formKey,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
@@ -74,9 +108,10 @@ class _AddSightScreenState
                           const _CategoryPhotoLoader(),
                           const _CategorySelection(),
                           const _SightName(),
-                          const _SightCoordinates(),
+                          _SightCoordinates(
+                              nextFocusNode: descriptionFocusNode),
                           const _ShowOnMap(),
-                          const _SightDescription(),
+                          _SightDescription(focusNode: descriptionFocusNode),
                         ],
                       ),
                     ),
@@ -85,16 +120,14 @@ class _AddSightScreenState
                 const SliverFillRemaining(
                   hasScrollBody: false,
                   fillOverscroll: true,
-                  child: _AddSightButton(),
+                  child: const _AddSightButton(),
                 ),
               ],
             ),
           ),
-          // ),
-          // bottomNavigationBar: const _SightCreateButton(),
         ),
-      );
-    });
+      ),
+    );
   }
 }
 
@@ -140,34 +173,37 @@ class _CategorySelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RowGroup(
-      title: Text(AppStrings.addSightScreenCategoryTitle.toUpperCase()),
-      child: StreamedStateBuilder<ValidationModel<PlaceCategory>>(
-        streamedState: context.watch<AddSightWidgetModel>().placeCategoryState,
-        builder: (BuildContext context, data) {
-          return UnderlinedTextField(
+    return BlocBuilder<AddSightBloc, AddSightState>(
+      buildWhen: (previous, current) =>
+          current.placeCategory.value != null &&
+          previous.placeCategory != current.placeCategory,
+      builder: (context, state) {
+        return RowGroup(
+          title: Text(AppStrings.addSightScreenCategoryTitle.toUpperCase()),
+          child: UnderlinedTextField(
+            controller: TextEditingController(
+              text: state.placeCategory.value?.name ?? '',
+            ),
             readOnly: true,
-            controller: TextEditingController(text: data.value?.name ?? ''),
-            validator: (_) => data.error,
+            validator: (_) => state.placeCategory.error?.message,
             onTap: () async {
-              final oldCategory =
-                  context.read<AddSightWidgetModel>().placeCategoryState.value;
+              final oldCategory = state.placeCategory.value;
+
               final newCategory = await Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => SelectCategoryScreen(
-                        selectedCategory: oldCategory.value,
-                      ),
+                      builder: (BuildContext context) =>
+                          SelectCategoryScreen(selectedCategory: oldCategory),
                     ),
                   ) ??
-                  oldCategory.value;
-              await context
-                  .read<AddSightWidgetModel>()
-                  .placeCategoryAction
-                  .accept(newCategory);
+                  oldCategory;
+
+              context.read<AddSightBloc>().add(
+                    AddSightCategoryChanged(newCategory),
+                  );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -177,21 +213,30 @@ class _SightName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RowGroup(
-      title: Text(AppStrings.addSightScreenSightNameTitle.toUpperCase()),
-      child: CustomTextField(
-        controller:
-            context.read<AddSightWidgetModel>().placeNameAction.controller,
-        validator: (value) =>
-            context.read<AddSightWidgetModel>().placeNameState.value.error,
-        onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-      ),
+    return BlocBuilder<AddSightBloc, AddSightState>(
+      builder: (context, state) {
+        return RowGroup(
+          title: Text(AppStrings.addSightScreenSightNameTitle.toUpperCase()),
+          child: CustomTextField(
+            validator: (_) => state.placeName.error?.message,
+            onChanged: (value) {
+              context.read<AddSightBloc>().add(
+                    AddSightNameChanged(value),
+                  );
+            },
+            onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+          ),
+        );
+      },
     );
   }
 }
 
 class _SightCoordinates extends StatefulWidget {
-  const _SightCoordinates({Key? key}) : super(key: key);
+  const _SightCoordinates({Key? key, required this.nextFocusNode})
+      : super(key: key);
+
+  final FocusNode nextFocusNode;
 
   @override
   State<_SightCoordinates> createState() => _SightCoordinatesState();
@@ -200,54 +245,52 @@ class _SightCoordinates extends StatefulWidget {
 class _SightCoordinatesState extends State<_SightCoordinates> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: RowGroup(
-            title: Text(
-              AppStrings.addSightScreenSightCoordinatesLat.toUpperCase(),
-            ),
-            child: CustomTextField(
-              controller: context
-                  .read<AddSightWidgetModel>()
-                  .placeCoordinatesLatAction
-                  .controller,
-              validator: (value) => context
-                  .read<AddSightWidgetModel>()
-                  .placeCoordinatesLatState
-                  .value
-                  .error,
-              onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-            ),
-          ),
-        ),
-        const SizedBox(width: mediumSpacing),
-        Expanded(
-          child: RowGroup(
-            title: Text(
-              AppStrings.addSightScreenSightCoordinatesLon.toUpperCase(),
-            ),
-            child: CustomTextField(
-              controller: context
-                  .read<AddSightWidgetModel>()
-                  .placeCoordinatesLonAction
-                  .controller,
-              validator: (value) => context
-                  .read<AddSightWidgetModel>()
-                  .placeCoordinatesLonState
-                  .value
-                  .error,
-              onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(
-                context.read<AddSightWidgetModel>().placeDescriptionFocusNode,
+    return BlocBuilder<AddSightBloc, AddSightState>(
+      builder: (context, state) {
+        return Row(
+          children: [
+            Expanded(
+              child: RowGroup(
+                title: Text(
+                  AppStrings.addSightScreenSightCoordinatesLat.toUpperCase(),
+                ),
+                child: CustomTextField(
+                  onChanged: (value) {
+                    context.read<AddSightBloc>().add(
+                          AddSightCoordinateLatChanged(value),
+                        );
+                  },
+                  validator: (_) => state.placeCoordinateLat.error?.message,
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
               ),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
             ),
-          ),
-        ),
-      ],
+            const SizedBox(width: mediumSpacing),
+            Expanded(
+              child: RowGroup(
+                title: Text(
+                  AppStrings.addSightScreenSightCoordinatesLon.toUpperCase(),
+                ),
+                child: CustomTextField(
+                  onChanged: (value) {
+                    context.read<AddSightBloc>().add(
+                          AddSightCoordinateLngChanged(value),
+                        );
+                  },
+                  validator: (_) => state.placeCoordinateLng.error?.message,
+                  onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(
+                    widget.nextFocusNode,
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -273,35 +316,42 @@ class _ShowOnMap extends StatelessWidget {
 }
 
 class _SightDescription extends StatelessWidget {
-  const _SightDescription({Key? key}) : super(key: key);
+  const _SightDescription({
+    Key? key,
+    required this.focusNode,
+  }) : super(key: key);
+
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
     return RowGroup(
       title: Text(AppStrings.addSightScreenSightDescription.toUpperCase()),
       child: CustomTextField(
-        controller: context
-            .read<AddSightWidgetModel>()
-            .placeDescriptionAction
-            .controller,
-        validator: (value) => context
-            .read<AddSightWidgetModel>()
-            .placeDescriptionState
-            .value
-            .error,
-        focusNode:
-            context.read<AddSightWidgetModel>().placeDescriptionFocusNode,
+        onChanged: (value) {
+          context.read<AddSightBloc>().add(
+                AddSightDescriptionChanged(value),
+              );
+        },
+        validator: (_) =>
+            context.read<AddSightBloc>().state.placeDescription.error?.message,
+        focusNode: focusNode,
         hint: AppStrings.addSightScreenSightDescriptionHint,
-        maxLines: 3,
+        maxLines: 4,
         textInputAction: TextInputAction.done,
       ),
     );
   }
 }
 
-/// Button is enabled when [AddSight._validateFields] is true.
+// /// Button is enabled when [AddSight._validateFields] is true.
 class _AddSightButton extends StatelessWidget {
   const _AddSightButton({Key? key}) : super(key: key);
+
+  void _onPressed(BuildContext context) {
+    log('Add sight button pressed', name: 'AddSightScreen::_AddSightButton');
+    context.read<AddSightBloc>().add(const AddSightSubmitted());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -311,36 +361,12 @@ class _AddSightButton extends StatelessWidget {
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: StreamedStateBuilder<bool>(
-            streamedState:
-                context.read<AddSightWidgetModel>().createButtonState,
-            builder: (BuildContext context, data) {
+          child: BlocBuilder<AddSightBloc, AddSightState>(
+            builder: (BuildContext context, state) {
               return Button(
                 text: AppStrings.addSightScreenSightCreate.toUpperCase(),
-                onPressed: data
-                    ? () async {
-                        final response = await context
-                            .read<AddSightWidgetModel>()
-                            .addPlace();
-
-                        if (response.state == WMState.loaded) {
-                          showAlertDialog(
-                            context,
-                            const _AddSightSuccessDialog(),
-                          );
-                        }
-
-                        if (response.state == WMState.error) {
-                          showAlertDialog(
-                            context,
-                            _AddSightErrorDialog(
-                              error: response.error!.message,
-                            ),
-                          );
-                        }
-                      }
-                    : null,
-                buttonPadding: ButtonPadding.UltraWide,
+                onPressed:
+                    state.status.isValidated ? () => _onPressed(context) : null,
               );
             },
           ),
@@ -350,7 +376,7 @@ class _AddSightButton extends StatelessWidget {
   }
 }
 
-/// Dialog, preventing form values loss.
+// /// Dialog, preventing form values loss.
 class _AddSightCloseButtonDialog extends StatelessWidget {
   const _AddSightCloseButtonDialog({Key? key}) : super(key: key);
 
@@ -381,8 +407,13 @@ class _AddSightCloseButtonDialog extends StatelessWidget {
   }
 }
 
-class _AddSightSuccessDialog extends StatelessWidget {
-  const _AddSightSuccessDialog({Key? key}) : super(key: key);
+class _AddSightSubmissionSuccessDialog extends StatelessWidget {
+  const _AddSightSubmissionSuccessDialog({
+    Key? key,
+    required this.placeId,
+  }) : super(key: key);
+
+  final String placeId;
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +425,20 @@ class _AddSightSuccessDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () {
-            // context.read<AddSight>().clearFields();
+            Navigator.of(context)
+              ..pop()
+              ..pushReplacementNamed(
+                AppRouteNames.placeDetails,
+                arguments: placeId,
+              );
+          },
+          child: Text(
+            AppStrings.addSightScreenSightDialogGoToPlaceActionTitle,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
             Navigator.of(context)
               ..pop()
               ..pop();
@@ -408,8 +452,8 @@ class _AddSightSuccessDialog extends StatelessWidget {
   }
 }
 
-class _AddSightErrorDialog extends StatelessWidget {
-  const _AddSightErrorDialog({
+class _AddSightSubmissionFailureDialog extends StatelessWidget {
+  const _AddSightSubmissionFailureDialog({
     Key? key,
     required this.error,
   }) : super(key: key);
