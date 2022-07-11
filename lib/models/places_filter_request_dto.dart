@@ -22,13 +22,29 @@ class PlacesFilterRequestDto {
     double? radius,
     double? lat,
     double? lng,
+    String? nameFilter,
   }) =>
       PlacesFilterRequestDto(
         radius: radius ?? _defaultRadius,
         lat: lat ?? 12.0,
         lng: lng ?? 17.0,
         typeFilter: _allCategories,
-        nameFilter: '',
+        nameFilter: nameFilter ?? '',
+      );
+
+  PlacesFilterRequestDto copyWith({
+    double? radius,
+    double? lat,
+    double? lng,
+    List<String>? typeFilter,
+    String? nameFilter,
+  }) =>
+      PlacesFilterRequestDto(
+        radius: radius ?? this.radius,
+        lat: lat ?? this.lat,
+        lng: lng ?? this.lng,
+        typeFilter: typeFilter ?? this.typeFilter,
+        nameFilter: nameFilter ?? this.nameFilter,
       );
 
   Map<String, dynamic> toJson() => {

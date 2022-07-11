@@ -11,7 +11,6 @@ import 'package:places/ui/screens/add_sight/models/models.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'add_sight_event.dart';
-
 part 'add_sight_state.dart';
 
 EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) {

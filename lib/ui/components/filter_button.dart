@@ -29,10 +29,7 @@ class _FilterButtonState extends State<FilterButton> {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () {
-        widget.onTap();
-        setState(() {});
-      },
+      onTap: () => widget.onTap(),
       child: Column(
         children: [
           Stack(

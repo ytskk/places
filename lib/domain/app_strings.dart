@@ -6,6 +6,8 @@
 ///  Text(AppStrings.sightDetailsGetDirectionsTitle)
 /// ```
 class AppStrings {
+  const AppStrings._();
+
   // Sight Screen
   static const sightTitle = 'Список интересных мест';
   static const sightTitleExpanded = 'Список\nинтересных мест';
@@ -47,6 +49,8 @@ class AppStrings {
   static const filterScreenRangeSelectionGroupTitleAfter = 'от 10 до 30 км';
   static const filterScreenFilterTitle = 'Категории';
   static const filterScreenFilterShow = 'Показать';
+  static const filterScreenFilterShowEmpty = 'Ничего не найдено';
+  static const filterScreenFilterShowLoading = 'Загрузка...';
 
   // settings screen
   static const settingsScreenAppTitle = 'Настройки';

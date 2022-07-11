@@ -48,17 +48,8 @@ class PlaceNetworkInteractor extends PlaceInteractor {
   }
 
   List<PlaceDto> _excludeByRadius(List<PlaceDto> places, double radius) {
-    return places..where((place) => place.distance >= radius);
+    return places.where((place) => place.distance >= radius).toList();
   }
-
-  // Future<List<PlaceDto>> _fillFavorites(List<PlaceDto> places) async {
-  //   return await places
-  //     ..map((place) async {
-  //       place.isFavorite = await placeStorageRepository.isFavorite(place);
-  //
-  //       return place;
-  //     });
-  // }
 
   List<PlaceDto> _sortByDistance(List<PlaceDto> places) {
     return places..sort((a, b) => a.distance.compareTo(b.distance));

@@ -23,3 +23,12 @@ class PlacesLoad extends PlacesEvent {
   @override
   List<Object> get props => [filterOptions, radiusFrom];
 }
+
+class PlacesSet extends PlacesEvent {
+  PlacesSet(this.places);
+
+  final List<Place> places;
+
+  @override
+  List<Object?> get props => [places];
+}

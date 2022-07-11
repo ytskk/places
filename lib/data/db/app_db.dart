@@ -1,4 +1,5 @@
 import 'package:places/data/model/place_model.dart';
+import 'package:places/models/search_history_record.dart';
 import 'package:places/models/sight.dart';
 
 class AppDb {
@@ -26,11 +27,22 @@ class AppDb {
     ),
   ];
 
-  bool _isDarkMode = true;
+  List<SearchHistoryRecord> _searchHistory = [
+    SearchHistoryRecord(
+      value: "query",
+    ),
+    SearchHistoryRecord(
+      value: "query2",
+    ),
+  ];
+
+  bool _isDarkMode = false;
 
   bool _isFirstOpen = false;
 
   // getters
+  List<SearchHistoryRecord> get searchHistory => _searchHistory;
+
   List<Place> get favorites => _favorites;
 
   List<Place> get plannedPlaces => _favorites
@@ -51,23 +63,53 @@ class AppDb {
   }
 
   // methods
+  void addToSearchHistory(String query) {
+    if (!_searchHistory.contains(
+      // to avoid duplicates
+      SearchHistoryRecord(value: query),
+    )) {
+      _searchHistory.add(
+        SearchHistoryRecord(value: query),
+      );
+    }
+  }
+
+  void removeFromSearchHistory(SearchHistoryRecord historyRecord) async {
+    _searchHistory = _searchHistory
+        .where(
+          (element) => element.id != historyRecord.id,
+        )
+        .toList();
+  }
+
+  void clearSearchHistory() {
+    _searchHistory = [];
+  }
+
   bool isFavorite(Place place) {
     // return _favorites.contains(place);
     return _favorites.indexWhere((element) => element.id == place.id) != -1;
   }
 
   void addFavorite(Place place) {
-    _favorites.add(place);
-    place.isFavorite = true;
+    // _favorites.add(place);
+    // place.isFavorite = true;
+    _favorites = [...favorites, place];
   }
 
   void removeFavorite(Place place) {
-    _favorites.removeWhere((element) => element.id == place.id);
-    place.isFavorite = false;
+    _favorites = _favorites.where((element) => element.id != place.id).toList();
   }
 
-  void setPlannedAt(Place place, DateTime? plannedAt) {
+  Future<void> setPlannedAt(Place place, DateTime? plannedAt) async {
     place.plannedAt = plannedAt;
+    _favorites = _favorites.map((element) {
+      if (element.id == place.id) {
+        return place;
+      }
+
+      return element;
+    }).toList();
   }
 
   Place getFavoriteById(int id) {

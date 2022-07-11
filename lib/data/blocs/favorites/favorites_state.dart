@@ -1,24 +1,17 @@
-part of 'favorites_bloc.dart';
+part of 'favorites_cubit.dart';
 
-abstract class FavoritesState extends Equatable {
+abstract class FavoritesState {
   const FavoritesState();
-
-  @override
-  List<Object> get props => [];
 }
 
-/// Loading state
+class FavoritesInitial extends FavoritesState {}
+
+class FavoritesLoadInitialInProgress extends FavoritesState {}
+
 class FavoritesLoadInProgress extends FavoritesState {}
 
-/// Loading success state
 class FavoritesLoadSuccess extends FavoritesState {
   final List<Place> favorites;
 
-  const FavoritesLoadSuccess(this.favorites);
-
-  @override
-  List<Object> get props => [favorites];
-
-  @override
-  String toString() => 'FavoritesLoadSuccess { wantToVisit: $favorites }';
+  FavoritesLoadSuccess(this.favorites);
 }

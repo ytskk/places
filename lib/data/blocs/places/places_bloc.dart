@@ -8,7 +8,6 @@ import 'package:places/data/model/place_model.dart';
 import 'package:places/models/places_filter_request_dto.dart';
 
 part 'places_event.dart';
-
 part 'places_state.dart';
 
 class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
@@ -20,18 +19,20 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
     log('places bloc created');
     on<PlacesLoadInitial>(onPlacesLoadInitial);
     on<PlacesLoad>(onPlacesLoad);
+    on<PlacesSet>(onPlacesSet);
   }
 
   onPlacesLoad(
     PlacesLoad event,
     Emitter<PlacesState> emit,
   ) async {
-    emit(PlacesLoadInProgress());
+    // emit(PlacesLoadInProgress());
     try {
       final places = await placesInteractor.getPlaces(
         filterOptions: event.filterOptions,
         radiusFrom: event.radiusFrom,
       );
+
       emit(PlacesLoadSuccess(places));
     } on NetworkException catch (e) {
       emit(PlacesLoadFailure(e));
@@ -46,11 +47,15 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
     try {
       final places = await placesInteractor.getPlaces(
         filterOptions: PlacesFilterRequestDto.defaultRequest(),
-        radiusFrom: 0,
+        radiusFrom: 0.0,
       );
       emit(PlacesLoadSuccess(places));
     } on NetworkException catch (e) {
       emit(PlacesLoadFailure(e));
     }
+  }
+
+  void onPlacesSet(PlacesSet event, Emitter<PlacesState> emit) {
+    emit(PlacesLoadSuccess(event.places));
   }
 }

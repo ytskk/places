@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/blocs.dart';
+import 'package:places/data/blocs/favorites/favorites_cubit.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
+import 'package:places/models/places_filter_request_dto.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -36,12 +38,18 @@ class _SightScreenState extends State<SightScreen> {
           },
           body: RefreshIndicator(
             onRefresh: () async {
-              // context.read<PlacesBloc>().add(
-              //       PlacesLoad(
-              //         filterOptions: filterOptions,
-              //         radiusFrom: radiusFrom,
-              //       ),
-              //     );
+              final filterOptions = context.read<FilterCubit>().state;
+              context.read<PlacesBloc>().add(
+                    PlacesLoad(
+                      filterOptions: PlacesFilterRequestDto(
+                        typeFilter: filterOptions.getSelectedOptions(),
+                        lat: 12.0,
+                        lng: 17.0,
+                        radius: filterOptions.radiusValues.end,
+                      ),
+                      radiusFrom: filterOptions.radiusValues.start,
+                    ),
+                  );
             },
             child: CustomScrollView(
               slivers: [
@@ -82,8 +90,18 @@ class _PlacesList extends StatelessWidget {
           return _PlaceList(places: places);
         }
 
-        return SliverToBoxAdapter(
-          child: const LoadingProgressIndicator(),
+        if (state is PlacesLoadFailure) {
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: const _PlacesNotFound(),
+          );
+        }
+
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: const Center(
+            child: Text('Unknown state :('),
+          ),
         );
       },
     );
@@ -196,24 +214,28 @@ class __SightHeartIconButtonToggleableState
     extends State<_SightHeartIconButtonToggleable> {
   @override
   Widget build(BuildContext context) {
-    return Button.icon(
-      icon: AppIcons.heart,
-      background: Colors.transparent,
-      onPressed: () {},
+    return BlocBuilder<FavoritesCubit, FavoritesState>(
+      builder: (context, state) {
+        return StreamBuilder(
+          stream: context
+              .read<FavoritesCubit>()
+              .isFavorite(widget.place)
+              .asStream(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            return Button.icon(
+              icon: snapshot.data ?? false
+                  ? AppIcons.heartFilled
+                  : AppIcons.heart,
+              iconColor: Colors.white,
+              background: Colors.transparent,
+              onPressed: () {
+                context.read<FavoritesCubit>().toggleFavorite(widget.place);
+              },
+            );
+          },
+        );
+      },
     );
-    // return FutureBuilder(
-    //   future: context.read<FavoritesInteractor>().isFavorite(widget.place),
-    //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-    //     return Button.icon(
-    //       icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
-    //       iconColor: Colors.white,
-    //       background: Colors.transparent,
-    //       onPressed: () {
-    //         context.read<FavoritesInteractor>().toggleFavorite(widget.place);
-    //       },
-    //     );
-    //   },
-    // );
   }
 }
 
@@ -276,7 +298,7 @@ class _SightListSliverAppBar extends StatelessWidget {
                   icon: AppIcons.filter,
                 ),
                 onPressed: () {
-                  // Navigator.of(context).pushNamed(AppRoutes.sightFilter);
+                  Navigator.of(context).pushNamed(AppRouteNames.filter);
                 },
               ),
             ),

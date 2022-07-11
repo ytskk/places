@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/api/client_api.dart';
 import 'package:places/data/blocs/blocs.dart';
+import 'package:places/data/blocs/favorites/favorites_cubit.dart';
 import 'package:places/data/db/app_db.dart';
+import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/place_network_interactor.dart';
 import 'package:places/data/repository/local_repository.dart';
@@ -39,6 +41,10 @@ class App extends StatelessWidget {
               PlaceNetworkInteractor(
                   placeNetworkRepository, placeStorageRepository),
         ),
+        ProxyProvider<PlaceStorageRepository, FavoritesInteractor>(
+          update: (_, placeStorageRepository, __) =>
+              FavoritesInteractor(placeStorageRepository),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -60,6 +66,16 @@ class App extends StatelessWidget {
               return PlaceDetailsCubit(
                 placeInteractor: context.read<PlaceInteractor>(),
               );
+            },
+          ),
+          BlocProvider(
+            create: (BuildContext context) {
+              return FilterCubit();
+            },
+          ),
+          BlocProvider(
+            create: (BuildContext context) {
+              return FavoritesCubit(context.read<FavoritesInteractor>());
             },
           ),
         ],

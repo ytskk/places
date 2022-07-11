@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:places/models/sight.dart';
 
-class Place {
+class Place extends Equatable {
   final int? id;
   final double lat;
   final double lng;
@@ -74,9 +75,12 @@ class Place {
       this.lng == other.lng &&
       this.name == other.name &&
       this.urls == other.urls &&
-      this.type == other.type;
-
-  // this.description == other.description;
+      this.type == other.type &&
+      this.description == other.description &&
+      this.isFavorite == other.isFavorite &&
+      this.isVisited == other.isVisited &&
+      this.plannedAt == other.plannedAt &&
+      this.visitedAt == other.visitedAt;
 
   @override
   int get hashCode =>
@@ -86,7 +90,15 @@ class Place {
       name.hashCode ^
       urls.hashCode ^
       type.hashCode ^
-      description.hashCode;
+      description.hashCode ^
+      isFavorite.hashCode ^
+      isVisited.hashCode ^
+      plannedAt.hashCode ^
+      visitedAt.hashCode;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }
 
 // String localizeType(String type) {
