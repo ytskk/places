@@ -16,7 +16,6 @@ import 'package:places/ui/components/picker.dart';
 import 'package:places/utils/extensions/list_extension.dart';
 import 'package:places/utils/screen_sizes.dart';
 import 'package:places/utils/string_manipulations.dart';
-import 'package:provider/provider.dart';
 
 // BUG: when its no internet, throws error!
 // TODO: hide sliver image carousel when its bad link.

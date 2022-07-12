@@ -258,7 +258,6 @@ class _FilterShowResultsButton extends StatelessWidget {
                       : null,
                   child: Text(
                     state is FilteringPlacesLoadSuccess
-                        // TODO: add plural form
                         ? state.places.length > 0
                             ? '${AppStrings.filterScreenFilterShow} (${state.places.length} ${pluralize(
                                 state.places.length,
@@ -278,52 +277,3 @@ class _FilterShowResultsButton extends StatelessWidget {
     );
   }
 }
-
-// class _FilterShowResultButton extends StatefulWidget {
-//   const _FilterShowResultButton({Key? key}) : super(key: key);
-//
-//   @override
-//   State<_FilterShowResultButton> createState() =>
-//       _FilterShowResultButtonState();
-// }
-//
-// class _FilterShowResultButtonState extends State<_FilterShowResultButton> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Align(
-//       alignment: Alignment.bottomCenter,
-//       child: SizedBox(
-//         width: double.infinity,
-//         child: Padding(
-//           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-//           child: FutureBuilder(
-//             // filters on every option and range change.
-//             future: context.watch<Filter>().parseFilteredPlaces(context),
-//             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-//               if (snapshot.hasError) {
-//                 return Text('Has an error: ${snapshot.error}');
-//               }
-//
-//               bool isLoaded = snapshot.connectionState == ConnectionState.done;
-//               List<Place> candidates = isLoaded ? snapshot.data : [];
-//
-//               return ElevatedButton(
-//                 onPressed: isLoaded && candidates.isNotEmpty
-//                     ? () {
-//                         Navigator.of(context).pop();
-//                         context.read<Filter>().setFilteredPlaces(candidates);
-//                       }
-//                     : null,
-//                 child: Text(
-//                   isLoaded
-//                       ? '${AppStrings.filterScreenFilterShow} ${candidates.length}'
-//                       : 'Загрузка...',
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

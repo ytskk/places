@@ -10,9 +10,7 @@ int _screenSizeHeightMedium = 1000;
 int _screenSizeWidthSmall = 340;
 int _screenSizeWidthMedium = 400;
 
-/// 23
 ScreenSizes resolveScreenHeightSize(double height) {
-  // some
   if (height < _screenSizeHeightSmall) {
     return ScreenSizes.Small;
   } else if (height < _screenSizeHeightMedium) {

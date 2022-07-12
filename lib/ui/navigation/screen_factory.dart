@@ -7,7 +7,8 @@ import 'package:places/ui/screens/add_sight/view/add_sight_screen.dart';
 import 'package:places/ui/screens/filter/bloc/filtering_places_bloc.dart';
 import 'package:places/ui/screens/filter/filter_screen.dart';
 import 'package:places/ui/screens/main_screen.dart';
-import 'package:places/ui/screens/onboarding_screen.dart';
+import 'package:places/ui/screens/onboarding/cubit/onboarding_cubit.dart';
+import 'package:places/ui/screens/onboarding/onboarding_screen.dart';
 import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
@@ -30,7 +31,10 @@ class ScreenFactory {
   }
 
   Widget makeOnboardingScreen() {
-    return OnboardingScreen();
+    return BlocProvider(
+      create: (context) => OnboardingCubit(),
+      child: OnboardingScreen(),
+    );
   }
 
   Widget makeFavoritesScreen() {
