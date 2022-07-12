@@ -17,9 +17,6 @@ import 'package:places/ui/components/row_group.dart';
 import 'package:places/ui/navigation/app_route_names.dart';
 import 'package:places/ui/screens/add_sight/bloc/add_sight_bloc.dart';
 import 'package:places/ui/screens/add_sight/models/models.dart';
-import 'package:places/ui/screens/add_sight/models/place_category.dart';
-import 'package:places/ui/screens/add_sight/models/place_coordinates.dart';
-import 'package:places/ui/screens/add_sight/models/place_name.dart';
 
 import 'view.dart';
 

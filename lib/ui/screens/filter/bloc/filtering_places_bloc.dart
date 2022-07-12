@@ -8,7 +8,6 @@ import 'package:places/models/places_filter_request_dto.dart';
 import 'package:places/ui/screens/add_sight/bloc/add_sight_bloc.dart';
 
 part 'filtering_places_event.dart';
-
 part 'filtering_places_state.dart';
 
 class FilteringPlacesBloc

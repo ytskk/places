@@ -213,7 +213,6 @@ class _SearchResultListTile extends StatelessWidget {
           sight.type.name,
           style: textTheme.bodyText1,
         ),
-        // leading: _SightImageBox(imageUrl: sight.url),
         leading: RoundedNetworkImageBox(
           imageUrl: ListExtension(sight.urls).takeFirstImgOrTemp,
         ),
@@ -256,8 +255,6 @@ class _SearchRecentActivityRecords extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trailingColor = Theme.of(context).textTheme.bodyText1!.color;
-
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return Column(

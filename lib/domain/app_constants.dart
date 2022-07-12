@@ -32,6 +32,10 @@ const double largeBorderRadius = 24.0;
 const double bottomAppBarHeight = 52.0;
 const double largeLeadingWidth = 80.0;
 
+const Duration quickDuration = const Duration(milliseconds: 150);
+
+const Cubic brandCurve = Curves.easeOut;
+
 // Most relevant Date formats.
 class DateFormats {
   DateFormats._();

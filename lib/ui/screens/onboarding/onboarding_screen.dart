@@ -76,9 +76,9 @@ class _OnboardingPageIndicator extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: 150),
+                  duration: quickDuration,
                   margin: EdgeInsets.only(right: 4),
-                  curve: Curves.easeOut,
+                  curve: brandCurve,
                   height: 8,
                   width: state.currentPage == pageIndex ? 24 : 8,
                   decoration: BoxDecoration(
@@ -106,8 +106,8 @@ class _OnboardingActionButton extends StatelessWidget {
         return Align(
           alignment: Alignment.bottomCenter,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            curve: Curves.easeOut,
+            duration: quickDuration,
+            curve: brandCurve,
             height: state.currentPage == state.onboardingPagesContent.length - 1
                 ? 64
                 : 0,

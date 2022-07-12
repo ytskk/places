@@ -10,7 +10,6 @@ import 'package:places/models/search_history_record.dart';
 import 'package:places/ui/screens/add_sight/bloc/add_sight.dart';
 
 part 'search_event.dart';
-
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
