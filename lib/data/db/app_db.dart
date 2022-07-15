@@ -15,6 +15,7 @@ class AppDb {
       urls: [""],
       type: SightCategories.cafe,
       description: "description",
+      isFavorite: true,
     ),
     Place(
       id: 12312321,
@@ -24,6 +25,7 @@ class AppDb {
       urls: [""],
       type: SightCategories.hotel,
       description: "description",
+      isFavorite: true,
     ),
   ];
 
@@ -91,14 +93,15 @@ class AppDb {
     return _favorites.indexWhere((element) => element.id == place.id) != -1;
   }
 
-  void addFavorite(Place place) {
-    // _favorites.add(place);
-    // place.isFavorite = true;
-    _favorites = [...favorites, place];
-  }
+  void addFavorite(Place place) {}
 
   void removeFavorite(Place place) {
-    _favorites = _favorites.where((element) => element.id != place.id).toList();
+    // _favorites = _favorites.where((element) => element.id != place.id).toList();
+    _favorites = _favorites
+        .map((favorite) => favorite.id == place.id
+            ? favorite.copyWith(isFavorite: false)
+            : favorite)
+        .toList();
   }
 
   Future<void> setPlannedAt(Place place, DateTime? plannedAt) async {

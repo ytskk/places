@@ -29,9 +29,6 @@ class PlaceNetworkInteractor extends PlaceInteractor {
       // Exclude places with distance less than [radiusFrom].
       final radiusDependentPlaces = _excludeByRadius(places, radiusFrom);
 
-      // // Add favorites to places.
-      // final favoritesPlaces = await _fillFavorites(radiusDependentPlaces);
-
       // Sort by distance ascending.
       final sortedPlaces = _sortByDistance(radiusDependentPlaces);
 
@@ -39,7 +36,10 @@ class PlaceNetworkInteractor extends PlaceInteractor {
       final convertedPlaces =
           sortedPlaces.map((place) => Place.fromDto(place)).toList();
 
-      return convertedPlaces;
+      // Add favorites to places.
+      final favoritesPlaces = await _fillFavorites(convertedPlaces);
+
+      return favoritesPlaces;
     } on DioError catch (e) {
       final exception = placeNetworkRepository.handleError(e);
 
@@ -59,6 +59,16 @@ class PlaceNetworkInteractor extends PlaceInteractor {
     final response = await placeNetworkRepository.getPlaceById(id: id);
 
     return response;
+  }
+
+  Future<List<Place>> _fillFavorites(List<Place> places) async {
+    final favorites = await placeStorageRepository.getFavorites();
+
+    return places.map((place) {
+      place.isFavorite = favorites.contains(place.id);
+
+      return place;
+    }).toList();
   }
 
   @override

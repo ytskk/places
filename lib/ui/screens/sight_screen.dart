@@ -221,7 +221,7 @@ class __SightHeartIconButtonToggleableState
               .read<FavoritesCubit>()
               .isFavorite(widget.place)
               .asStream(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          builder: (_, AsyncSnapshot<dynamic> snapshot) {
             return Button.icon(
               icon: snapshot.data ?? false
                   ? AppIcons.heartFilled

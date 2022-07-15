@@ -102,7 +102,7 @@ class _SearchContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
-      builder: (BuildContext context, state) {
+      builder: (_, state) {
         switch (state.status) {
           case SearchStatus.empty:
             return SliverToBoxAdapter(
@@ -193,7 +193,8 @@ class _SearchResultListTile extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return InkWell(
-      splashColor: Colors.black12,
+      splashColor:
+          Theme.of(context).textTheme.bodyText2!.color?.withOpacity(0.5),
       onTap: () {
         context.read<SearchBloc>().add(SearchHistoryAdd(query: searchText));
         Navigator.of(context).pushNamed(

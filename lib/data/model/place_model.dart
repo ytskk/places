@@ -62,6 +62,28 @@ class Place extends Equatable {
     };
   }
 
+  // copy with
+  Place copyWith({
+    bool? isFavorite,
+    bool? isVisited,
+    DateTime? plannedAt,
+    DateTime? visitedAt,
+  }) {
+    return Place(
+      id: this.id,
+      lat: this.lat,
+      lng: this.lng,
+      name: this.name,
+      urls: this.urls,
+      type: this.type,
+      description: this.description,
+      isFavorite: isFavorite ?? this.isFavorite,
+      isVisited: isVisited ?? this.isVisited,
+      plannedAt: plannedAt ?? this.plannedAt,
+      visitedAt: visitedAt ?? this.visitedAt,
+    );
+  }
+
   @override
   String toString() {
     return 'Place#$id: $name ($type) ($isFavorite, $plannedAt, $isVisited)';

@@ -178,11 +178,7 @@ class _UnderlinedTextFieldState extends State<UnderlinedTextField> {
           ),
         ),
         focusedErrorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppThemeData.selectColor(
-              isDark: context.read<PreferencesCubit>().state.isDarkMode,
-            ).red,
-          ),
+          borderSide: BorderSide(color: theme.errorColor),
         ),
         errorBorder: UnderlineInputBorder(
           borderSide: BorderSide(
