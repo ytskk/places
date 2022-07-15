@@ -6,6 +6,8 @@
 ///  Text(AppStrings.sightDetailsGetDirectionsTitle)
 /// ```
 class AppStrings {
+  const AppStrings._();
+
   // Sight Screen
   static const sightTitle = 'Список интересных мест';
   static const sightTitleExpanded = 'Список\nинтересных мест';
@@ -47,6 +49,8 @@ class AppStrings {
   static const filterScreenRangeSelectionGroupTitleAfter = 'от 10 до 30 км';
   static const filterScreenFilterTitle = 'Категории';
   static const filterScreenFilterShow = 'Показать';
+  static const filterScreenFilterShowEmpty = 'Ничего не найдено';
+  static const filterScreenFilterShowLoading = 'Загрузка...';
 
   // settings screen
   static const settingsScreenAppTitle = 'Настройки';
@@ -70,7 +74,7 @@ class AppStrings {
       'Место успешно добавлено!';
   static const addSightScreenSightDialogCloseContent =
       'Уверены что хотите закрыть? Вы потеряете введённые данные.';
-  static const addSightScreenSightDialogCloseActionClose = 'Да';
+  static const addSightScreenSightDialogCloseActionClose = 'Закрыть';
   static const addSightScreenSightDialogCloseActionStay = 'Нет';
 
   // image picker options
@@ -79,6 +83,8 @@ class AppStrings {
   static const addSightScreenImagePickerOptionsFileTitle = 'Файл';
 
   static const addSightScreenSightDialogCreateActionTitle = 'Закрыть';
+  static const addSightScreenSightDialogGoToPlaceActionTitle =
+      'Перейти к месту';
   static const addSightScreenDeleteImageDialogTitle = 'Удалить фото?';
   static const addSightScreenDeleteImageDialogActionYes = 'Да, удалить';
   static const addSightScreenDeleteImageDialogActionNo = 'Нет, оставить';

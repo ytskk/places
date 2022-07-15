@@ -13,7 +13,7 @@ class PlaceStorageRepository {
   }
 
   Future<void> setPlannedAt(Place place, DateTime? plannedAt) async {
-    _appDb.setPlannedAt(place, plannedAt);
+    await _appDb.setPlannedAt(place, plannedAt);
   }
 
   Future<bool> isFavorite(Place place) async {

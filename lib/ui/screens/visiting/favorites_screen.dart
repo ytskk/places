@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/blocks/favorites/favorites_bloc.dart';
-import 'package:places/data/blocks/favorites/favorites_state.dart';
+import 'package:places/data/blocs/blocs.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_icons.dart';
@@ -21,14 +22,12 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  late final FavoritesBloc _favoritesBloc;
-
   @override
   void initState() {
     super.initState();
 
     print('created favorites screen');
-    _favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
+    context.read<FavoritesCubit>().loadFavorites();
   }
 
   @override
@@ -46,9 +45,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             ),
           ),
         ),
-        body: BlocBuilder<FavoritesBloc, FavoritesState>(
+        body: BlocBuilder<FavoritesCubit, FavoritesState>(
           builder: (BuildContext context, state) {
-            if (state is FavoritesLoadInProgress) {
+            log('favorites screen state: $state');
+            if (state is FavoritesLoadInitialInProgress) {
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -188,9 +188,7 @@ List<Widget> _getFavoriteItems(BuildContext context, List<Place> items) {
                     lastDate: DateTime.now().add(const Duration(days: 365)),
                   ).show(context);
 
-                  context
-                      .read<FavoritesInteractor>()
-                      .setPlannedAt(place, plannedAt);
+                  context.read<FavoritesCubit>().setPlannedAt(place, plannedAt);
                 },
               ),
             ],
@@ -198,7 +196,7 @@ List<Widget> _getFavoriteItems(BuildContext context, List<Place> items) {
             scheduledAt: place.plannedAt,
             workingStatus: '${AppStrings.visitingVisitedClosedUntil} 09:00',
             onDeleteButtonPressed: () {
-              context.read<FavoritesInteractor>().removeFromFavorites(place);
+              context.read<FavoritesCubit>().removeFromFavorites(place);
             },
           ))
       .toList();

@@ -9,7 +9,7 @@ abstract class PlaceRepository {
   });
 
   Future<Place> getPlaceById({
-    required int id,
+    required String id,
   });
 
   Future<void> addPlace({

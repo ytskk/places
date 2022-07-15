@@ -38,15 +38,44 @@ class Sight {
 }
 
 class SightCategories {
-  static const movie = PlaceCategory(name: 'Кинотеатр', engName: 'movie');
   static const restaurant =
-      PlaceCategory(name: 'Ресторан', engName: 'restaurant');
-  static const poi = PlaceCategory(name: 'Особое место', engName: 'poi');
-  static const theater = PlaceCategory(name: 'Театр', engName: 'theatre');
+      const PlaceCategory(name: 'Ресторан', engName: 'restaurant');
+  static const cafe = const PlaceCategory(name: 'Кафе', engName: 'cafe');
+  static const movie = const PlaceCategory(name: 'Кинотеатр', engName: 'movie');
+  static const park = const PlaceCategory(name: 'Парк', engName: 'park');
+  static const museum = const PlaceCategory(name: 'Музей', engName: 'museum');
+  static const temple = const PlaceCategory(name: 'Храм', engName: 'temple');
   static const hotel = const PlaceCategory(name: 'Отель', engName: 'hotel');
-  static const museum = PlaceCategory(name: 'Музей', engName: 'museum');
-  static const cafe = PlaceCategory(name: 'Кафе', engName: 'cafe');
-  static const park = PlaceCategory(name: 'Парк', engName: 'park');
+  static const theater = const PlaceCategory(name: 'Театр', engName: 'theatre');
+  static const monument =
+      const PlaceCategory(name: 'Монумент', engName: 'monument');
+  static const other = const PlaceCategory(name: 'Другое', engName: 'other');
+
+  static const all = [
+    restaurant,
+    cafe,
+    movie,
+    park,
+    museum,
+    temple,
+    hotel,
+    theater,
+    monument,
+    other,
+  ];
+
+  static final allEng = [
+    restaurant.engName,
+    cafe.engName,
+    movie.engName,
+    park.engName,
+    museum.engName,
+    temple.engName,
+    hotel.engName,
+    theater.engName,
+    monument.engName,
+    other.engName,
+  ];
 }
 
 class PlaceCategory {
@@ -57,6 +86,36 @@ class PlaceCategory {
     required this.name,
     required this.engName,
   });
+
+  factory PlaceCategory.fromJson(String engName) {
+    return localizeCategory(engName);
+  }
+
+  static PlaceCategory localizeCategory(String engName) {
+    switch (engName) {
+      case 'restaurant':
+        return SightCategories.restaurant;
+      case 'cafe':
+        return SightCategories.cafe;
+      case 'movie':
+        return SightCategories.movie;
+      case 'park':
+        return SightCategories.park;
+      case 'museum':
+        return SightCategories.museum;
+      case 'temple':
+        return SightCategories.temple;
+      case 'hotel':
+        return SightCategories.hotel;
+      case 'theatre':
+        return SightCategories.theater;
+      case 'monument':
+        return SightCategories.monument;
+      case 'other':
+      default:
+        return SightCategories.other;
+    }
+  }
 
   @override
   String toString() {

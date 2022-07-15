@@ -21,8 +21,8 @@ InterceptorsWrapper _interceptorsWrapper = InterceptorsWrapper(
     return handler.next(response);
   },
   onError: (DioError error, ErrorInterceptorHandler handler) {
-    // print(
-    // 'onError: ${error.response?.statusCode} ${error.response?.data['error'].toString()}');
+    print(
+        'onError: ${error.response?.statusCode} ${error.response?.data['error'].toString()}');
 
     return handler.next(error);
   },
@@ -79,7 +79,7 @@ class ClientApi {
     final exception = NetworkException(
       name: error.requestOptions.path,
       code: error.response?.statusCode,
-      message: error.response!.data['error'].toString(),
+      message: error.response?.data.toString(),
     );
 
     return exception;

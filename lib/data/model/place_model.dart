@@ -1,11 +1,14 @@
-class Place {
+import 'package:equatable/equatable.dart';
+import 'package:places/models/sight.dart';
+
+class Place extends Equatable {
   final int? id;
   final double lat;
   final double lng;
   final String name;
   final List<String> urls;
-  final String type;
-  final String description;
+  final PlaceCategory type;
+  final String? description;
   bool isFavorite;
   bool isVisited;
   DateTime? plannedAt;
@@ -34,7 +37,7 @@ class Place {
         lng: json['lng'],
         name: json['name'],
         urls: List<String>.from(json['urls']),
-        type: json['placeType'],
+        type: PlaceCategory.fromJson(json['placeType']),
         description: json['description'],
       );
 
@@ -50,14 +53,35 @@ class Place {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'lat': lat,
       'lng': lng,
       'name': name,
       'urls': urls,
-      'placeType': type,
+      'placeType': type.engName,
       'description': description,
     };
+  }
+
+  // copy with
+  Place copyWith({
+    bool? isFavorite,
+    bool? isVisited,
+    DateTime? plannedAt,
+    DateTime? visitedAt,
+  }) {
+    return Place(
+      id: this.id,
+      lat: this.lat,
+      lng: this.lng,
+      name: this.name,
+      urls: this.urls,
+      type: this.type,
+      description: this.description,
+      isFavorite: isFavorite ?? this.isFavorite,
+      isVisited: isVisited ?? this.isVisited,
+      plannedAt: plannedAt ?? this.plannedAt,
+      visitedAt: visitedAt ?? this.visitedAt,
+    );
   }
 
   @override
@@ -73,9 +97,12 @@ class Place {
       this.lng == other.lng &&
       this.name == other.name &&
       this.urls == other.urls &&
-      this.type == other.type;
-
-  // this.description == other.description;
+      this.type == other.type &&
+      this.description == other.description &&
+      this.isFavorite == other.isFavorite &&
+      this.isVisited == other.isVisited &&
+      this.plannedAt == other.plannedAt &&
+      this.visitedAt == other.visitedAt;
 
   @override
   int get hashCode =>
@@ -85,7 +112,15 @@ class Place {
       name.hashCode ^
       urls.hashCode ^
       type.hashCode ^
-      description.hashCode;
+      description.hashCode ^
+      isFavorite.hashCode ^
+      isVisited.hashCode ^
+      plannedAt.hashCode ^
+      visitedAt.hashCode;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }
 
 // String localizeType(String type) {
@@ -127,7 +162,7 @@ class PlaceDto extends Place {
     required double lng,
     required String name,
     required List<String> urls,
-    required String type,
+    required PlaceCategory type,
     required String description,
     this.distance = -1,
   }) : super(
@@ -150,7 +185,7 @@ class PlaceDto extends Place {
         lng: json['lng'],
         name: json['name'],
         urls: List<String>.from(json['urls']),
-        type: json['placeType'],
+        type: PlaceCategory.fromJson(json['placeType']),
         description: json['description'],
         distance: json['distance'],
       );

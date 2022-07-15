@@ -20,12 +20,14 @@ class SearchField extends StatefulWidget {
     this.onEditingComplete,
     this.suffix,
     this.onChange,
+    this.focusNode,
   }) : super(key: key);
 
   /// Controls the text being edited.
   ///
   /// If null, this widget will create it's own [TextEditingController].
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final bool readOnly;
   final bool autofocus;
   final VoidCallback? onTap;
@@ -41,12 +43,14 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   late final TextEditingController _controller;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
 
     _controller = widget.controller ?? TextEditingController();
+    _focusNode = widget.focusNode ?? FocusNode();
   }
 
   @override
@@ -55,9 +59,15 @@ class _SearchFieldState extends State<SearchField> {
 
     return TextField(
       controller: _controller,
+      focusNode: _focusNode,
       onTap: widget.onTap,
       onChanged: widget.onChange,
-      onEditingComplete: widget.onEditingComplete,
+      onEditingComplete: () {
+        if (widget.onEditingComplete != null) {
+          widget.onEditingComplete!.call();
+        }
+        _focusNode.unfocus();
+      },
       textInputAction: TextInputAction.search,
       readOnly: widget.readOnly,
       autofocus: widget.autofocus,

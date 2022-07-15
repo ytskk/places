@@ -1,26 +1,28 @@
-import 'dart:developer';
-
 import 'package:places/models/sight.dart';
 
 /// Class for describing and controls filter option.
 class FilterOption {
   FilterOption({
     required this.category,
-    bool isEnabled = true,
-  }) : this._isSelected = isEnabled;
+    this.isSelected = true,
+  });
 
   final PlaceCategory category;
-  bool _isSelected;
+  final bool isSelected;
 
-  void setSelected(bool value) {
-    _isSelected = value;
-    log(
-      "$this is ${_isSelected ? "" : "un"}selected",
-      name: 'FilterOption',
+  FilterOption copyWith({
+    PlaceCategory? category,
+    bool? isSelected,
+  }) {
+    return FilterOption(
+      category: category ?? this.category,
+      isSelected: isSelected ?? this.isSelected,
     );
   }
 
-  bool get isSelected => _isSelected;
+  FilterOption setSelected(bool newValue) {
+    return copyWith(isSelected: newValue);
+  }
 
   String get name => category.name;
 

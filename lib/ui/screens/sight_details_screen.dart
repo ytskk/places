@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/data/interactor/place_network_interactor.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/blocs.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
@@ -10,12 +11,11 @@ import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/horizontal_divider.dart';
 import 'package:places/ui/components/image/network_image_box.dart';
-import 'package:places/ui/components/info_list.dart';
+import 'package:places/ui/components/loading_progress_indicator.dart';
 import 'package:places/ui/components/picker.dart';
 import 'package:places/utils/extensions/list_extension.dart';
 import 'package:places/utils/screen_sizes.dart';
 import 'package:places/utils/string_manipulations.dart';
-import 'package:provider/provider.dart';
 
 // BUG: when its no internet, throws error!
 // TODO: hide sliver image carousel when its bad link.
@@ -31,112 +31,142 @@ class SightDetailsScreen extends StatefulWidget {
 }
 
 class _SightDetailsScreenState extends State<SightDetailsScreen> {
-  // tmp
-  Future getPlaceDetails(BuildContext context) async {
-    final placeId = ModalRoute.of(context)!.settings.arguments as int;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    final response = await context
-        .read<PlaceNetworkInteractor>()
-        .getPlaceDetails(id: placeId);
-
-    print('response: $response');
-
-    return response;
+    context.read<PlaceDetailsCubit>().loadPlaceDetails(
+          ModalRoute.of(context)!.settings.arguments as String,
+        );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+        builder: (BuildContext context, state) {
+          if (state is PlaceDetailsLoadInProgress) {
+            return _PlaceDetailsLoadInProgress();
+          }
+
+          if (state is PlaceDetailsLoadSuccess) {
+            final sight = state.placeDetails;
+
+            return _PlaceDetailsLoadSuccess(sight: sight);
+          }
+
+          if (state is PlaceDetailsLoadFailure) {
+            return _PlaceDetailsLoadFailure(error: state.error.toString());
+          }
+
+          return Center(
+            child: const Text('Если бы мы знали что это такое…'),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _PlaceDetailsLoadInProgress extends StatelessWidget {
+  const _PlaceDetailsLoadInProgress({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: const LoadingProgressIndicator(),
+    );
+  }
+}
+
+class _PlaceDetailsLoadSuccess extends StatelessWidget {
+  const _PlaceDetailsLoadSuccess({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+  final Place sight;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: FutureBuilder(
-        future: getPlaceDetails(context),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (snapshot.hasError) {
-            return InfoList(
-              infoListData: InfoListData(
-                iconName: AppIcons.error,
-                title: Text('Error :('),
-                subtitle: Text(
-                  snapshot.error.toString(),
-                  textAlign: TextAlign.center,
-                  maxLines: 10,
-                ),
-              ),
-            );
-          }
-
-          if (!snapshot.hasData) {
-            return Center(
-              child: Text('No data'),
-            );
-          }
-          final Place sight = snapshot.data;
-
-          return Scaffold(
-            body: CustomScrollView(
-              primary: false,
-              slivers: [
-                _SightSliverAppBar(
-                  sightImages: sight.urls.isEmpty
-                      ? [ListExtension(sight.urls).takeFirstImgOrTemp]
-                      : sight.urls,
-                  useBackButton: true,
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    SafeArea(
-                      top: false,
-                      child: Padding(
-                        padding: largeWrappingPadding,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Text(
-                                sight.name,
-                                style: textTheme.headline3,
-                              ),
-                            ),
-                            _SightSubtitle(
-                              sightType: sight.type,
-                              sightWorkingStatus:
-                                  '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
-                            ),
-                            if (sight.description.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 24),
-                                child: Text(
-                                  sight.description,
-                                  style: textTheme.bodyText2,
-                                ),
-                              ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 8),
-                              child: _DirectionButton(),
-                            ),
-                            const HorizontalDivider(),
-                            _SightManipulationButtons(
-                              place: sight,
-                            ),
-                          ],
+      body: CustomScrollView(
+        primary: false,
+        slivers: [
+          _SightSliverAppBar(
+            sightImages: sight.urls.isEmpty
+                ? [ListExtension(sight.urls).takeFirstImgOrTemp]
+                : sight.urls,
+            useBackButton: true,
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: largeWrappingPadding,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text(
+                          sight.name,
+                          style: textTheme.headline3,
                         ),
                       ),
-                    ),
-                  ]),
+                      _SightSubtitle(
+                        sightType: sight.type.name,
+                        sightWorkingStatus:
+                            '${AppStrings.sightDetailsWorkingStatusClosed} 9:00',
+                      ),
+                      if (sight.description != null &&
+                          sight.description!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24),
+                          child: Text(
+                            sight.description!,
+                            style: textTheme.bodyText2,
+                          ),
+                        ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: _DirectionButton(),
+                      ),
+                      const HorizontalDivider(),
+                      _SightManipulationButtons(
+                        place: sight,
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          );
-        },
+              ),
+            ]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlaceDetailsLoadFailure extends StatelessWidget {
+  const _PlaceDetailsLoadFailure({
+    Key? key,
+    required this.error,
+  }) : super(key: key);
+
+  final String error;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Center(
+      child: Text(
+        '${error.toString()}',
+        style: textTheme.headline3,
       ),
     );
   }
@@ -195,8 +225,6 @@ class _ImagesCarouselState extends State<_ImagesCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    print('displaying images: ${widget.images}');
-
     return Stack(
       alignment: Alignment.bottomLeft,
       children: [
@@ -422,7 +450,6 @@ class _RoundedBackButton extends StatelessWidget {
                 splashColor: Colors.black12,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 onTap: () {
-                  print("Back button clicked");
                   Navigator.pop(context);
                 },
                 child: Icon(

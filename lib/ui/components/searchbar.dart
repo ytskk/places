@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/components/search_field.dart';
 
-class SearchBar extends StatelessWidget {
+class SearchBar extends StatefulWidget {
   const SearchBar({
     Key? key,
     this.readOnly = true,
@@ -22,17 +22,38 @@ class SearchBar extends StatelessWidget {
   final TextEditingController? controller;
 
   @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = widget.controller ?? TextEditingController();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: SearchField(
-        controller: controller,
-        autofocus: autofocus,
-        readOnly: readOnly,
-        onTap: onTap,
-        onEditingComplete: onEditingComplete,
-        onChange: onChange,
-        suffix: suffix,
+        controller: _controller,
+        autofocus: widget.autofocus,
+        readOnly: widget.readOnly,
+        onTap: widget.onTap,
+        onEditingComplete: widget.onEditingComplete,
+        onChange: widget.onChange,
+        suffix: widget.suffix,
       ),
     );
   }

@@ -11,7 +11,7 @@ class FavoritesInteractor {
   }
 
   Future<void> setPlannedAt(Place place, DateTime? plannedAt) async {
-    _repository.setPlannedAt(place, plannedAt);
+    await _repository.setPlannedAt(place, plannedAt);
   }
 
   Future<bool> isFavorite(Place place) async {

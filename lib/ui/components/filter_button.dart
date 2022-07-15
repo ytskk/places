@@ -29,10 +29,7 @@ class _FilterButtonState extends State<FilterButton> {
     final theme = Theme.of(context);
 
     return InkWell(
-      onTap: () {
-        widget.onTap();
-        setState(() {});
-      },
+      onTap: () => widget.onTap(),
       child: Column(
         children: [
           Stack(
@@ -105,9 +102,6 @@ class _FilterButtonState extends State<FilterButton> {
     }
     if (category == SightCategories.cafe.engName) {
       return AppIcons.cafe;
-    }
-    if (category == SightCategories.poi.engName) {
-      return AppIcons.poi;
     }
 
     return AppIcons.error;

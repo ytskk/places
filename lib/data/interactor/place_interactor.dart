@@ -14,12 +14,11 @@ abstract class PlaceInteractor {
   PlaceInteractor(this.placeNetworkRepository, this.placeStorageRepository);
 
   Future<List<Place>> getPlaces({
-    required double radiusTo,
+    required PlacesFilterRequestDto filterOptions,
     required double radiusFrom,
-    List<String>? types,
   });
 
-  Future getPlaceDetails({required int id});
+  Future getPlaceDetails({required String id});
 
   Future searchPlace({required PlacesFilterRequestDto filterOptions});
 

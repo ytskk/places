@@ -1,3 +1,5 @@
+import 'package:places/models/sight.dart';
+
 class PlacesFilterRequestDto {
   final double? radius;
   final double? lat;
@@ -13,11 +15,38 @@ class PlacesFilterRequestDto {
     this.nameFilter,
   });
 
-  // /// assert if one of them is specified, then the other two become mandatory
-  // assert((radius != null || lat != null || lng != null) &&
-  //     (radius != null && lat != null && lng != null));
+  static const double _defaultRadius = 1000000.0;
+  static final List<String> _allCategories = SightCategories.allEng;
 
-  // to json
+  static defaultRequest({
+    double? radius,
+    double? lat,
+    double? lng,
+    String? nameFilter,
+  }) =>
+      PlacesFilterRequestDto(
+        radius: radius ?? _defaultRadius,
+        lat: lat ?? 12.0,
+        lng: lng ?? 17.0,
+        typeFilter: _allCategories,
+        nameFilter: nameFilter ?? '',
+      );
+
+  PlacesFilterRequestDto copyWith({
+    double? radius,
+    double? lat,
+    double? lng,
+    List<String>? typeFilter,
+    String? nameFilter,
+  }) =>
+      PlacesFilterRequestDto(
+        radius: radius ?? this.radius,
+        lat: lat ?? this.lat,
+        lng: lng ?? this.lng,
+        typeFilter: typeFilter ?? this.typeFilter,
+        nameFilter: nameFilter ?? this.nameFilter,
+      );
+
   Map<String, dynamic> toJson() => {
         'radius': radius,
         'lat': lat,

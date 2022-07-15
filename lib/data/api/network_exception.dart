@@ -7,7 +7,7 @@ class NetworkException implements Exception {
 
   final String name;
   final int? code;
-  final String message;
+  final String? message;
 
   @override
   String toString() {

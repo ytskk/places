@@ -9,4 +9,5 @@ class AppRouteNames {
   static const String placeDetails = '/placeDetails';
   static const String settings = '/settings';
   static const String addNewPlace = '/add-new-place';
+  static const String splash = '/splash';
 }

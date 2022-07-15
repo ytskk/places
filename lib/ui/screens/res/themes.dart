@@ -121,6 +121,7 @@ class AppThemeData {
         trackHeight: 2,
         minThumbSeparation: 20,
       ),
+      errorColor: appColors.red,
       inputDecorationTheme: InputDecorationTheme(
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 10),

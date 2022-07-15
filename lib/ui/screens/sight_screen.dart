@@ -1,16 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
-import 'package:places/controllers/filter_controller.dart';
-import 'package:places/data/interactor/favorites_interactor.dart';
-import 'package:places/data/interactor/place_network_interactor.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/blocs.dart';
+import 'package:places/data/blocs/favorites/favorites_cubit.dart';
 import 'package:places/data/model/place_model.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_icons.dart';
 import 'package:places/domain/app_strings.dart';
-import 'package:places/stores/sight_screen/sight_screen_store.dart';
+import 'package:places/models/places_filter_request_dto.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/card/sight_card.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -18,7 +14,6 @@ import 'package:places/ui/components/info_list.dart';
 import 'package:places/ui/components/loading_progress_indicator.dart';
 import 'package:places/ui/components/searchbar.dart';
 import 'package:places/ui/navigation/app_route_names.dart';
-import 'package:provider/provider.dart';
 
 class SightScreen extends StatefulWidget {
   const SightScreen({Key? key}) : super(key: key);
@@ -41,10 +36,26 @@ class _SightScreenState extends State<SightScreen> {
               _SightListSliverAppBar(isScrolled: innerBoxIsScrolled),
             ];
           },
-          body: CustomScrollView(
-            slivers: [
-              _PlaceFutureList(),
-            ],
+          body: RefreshIndicator(
+            onRefresh: () async {
+              final filterOptions = context.read<FilterCubit>().state;
+              context.read<PlacesBloc>().add(
+                    PlacesLoad(
+                      filterOptions: PlacesFilterRequestDto(
+                        typeFilter: filterOptions.getSelectedOptions(),
+                        lat: 12.0,
+                        lng: 17.0,
+                        radius: filterOptions.radiusValues.end,
+                      ),
+                      radiusFrom: filterOptions.radiusValues.start,
+                    ),
+                  );
+            },
+            child: CustomScrollView(
+              slivers: [
+                const _PlacesList(),
+              ],
+            ),
           ),
         ),
       ),
@@ -52,99 +63,73 @@ class _SightScreenState extends State<SightScreen> {
   }
 }
 
-class _PlaceFutureList extends StatefulWidget {
-  const _PlaceFutureList({Key? key}) : super(key: key);
-
-  @override
-  State<_PlaceFutureList> createState() => _PlaceFutureListState();
-}
-
-class _PlaceFutureListState extends State<_PlaceFutureList> {
-  late SightListStore _store;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // BUG: store recreating every time.
-    _store = SightListStore(context.read<PlaceNetworkInteractor>());
-    _getPlaces();
-  }
-
-  Future _getPlaces() async {
-    await _store.fetchPlaces(
-      radiusTo: 100000,
-      radiusFrom: 10,
-      types: context.read<Filter>().selectedCategories,
-    );
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-  }
+class _PlacesList extends StatelessWidget {
+  const _PlacesList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Observer(
-      builder: (BuildContext context) {
-        final future = _store.placesFuture;
-
-        if (future == null || future.status == FutureStatus.pending) {
+    return BlocBuilder<PlacesBloc, PlacesState>(
+      builder: (BuildContext context, state) {
+        if (state is PlacesLoadInitial) {
           return SliverFillRemaining(
             hasScrollBody: false,
             child: const LoadingProgressIndicator(),
           );
         }
 
-        if (future.status == FutureStatus.rejected) {
-          return SliverFillRemaining(
+        if (state is PlacesLoadSuccess) {
+          final places = state.places;
+
+          if (places.isEmpty) {
+            return SliverFillRemaining(
               hasScrollBody: false,
-              child: Center(
-                child: InfoList(
-                  infoListData: InfoListData(
-                    iconName: AppIcons.delete,
-                    iconColor: theme.textTheme.bodyText1!.color,
-                    title: Text(AppStrings.requestError),
-                    titleColor: theme.textTheme.bodyText1!.color,
-                    subtitle: Text(
-                      AppStrings.sightLoadingError,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ));
+              child: const _PlacesNotFound(),
+            );
+          }
+
+          return _PlaceList(places: places);
         }
 
-        final List<Place> places = future.result;
-
-        if (places.isEmpty) {
+        if (state is PlacesLoadFailure) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: Center(
-              child: InfoList(
-                infoListData: InfoListData(
-                  iconName: AppIcons.delete,
-                  iconColor: theme.textTheme.bodyText1!.color,
-                  title: Text(
-                    AppStrings.emptyListTitle,
-                    textAlign: TextAlign.center,
-                  ),
-                  titleColor: theme.textTheme.bodyText1!.color,
-                  subtitle: Text(
-                    AppStrings.emptyListSubtitle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
+            child: const _PlacesNotFound(),
           );
         }
 
-        return _PlaceList(places: places);
+        return SliverFillRemaining(
+          hasScrollBody: false,
+          child: const Center(
+            child: Text('Unknown state :('),
+          ),
+        );
       },
+    );
+  }
+}
+
+class _PlacesNotFound extends StatelessWidget {
+  const _PlacesNotFound({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final iconColor = Theme.of(context).textTheme.bodyText2!.color;
+
+    return Center(
+      child: InfoList(
+        infoListData: InfoListData(
+          iconName: AppIcons.delete,
+          iconColor: iconColor,
+          title: Text(
+            AppStrings.emptyListTitle,
+            textAlign: TextAlign.center,
+          ),
+          subtitle: Text(
+            AppStrings.emptyListSubtitle,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -200,7 +185,7 @@ class _PlaceListItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           AppRouteNames.placeDetails,
-          arguments: place.id,
+          arguments: place.id.toString(),
         );
       },
       actions: [
@@ -229,15 +214,24 @@ class __SightHeartIconButtonToggleableState
     extends State<_SightHeartIconButtonToggleable> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: context.read<FavoritesInteractor>().isFavorite(widget.place),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        return Button.icon(
-          icon: snapshot.data == true ? AppIcons.heartFilled : AppIcons.heart,
-          iconColor: Colors.white,
-          background: Colors.transparent,
-          onPressed: () {
-            context.read<FavoritesInteractor>().toggleFavorite(widget.place);
+    return BlocBuilder<FavoritesCubit, FavoritesState>(
+      builder: (context, state) {
+        return StreamBuilder(
+          stream: context
+              .read<FavoritesCubit>()
+              .isFavorite(widget.place)
+              .asStream(),
+          builder: (_, AsyncSnapshot<dynamic> snapshot) {
+            return Button.icon(
+              icon: snapshot.data ?? false
+                  ? AppIcons.heartFilled
+                  : AppIcons.heart,
+              iconColor: Colors.white,
+              background: Colors.transparent,
+              onPressed: () {
+                context.read<FavoritesCubit>().toggleFavorite(widget.place);
+              },
+            );
           },
         );
       },
@@ -304,7 +298,7 @@ class _SightListSliverAppBar extends StatelessWidget {
                   icon: AppIcons.filter,
                 ),
                 onPressed: () {
-                  // Navigator.of(context).pushNamed(AppRoutes.sightFilter);
+                  Navigator.of(context).pushNamed(AppRouteNames.filter);
                 },
               ),
             ),

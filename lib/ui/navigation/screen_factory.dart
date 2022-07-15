@@ -1,22 +1,27 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mwwm/mwwm.dart';
-import 'package:places/data/blocks/favorites/favorites_bloc.dart';
-import 'package:places/data/blocks/favorites/favorites_event.dart';
-import 'package:places/data/interactor/favorites_interactor.dart';
-import 'package:places/data/interactor/place_network_interactor.dart';
-import 'package:places/ui/screens/add_sight/add_sight_screen.dart';
-import 'package:places/ui/screens/add_sight/add_sight_wm.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/repository/local_repository.dart';
+import 'package:places/ui/screens/add_sight/bloc/add_sight_bloc.dart';
+import 'package:places/ui/screens/add_sight/view/add_sight_screen.dart';
+import 'package:places/ui/screens/filter/bloc/filtering_places_bloc.dart';
 import 'package:places/ui/screens/filter/filter_screen.dart';
 import 'package:places/ui/screens/main_screen.dart';
-import 'package:places/ui/screens/onboarding_screen.dart';
+import 'package:places/ui/screens/onboarding/cubit/onboarding_cubit.dart';
+import 'package:places/ui/screens/onboarding/onboarding_screen.dart';
 import 'package:places/ui/screens/settings/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/sight_screen.dart';
-import 'package:places/ui/screens/sight_search/sight_search_screen.dart';
+import 'package:places/ui/screens/sight_search/bloc/search_bloc.dart';
+import 'package:places/ui/screens/sight_search/view/sight_search_screen.dart';
+import 'package:places/ui/screens/splash_screen.dart';
 import 'package:places/ui/screens/visiting/favorites_screen.dart';
 
 class ScreenFactory {
+  Widget makeSplashScreen() {
+    return const SplashScreen();
+  }
+
   Widget makeMainScreen() {
     return MainScreen();
   }
@@ -26,31 +31,36 @@ class ScreenFactory {
   }
 
   Widget makeOnboardingScreen() {
-    return OnboardingScreen();
-  }
-
-  Widget makeFavoritesScreen() {
-    return BlocProvider<FavoritesBloc>(
-      create: (BuildContext context) {
-        return FavoritesBloc(context.read<FavoritesInteractor>())
-          ..add(FavoritesLoad());
-      },
-      child: FavoritesScreen(),
+    return BlocProvider(
+      create: (context) => OnboardingCubit(),
+      child: OnboardingScreen(),
     );
   }
 
-  Widget makeFilterScreen() {
-    return FilterScreen();
+  Widget makeFavoritesScreen() {
+    return FavoritesScreen();
+  }
+
+  Widget makeFilterScreen(BuildContext context) {
+    final placeInteractor = context.read<PlaceInteractor>();
+
+    return BlocProvider(
+      create: (context) => FilteringPlacesBloc(placeInteractor),
+      child: FilterScreen(),
+    );
   }
 
   Widget makeSearchScreen(BuildContext context) {
-    // final store = context.read<Store<AppState>>();
+    final placeInteractor = context.read<PlaceInteractor>();
+    final localRepository = context.read<LocalRepository>();
 
-    // return StoreProvider(
-    //   store: store,
-    //   child: SightSearchScreen(),
-    // );
-    return SightSearchScreen();
+    return BlocProvider(
+      create: (context) => SearchBloc(
+        placeInteractor,
+        localRepository,
+      )..add(SearchHistoryLoad()),
+      child: SightSearchScreen(),
+    );
   }
 
   Widget makePlaceDetailsScreen() {
@@ -62,15 +72,11 @@ class ScreenFactory {
   }
 
   Widget makeAddNewPlaceScreen(BuildContext context) {
-    final placeInteractor = context.read<PlaceNetworkInteractor>();
+    final placeInteractor = context.read<PlaceInteractor>();
 
-    return AddSightScreen(
-      widgetModelBuilder: (BuildContext context) {
-        return AddSightWidgetModel(
-          WidgetModelDependencies(),
-          placeInteractor,
-        );
-      },
+    return BlocProvider(
+      create: (context) => AddSightBloc(placeInteractor),
+      child: AddSightScreen(),
     );
   }
 }
