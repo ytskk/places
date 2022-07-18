@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/blocs.dart';
@@ -23,6 +25,13 @@ class SightScreen extends StatefulWidget {
 }
 
 class _SightScreenState extends State<SightScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    log('SightScreen: initState');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -5,7 +5,7 @@ import 'package:places/ui/navigation/screen_factory.dart';
 class AppRoutes {
   static final _screenFactory = ScreenFactory();
 
-  final Map<String, WidgetBuilder> routes = {
+  static final Map<String, WidgetBuilder> routes = {
     AppRouteNames.splash: (context) => _screenFactory.makeSplashScreen(),
     AppRouteNames.onBoarding: (context) =>
         _screenFactory.makeOnboardingScreen(),

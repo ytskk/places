@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -23,16 +25,61 @@ class InfoListData {
 }
 
 /// Widget displaying a message content
-class InfoList extends StatelessWidget {
+class InfoList extends StatefulWidget {
   /// Creates widget, displaying [icon], [title] and [subtitle].
   ///
   /// [title] must be not null.
   const InfoList({
     Key? key,
     required this.infoListData,
+    this.animate = false,
   }) : super(key: key);
 
   final InfoListData infoListData;
+  final bool animate;
+
+  @override
+  State<InfoList> createState() => _InfoListState();
+}
+
+class _InfoListState extends State<InfoList>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _iconScaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: longDuration,
+    );
+
+    _iconScaleAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: brandCurve,
+      ),
+    );
+
+    if (widget.animate) {
+      Future.delayed(const Duration(milliseconds: 250), () {
+        _animationController.forward();
+      });
+    } else {
+      _animationController.value = 1;
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,33 +99,36 @@ class InfoList extends StatelessWidget {
             width: maxContentWidth,
             child: Column(
               children: [
-                if (infoListData.iconName != null)
+                if (widget.infoListData.iconName != null)
                   Padding(
-                    padding:
-                        EdgeInsets.only(bottom: infoListData.iconPaddingBottom),
-                    child: IconBox(
-                      icon: infoListData.iconName!,
-                      color: infoListData.iconColor,
-                      size: infoListData.iconSize,
+                    padding: EdgeInsets.only(
+                        bottom: widget.infoListData.iconPaddingBottom),
+                    child: ScaleTransition(
+                      scale: _iconScaleAnimation,
+                      child: IconBox(
+                        icon: widget.infoListData.iconName!,
+                        color: widget.infoListData.iconColor,
+                        size: widget.infoListData.iconSize,
+                      ),
                     ),
                   ),
                 Text(
-                  infoListData.title.data!,
+                  widget.infoListData.title.data!,
                   style: defaultTitleStyle
-                      .copyWith(color: infoListData.titleColor)
-                      .merge(infoListData.title.style),
-                  textAlign: infoListData.title.textAlign,
-                  maxLines: infoListData.title.maxLines,
+                      .copyWith(color: widget.infoListData.titleColor)
+                      .merge(widget.infoListData.title.style),
+                  textAlign: widget.infoListData.title.textAlign,
+                  maxLines: widget.infoListData.title.maxLines,
                 ),
-                if (infoListData.subtitle != null)
+                if (widget.infoListData.subtitle != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      infoListData.subtitle!.data!,
-                      textAlign: infoListData.subtitle?.textAlign,
-                      maxLines: infoListData.subtitle?.maxLines,
+                      widget.infoListData.subtitle!.data!,
+                      textAlign: widget.infoListData.subtitle?.textAlign,
+                      maxLines: widget.infoListData.subtitle?.maxLines,
                       style: defaultSubtitleStyle!
-                          .merge(infoListData.subtitle!.style),
+                          .merge(widget.infoListData.subtitle!.style),
                     ),
                   ),
               ],

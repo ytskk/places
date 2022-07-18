@@ -40,7 +40,7 @@ class AppDb {
 
   bool _isDarkMode = false;
 
-  bool _isFirstOpen = false;
+  bool _isFirstOpen = true;
 
   // getters
   List<SearchHistoryRecord> get searchHistory => _searchHistory;
@@ -62,6 +62,10 @@ class AppDb {
   // setters
   void setDarkMode(bool value) {
     _isDarkMode = value;
+  }
+
+  void setFirstOpen(bool value) {
+    _isFirstOpen = value;
   }
 
   // methods

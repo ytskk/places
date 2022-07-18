@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/blocs.dart';
 import 'package:places/domain/app_constants.dart' as constants;
 import 'package:places/domain/app_icons.dart';
 import 'package:places/ui/components/icon_box.dart';
+import 'package:places/ui/navigation/app_route_names.dart';
 import 'package:places/ui/navigation/screen_factory.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,12 +16,37 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
 
+    _animationController = AnimationController(
+      vsync: this,
+      duration: constants.splashScreenDuration,
+    );
+    _animation = Tween(
+      begin: 0.0,
+      end: -1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: constants.brandCurve,
+      ),
+    );
+    _animationController.repeat();
+
     _moveToNext(context);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   /// Controls app loading progress. When it's done, it moves to the next screen.
@@ -28,16 +56,14 @@ class _SplashScreenState extends State<SplashScreen> {
   /// On push, clears navigation stack.
   Future<void> _moveToNext(BuildContext context) async {
     await Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 5),
       () {
-        Navigator.pushReplacement(
+        log('SplashScreen: moving to next screen: ${context.read<PreferencesCubit>().state.isFirstOpen}');
+        Navigator.pushReplacementNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) =>
-                context.read<PreferencesCubit>().state.isFirstOpen
-                    ? ScreenFactory().makeOnboardingScreen()
-                    : ScreenFactory().makeMainScreen(),
-          ),
+          context.read<PreferencesCubit>().state.isFirstOpen
+              ? AppRouteNames.onBoarding
+              : AppRouteNames.home,
         );
       },
     );
@@ -53,10 +79,13 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
-          child: IconBox(
-            icon: AppIcons.map_fill_circle,
-            color: Colors.white,
-            size: 160,
+          child: RotationTransition(
+            turns: _animation,
+            child: IconBox(
+              icon: AppIcons.map_fill_circle,
+              color: Colors.white,
+              size: 160,
+            ),
           ),
         ),
       ),
