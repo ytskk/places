@@ -208,6 +208,9 @@ class _OnboardingPages extends StatefulWidget {
 }
 
 class _OnboardingPagesState extends State<_OnboardingPages> {
+  /// In order not to animate the previous pages.
+  int maxPage = -1;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -218,7 +221,11 @@ class _OnboardingPagesState extends State<_OnboardingPages> {
           controller: state.pageController,
           onPageChanged: (page) {
             context.read<OnboardingCubit>().setCurrentPage(page);
-            log('Onboarding page changed to $page');
+            if (page > maxPage) {
+              setState(() {
+                maxPage = page;
+              });
+            }
           },
           itemCount: state.onboardingPagesContent.length,
           itemBuilder: (BuildContext context, int index) {
@@ -231,7 +238,7 @@ class _OnboardingPagesState extends State<_OnboardingPages> {
                     // To center content vertically. And to avoid overlapping of text and indicator.
                     padding: const EdgeInsets.only(bottom: 120),
                     child: InfoList(
-                      animate: true,
+                      animate: index > maxPage,
                       infoListData: InfoListData(
                         iconName:
                             state.onboardingPagesContent.elementAt(index).icon,
