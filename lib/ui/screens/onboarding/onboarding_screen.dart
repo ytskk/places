@@ -151,49 +151,6 @@ class _OnboardingActionButton extends StatelessWidget {
                     : CrossFadeState.showFirst,
             duration: quickDuration,
           ),
-          // child: AnimatedSwitcher(
-          //   duration: quickDuration,
-          //   transitionBuilder: (child, animation) => SlideTransition(
-          //     position: Tween<Offset>(
-          //       begin: Offset(0, 0.05),
-          //       end: Offset.zero,
-          //     ).animate(animation),
-          //     child: child,
-          //   ),
-          //   switchOutCurve: Curves.easeOut,
-          //   child: state.currentPage == state.onboardingPagesContent.length - 1
-          //       ? SizedBox(
-          //           key: const Key('start_button'),
-          //           width: double.infinity,
-          //           child: Padding(
-          //             padding: mediumWrappingPadding,
-          //             child: Button(
-          //               text: AppStrings.tutorStartButtonTitle.toUpperCase(),
-          //               buttonPadding: ButtonPadding.UltraWide,
-          //               onPressed: () => _completeOnboarding(context),
-          //             ),
-          //           ),
-          //         )
-          //       : const SizedBox.shrink(),
-          // ),
-          // child: AnimatedContainer(
-          //   duration: quickDuration,
-          //   curve: brandCurve,
-          //   height: state.currentPage == state.onboardingPagesContent.length - 1
-          //       ? 64
-          //       : 0,
-          //   child: SizedBox(
-          //     width: double.infinity,
-          //     child: Padding(
-          //       padding: mediumWrappingPadding,
-          //       child: Button(
-          //         text: AppStrings.tutorStartButtonTitle.toUpperCase(),
-          //         buttonPadding: ButtonPadding.UltraWide,
-          //         onPressed: () => _completeOnboarding(context),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         );
       },
     );

@@ -42,8 +42,14 @@ class MyCard extends StatelessWidget {
           // mainAxisSize: MainAxisSize.min,
           children: [
             // header + photo
-            NetworkImageBox(ListExtension(place.urls).takeFirstImgOrTemp,
-                height: 200),
+            Hero(
+              tag:
+                  '${place.id}-header-image-${ListExtension(place.urls).takeFirstImgOrTemp}',
+              child: NetworkImageBox(
+                ListExtension(place.urls).takeFirstImgOrTemp,
+                height: 200,
+              ),
+            ),
             // card info
             CardInformation(cardInfo: cardInfo),
           ],

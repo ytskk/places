@@ -93,19 +93,15 @@ class AppDb {
   }
 
   bool isFavorite(Place place) {
-    // return _favorites.contains(place);
     return _favorites.indexWhere((element) => element.id == place.id) != -1;
   }
 
-  void addFavorite(Place place) {}
+  void addFavorite(Place place) {
+    _favorites.add(place);
+  }
 
   void removeFavorite(Place place) {
-    // _favorites = _favorites.where((element) => element.id != place.id).toList();
-    _favorites = _favorites
-        .map((favorite) => favorite.id == place.id
-            ? favorite.copyWith(isFavorite: false)
-            : favorite)
-        .toList();
+    _favorites.removeWhere((element) => element.id == place.id);
   }
 
   Future<void> setPlannedAt(Place place, DateTime? plannedAt) async {

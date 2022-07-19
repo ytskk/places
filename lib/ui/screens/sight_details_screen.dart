@@ -17,9 +17,6 @@ import 'package:places/utils/extensions/list_extension.dart';
 import 'package:places/utils/screen_sizes.dart';
 import 'package:places/utils/string_manipulations.dart';
 
-// BUG: when its no internet, throws error!
-// TODO: hide sliver image carousel when its bad link.
-
 /// A page detailing the [Place].
 class SightDetailsScreen extends StatefulWidget {
   const SightDetailsScreen({
@@ -96,6 +93,7 @@ class _PlaceDetailsLoadSuccess extends StatelessWidget {
         primary: false,
         slivers: [
           _SightSliverAppBar(
+            sight: sight,
             sightImages: sight.urls.isEmpty
                 ? [ListExtension(sight.urls).takeFirstImgOrTemp]
                 : sight.urls,
@@ -177,10 +175,12 @@ class _SightSliverAppBar extends StatelessWidget {
     Key? key,
     required this.sightImages,
     required this.useBackButton,
+    required this.sight,
   }) : super(key: key);
 
   final List<String> sightImages;
   final bool useBackButton;
+  final Place sight;
 
   @override
   Widget build(BuildContext context) {
