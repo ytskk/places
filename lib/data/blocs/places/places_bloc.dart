@@ -28,6 +28,7 @@ class PlacesBloc extends Bloc<PlacesEvent, PlacesState> {
   ) async {
     // emit(PlacesLoadInProgress());
     try {
+      log('places loading');
       final places = await placesInteractor.getPlaces(
         filterOptions: event.filterOptions,
         radiusFrom: event.radiusFrom,

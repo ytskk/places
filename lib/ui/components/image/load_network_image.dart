@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:places/domain/app_constants.dart';
 import 'package:places/ui/screens/res/themes.dart';
 
 class NetworkImageWidget extends StatelessWidget {
@@ -23,20 +24,16 @@ class NetworkImageWidget extends StatelessWidget {
     return Image.network(
       imageUrl,
       fit: fit,
-      loadingBuilder: (
-        context,
-        child,
-        ImageChunkEvent? loadingProgress,
-      ) {
-        if (loadingProgress == null) return child;
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded) {
+          return child;
+        }
 
-        return Center(
-          child: CupertinoActivityIndicator.partiallyRevealed(
-            progress: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                : 1,
-          ),
+        return AnimatedOpacity(
+          child: child,
+          opacity: frame == null ? 0 : 1,
+          duration: longDuration,
+          curve: brandCurve,
         );
       },
       errorBuilder: (context, error, stackTrace) {

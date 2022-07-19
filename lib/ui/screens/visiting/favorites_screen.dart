@@ -10,6 +10,7 @@ import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
 import 'package:places/ui/components/custom_app_bar.dart';
 import 'package:places/ui/components/info_list.dart';
+import 'package:places/ui/components/loading_progress_indicator.dart';
 import 'package:places/ui/components/picker.dart';
 import 'package:places/ui/components/sliding_tabbar.dart';
 import 'package:places/ui/components/visiting/visiting_list_item.dart';
@@ -48,9 +49,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         body: BlocBuilder<FavoritesCubit, FavoritesState>(
           builder: (BuildContext context, state) {
             log('favorites screen state: $state');
-            if (state is FavoritesLoadInitialInProgress) {
+            if (state is FavoritesLoadInitialInProgress ||
+                state is FavoritesInitial) {
               return Center(
-                child: CircularProgressIndicator(),
+                child: LoadingProgressIndicator(),
               );
             }
 

@@ -45,4 +45,8 @@ class AppIcons {
   static const camera = 'assets/icons/camera.svg';
   static const gallery = 'assets/icons/gallery.svg';
   static const file = 'assets/icons/file.svg';
+  static const load = 'assets/icons/load.svg';
+
+  //  loader
+  static const loader = 'assets/images/loader.png';
 }

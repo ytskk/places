@@ -35,9 +35,8 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
         return;
       }
+      addToFavorites(place);
     }
-
-    addToFavorites(place);
   }
 
   void setPlannedAt(Place place, DateTime? date) async {
@@ -52,6 +51,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
   }
 
   void addToFavorites(Place place) async {
+    log('adding to favorites');
     await _favoritesInteractor.addToFavorites(place);
     loadFavorites();
   }
