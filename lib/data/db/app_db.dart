@@ -45,11 +45,11 @@ class AppDb {
   // getters
   List<SearchHistoryRecord> get searchHistory => _searchHistory;
 
-  List<Place> get favorites => _favorites;
-
   List<Place> get plannedPlaces => _favorites
     ..where((place) => place.plannedAt != null)
     ..toList();
+
+  List<Place> get favorites => _favorites;
 
   List<Place> get visitedPlaces => _favorites
     ..where((place) => place.visitedAt != null)
