@@ -201,7 +201,7 @@ class _SearchResultListTile extends StatelessWidget {
         context.read<SearchBloc>().add(SearchHistoryAdd(query: searchText));
         Navigator.of(context).pushNamed(
           AppRouteNames.placeDetails,
-          arguments: sight.id.toString(),
+          arguments: sight,
         );
       },
       child: ListTile(

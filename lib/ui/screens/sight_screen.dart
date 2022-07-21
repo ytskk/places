@@ -194,7 +194,7 @@ class _PlaceListItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           AppRouteNames.placeDetails,
-          arguments: place.id.toString(),
+          arguments: place,
         );
       },
       actions: [

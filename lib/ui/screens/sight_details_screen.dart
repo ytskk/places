@@ -28,40 +28,54 @@ class SightDetailsScreen extends StatefulWidget {
 }
 
 class _SightDetailsScreenState extends State<SightDetailsScreen> {
+  late final Place sight;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    context.read<PlaceDetailsCubit>().loadPlaceDetails(
-          ModalRoute.of(context)!.settings.arguments as String,
-        );
+    log('SightDetailsScreen: didChangeDependencies');
+    sight = ModalRoute.of(context)!.settings.arguments as Place;
+    // commented for one bloc
+    // context.read<PlaceDetailsCubit>().loadPlaceDetails(
+    //       ModalRoute.of(context)!.settings.arguments as String,
+    //     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
-        builder: (BuildContext context, state) {
-          if (state is PlaceDetailsLoadInProgress) {
-            return _PlaceDetailsLoadInProgress();
-          }
-
-          if (state is PlaceDetailsLoadSuccess) {
-            final sight = state.placeDetails;
-
-            return _PlaceDetailsLoadSuccess(sight: sight);
-          }
-
-          if (state is PlaceDetailsLoadFailure) {
-            return _PlaceDetailsLoadFailure(error: state.error.toString());
-          }
-
-          return Center(
-            child: const Text('Если бы мы знали что это такое…'),
-          );
-        },
-      ),
+      body: _PlaceDetailsLoadSuccess(sight: sight),
     );
+    // commented for one block
+    // return Scaffold(
+    //   body: BlocBuilder<PlaceDetailsCubit, PlaceDetailsState>(
+    //     builder: (BuildContext context, state) {
+    //       if (state is PlaceDetailsLoadInProgress) {
+    //         return _PlaceDetailsLoadInProgress();
+    //       }
+    //
+    //       if (state is PlaceDetailsLoadSuccess) {
+    //         final sight = state.placeDetails;
+    //
+    //         return _PlaceDetailsLoadSuccess(sight: sight);
+    //       }
+    //
+    //       if (state is PlaceDetailsLoadFailure) {
+    //         return _PlaceDetailsLoadFailure(error: state.error.toString());
+    //       }
+    //
+    //       return Center(
+    //         child: const Text('Если бы мы знали что это такое…'),
+    //       );
+    //     },
+    //   ),
+    // );
   }
 }
 
@@ -196,8 +210,12 @@ class _SightSliverAppBar extends StatelessWidget {
       flexibleSpace: isImagesEmpty
           ? null
           : FlexibleSpaceBar(
-              background: _ImagesCarousel(
-                images: sightImages,
+              background: Hero(
+                tag:
+                    '${sight.id}-header-image-${ListExtension(sight.urls).takeFirstImgOrTemp}',
+                child: _ImagesCarousel(
+                  images: sightImages,
+                ),
               ),
             ),
     );
