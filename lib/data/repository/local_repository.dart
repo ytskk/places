@@ -16,6 +16,8 @@ class LocalRepository {
   // setters
   Future<void> setDarkMode(bool value) async => _appDb.setDarkMode(value);
 
+  Future<void> setFirstOpen(bool value) async => _appDb.setFirstOpen(value);
+
   // methods
   void addToSearchHistory(String query) => _appDb.addToSearchHistory(query);
 

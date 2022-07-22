@@ -28,6 +28,8 @@ class PreferencesCubit extends Cubit<PreferencesState> {
         isFirstOpen: isFirstOpen,
       ),
     );
+
+    log('loaded preferences');
   }
 
   Future<void> _turnOnDarkMode() async {
@@ -55,5 +57,15 @@ class PreferencesCubit extends Cubit<PreferencesState> {
     } else {
       _turnOnDarkMode();
     }
+  }
+
+  void setFirstOpen(bool isFirstOpen) {
+    log('setting first open: $isFirstOpen');
+    _localRepository.setFirstOpen(isFirstOpen);
+    emit(
+      state.copyWith(
+        isFirstOpen: isFirstOpen,
+      ),
+    );
   }
 }

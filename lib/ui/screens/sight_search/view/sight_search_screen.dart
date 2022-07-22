@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/model/place_model.dart';
@@ -199,7 +201,7 @@ class _SearchResultListTile extends StatelessWidget {
         context.read<SearchBloc>().add(SearchHistoryAdd(query: searchText));
         Navigator.of(context).pushNamed(
           AppRouteNames.placeDetails,
-          arguments: sight.id.toString(),
+          arguments: sight,
         );
       },
       child: ListTile(

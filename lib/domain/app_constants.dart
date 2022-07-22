@@ -33,8 +33,12 @@ const double bottomAppBarHeight = 52.0;
 const double largeLeadingWidth = 80.0;
 
 const Duration quickDuration = const Duration(milliseconds: 150);
+const Duration mediumDuration = const Duration(milliseconds: 350);
+const Duration longDuration = const Duration(milliseconds: 500);
 
-const Cubic brandCurve = Curves.easeOut;
+const Cubic brandCurve = Curves.easeInOut;
+
+const Duration splashScreenDuration = const Duration(milliseconds: 1700);
 
 // Most relevant Date formats.
 class DateFormats {

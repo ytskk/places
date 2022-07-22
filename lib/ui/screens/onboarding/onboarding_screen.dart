@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/blocs.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/ui/components/button.dart';
@@ -28,32 +31,52 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           appBar: CustomAppBar(
             actions: [
               // Shows skip button if its not the last page.
-              if (!isLastPage)
-                TextButton(
-                  onPressed: () => context
-                      .read<OnboardingCubit>()
-                      .completeOnboarding(context),
-                  child: Text(AppStrings.tutorAppBarSkipButtonText),
+              AnimatedSwitcher(
+                duration: quickDuration,
+                transitionBuilder: (child, animation) => SlideTransition(
+                  // opacity: animation,
+                  position: Tween<Offset>(
+                    begin: Offset(0, -1),
+                    end: Offset(0, 0),
+                  ).animate(animation),
+                  child: child,
                 ),
+                switchOutCurve: brandCurve,
+                child: !isLastPage
+                    ? TextButton(
+                        onPressed: () => _completeOnboarding(context),
+                        child: Text(AppStrings.tutorAppBarSkipButtonText),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ],
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           // To get a transparent background
-          floatingActionButton: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const _OnboardingPageIndicator(),
-              const SizedBox(height: largeSpacing),
-              // if (isLastPage) const _OnboardingActionButton(),
-              const _OnboardingActionButton(),
-            ],
+          floatingActionButton: AnimatedSize(
+            clipBehavior: Clip.none,
+            curve: brandCurve,
+            duration: quickDuration,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _OnboardingPageIndicator(),
+                const SizedBox(height: largeSpacing),
+                const _OnboardingActionButton(),
+              ],
+            ),
           ),
           body: const _OnboardingPages(),
         );
       },
     );
   }
+}
+
+void _completeOnboarding(BuildContext context) {
+  context.read<OnboardingCubit>().completeOnboarding(context);
+  context.read<PreferencesCubit>().setFirstOpen(false);
 }
 
 /// Page indicator is a row of dots, one for each page.
@@ -105,25 +128,28 @@ class _OnboardingActionButton extends StatelessWidget {
       builder: (context, state) {
         return Align(
           alignment: Alignment.bottomCenter,
-          child: AnimatedContainer(
-            duration: quickDuration,
-            curve: brandCurve,
-            height: state.currentPage == state.onboardingPagesContent.length - 1
-                ? 64
-                : 0,
-            child: SizedBox(
+          child: AnimatedCrossFade(
+            sizeCurve: brandCurve,
+            firstChild: const SizedBox(
+              width: double.infinity,
+            ),
+            secondChild: SizedBox(
+              key: const Key('start_button'),
               width: double.infinity,
               child: Padding(
                 padding: mediumWrappingPadding,
                 child: Button(
                   text: AppStrings.tutorStartButtonTitle.toUpperCase(),
                   buttonPadding: ButtonPadding.UltraWide,
-                  onPressed: () => context
-                      .read<OnboardingCubit>()
-                      .completeOnboarding(context),
+                  onPressed: () => _completeOnboarding(context),
                 ),
               ),
             ),
+            crossFadeState:
+                state.currentPage == state.onboardingPagesContent.length - 1
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+            duration: quickDuration,
           ),
         );
       },
@@ -139,6 +165,9 @@ class _OnboardingPages extends StatefulWidget {
 }
 
 class _OnboardingPagesState extends State<_OnboardingPages> {
+  /// In order not to animate the previous pages.
+  int maxPage = -1;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -149,6 +178,11 @@ class _OnboardingPagesState extends State<_OnboardingPages> {
           controller: state.pageController,
           onPageChanged: (page) {
             context.read<OnboardingCubit>().setCurrentPage(page);
+            if (page > maxPage) {
+              setState(() {
+                maxPage = page;
+              });
+            }
           },
           itemCount: state.onboardingPagesContent.length,
           itemBuilder: (BuildContext context, int index) {
@@ -161,6 +195,7 @@ class _OnboardingPagesState extends State<_OnboardingPages> {
                     // To center content vertically. And to avoid overlapping of text and indicator.
                     padding: const EdgeInsets.only(bottom: 120),
                     child: InfoList(
+                      animate: index > maxPage,
                       infoListData: InfoListData(
                         iconName:
                             state.onboardingPagesContent.elementAt(index).icon,

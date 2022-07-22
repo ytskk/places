@@ -46,7 +46,7 @@ class VisitingListItem extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushNamed(
                 AppRouteNames.placeDetails,
-                arguments: place.id,
+                arguments: place,
               );
             },
             key: ValueKey(place),

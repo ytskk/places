@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/blocs.dart';
@@ -23,6 +25,13 @@ class SightScreen extends StatefulWidget {
 }
 
 class _SightScreenState extends State<SightScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    log('SightScreen: initState');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,7 +194,7 @@ class _PlaceListItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           AppRouteNames.placeDetails,
-          arguments: place.id.toString(),
+          arguments: place,
         );
       },
       actions: [
@@ -221,17 +230,36 @@ class __SightHeartIconButtonToggleableState
               .read<FavoritesCubit>()
               .isFavorite(widget.place)
               .asStream(),
+          initialData: false,
           builder: (_, AsyncSnapshot<dynamic> snapshot) {
-            return Button.icon(
-              icon: snapshot.data ?? false
-                  ? AppIcons.heartFilled
-                  : AppIcons.heart,
-              iconColor: Colors.white,
-              background: Colors.transparent,
-              onPressed: () {
-                context.read<FavoritesCubit>().toggleFavorite(widget.place);
-              },
-            );
+            return IconButton(
+                onPressed: () {
+                  context.read<FavoritesCubit>().toggleFavorite(widget.place);
+                },
+                icon: AnimatedCrossFade(
+                  crossFadeState: snapshot.data
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  firstChild: IconBox(
+                    icon: AppIcons.heartFilled,
+                    color: Colors.white,
+                  ),
+                  duration: quickDuration,
+                  secondChild: IconBox(
+                    icon: AppIcons.heart,
+                    color: Colors.white,
+                  ),
+                ));
+            // return Button.icon(
+            //   icon: snapshot.data ?? false
+            //       ? AppIcons.heartFilled
+            //       : AppIcons.heart,
+            //   iconColor: Colors.white,
+            //   background: Colors.transparent,
+            //   onPressed: () {
+            //     context.read<FavoritesCubit>().toggleFavorite(widget.place);
+            //   },
+            // );
           },
         );
       },

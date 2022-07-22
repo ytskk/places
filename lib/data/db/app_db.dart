@@ -40,16 +40,16 @@ class AppDb {
 
   bool _isDarkMode = false;
 
-  bool _isFirstOpen = false;
+  bool _isFirstOpen = true;
 
   // getters
   List<SearchHistoryRecord> get searchHistory => _searchHistory;
 
-  List<Place> get favorites => _favorites;
-
   List<Place> get plannedPlaces => _favorites
     ..where((place) => place.plannedAt != null)
     ..toList();
+
+  List<Place> get favorites => _favorites;
 
   List<Place> get visitedPlaces => _favorites
     ..where((place) => place.visitedAt != null)
@@ -62,6 +62,10 @@ class AppDb {
   // setters
   void setDarkMode(bool value) {
     _isDarkMode = value;
+  }
+
+  void setFirstOpen(bool value) {
+    _isFirstOpen = value;
   }
 
   // methods
@@ -89,19 +93,15 @@ class AppDb {
   }
 
   bool isFavorite(Place place) {
-    // return _favorites.contains(place);
     return _favorites.indexWhere((element) => element.id == place.id) != -1;
   }
 
-  void addFavorite(Place place) {}
+  void addFavorite(Place place) {
+    _favorites.add(place);
+  }
 
   void removeFavorite(Place place) {
-    // _favorites = _favorites.where((element) => element.id != place.id).toList();
-    _favorites = _favorites
-        .map((favorite) => favorite.id == place.id
-            ? favorite.copyWith(isFavorite: false)
-            : favorite)
-        .toList();
+    _favorites.removeWhere((element) => element.id == place.id);
   }
 
   Future<void> setPlannedAt(Place place, DateTime? plannedAt) async {

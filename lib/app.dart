@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/api/client_api.dart';
@@ -12,6 +14,7 @@ import 'package:places/data/repository/place_network_repository.dart';
 import 'package:places/data/repository/place_storage_repository.dart';
 import 'package:places/ui/navigation/app_route_names.dart';
 import 'package:places/ui/navigation/app_routes.dart';
+import 'package:places/ui/screens/main_screen/cubit/main_navigation_cubit.dart';
 import 'package:places/ui/screens/res/themes.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +51,11 @@ class App extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (BuildContext context) {
+              return MainNavigationCubit();
+            },
+          ),
           BlocProvider<PreferencesCubit>(
             create: (BuildContext context) {
               return PreferencesCubit(context.read<LocalRepository>())
@@ -94,7 +102,7 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context, state) {
         return MaterialApp(
           initialRoute: AppRouteNames.splash,
-          routes: AppRoutes().routes,
+          routes: AppRoutes.routes,
           theme: state.isDarkMode ? AppThemeData.dark() : AppThemeData.light(),
         );
       },
