@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/blocs.dart';
+import 'package:places/data/db/db_repository.dart';
 import 'package:places/domain/app_constants.dart' as constants;
 import 'package:places/domain/app_icons.dart';
 import 'package:places/ui/components/icon_box.dart';
@@ -55,8 +56,11 @@ class _SplashScreenState extends State<SplashScreen>
   ///
   /// On push, clears navigation stack.
   Future<void> _moveToNext(BuildContext context) async {
+    final options = await context.read<DBRepository>().getFilterOptions();
+    context.read<FilterCubit>().loadFilterOptions(options);
+
     await Future.delayed(
-      const Duration(seconds: 5),
+      const Duration(seconds: 2),
       () {
         log('SplashScreen: moving to next screen: ${context.read<PreferencesCubit>().state.isFirstOpen}');
         Navigator.pushReplacementNamed(

@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:places/data/repository/local_repository.dart';
+import 'package:places/data/db/db.dart';
 
 part 'package:places/data/blocs/preferences/preferences_state.dart';
 
 class PreferencesCubit extends Cubit<PreferencesState> {
-  PreferencesCubit(this._localRepository)
+  PreferencesCubit(this._dbProvider)
       : super(
           PreferencesState(
             isDarkMode: false,
@@ -15,12 +15,12 @@ class PreferencesCubit extends Cubit<PreferencesState> {
           ),
         );
 
-  final LocalRepository _localRepository;
+  final DBRepository _dbProvider;
 
   Future<void> loadPreferences() async {
-    log('loading preferences');
-    final isDarkMode = await _localRepository.isDarkMode;
-    final isFirstOpen = await _localRepository.isFirstOpen;
+    log('loading preferences', name: 'PreferencesCubit::loadPreferences');
+    final isDarkMode = await _dbProvider.isDarkMode();
+    final isFirstOpen = await _dbProvider.isFirstOpen();
 
     emit(
       state.copyWith(
@@ -29,11 +29,11 @@ class PreferencesCubit extends Cubit<PreferencesState> {
       ),
     );
 
-    log('loaded preferences');
+    log('loaded preferences', name: 'PreferencesCubit::loadPreferences');
   }
 
   Future<void> _turnOnDarkMode() async {
-    await _localRepository.setDarkMode(true);
+    await _dbProvider.setDarkMode(true);
     emit(
       state.copyWith(
         isDarkMode: true,
@@ -42,7 +42,7 @@ class PreferencesCubit extends Cubit<PreferencesState> {
   }
 
   Future<void> _turnOffDarkMode() async {
-    await _localRepository.setDarkMode(false);
+    await _dbProvider.setDarkMode(false);
     emit(
       state.copyWith(
         isDarkMode: false,
@@ -51,7 +51,7 @@ class PreferencesCubit extends Cubit<PreferencesState> {
   }
 
   void toggleDarkMode() {
-    log('toggling dark mode');
+    log('toggling dark mode', name: 'PreferencesCubit::toggleDarkMode');
     if (state.isDarkMode) {
       _turnOffDarkMode();
     } else {
@@ -60,8 +60,7 @@ class PreferencesCubit extends Cubit<PreferencesState> {
   }
 
   void setFirstOpen(bool isFirstOpen) {
-    log('setting first open: $isFirstOpen');
-    _localRepository.setFirstOpen(isFirstOpen);
+    _dbProvider.setFirstOpen(isFirstOpen);
     emit(
       state.copyWith(
         isFirstOpen: isFirstOpen,

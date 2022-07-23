@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +10,17 @@ import 'package:places/models/sight.dart';
 part 'filter_state.dart';
 
 class FilterCubit extends Cubit<FilterState> {
-  FilterCubit() : super(FilterState());
+  FilterCubit()
+      : super(
+          FilterState(),
+        );
+
+  void loadFilterOptions(FilterState newState) {
+    log('preloading saved state');
+    emit(
+      newState,
+    );
+  }
 
   void toggleOption(FilterOption filterOption) {
     emit(
@@ -42,5 +55,9 @@ class FilterCubit extends Cubit<FilterState> {
         radiusValues: radius,
       ),
     );
+  }
+
+  String getFilterString() {
+    return jsonEncode(state.toJson());
   }
 }
