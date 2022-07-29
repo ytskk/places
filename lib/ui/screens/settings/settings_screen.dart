@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/blocs.dart';
@@ -65,6 +66,27 @@ class SettingsTableState extends State<SettingsTable> {
             },
             icon: Icon(Icons.info_outline),
           ),
+        ),
+        const HorizontalDivider(),
+        ListTile(
+          title: Text('Сбросить туториал'),
+          subtitle: Text('Временно'),
+          onTap: () {
+            context.read<PreferencesCubit>().setFirstOpen(true);
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Туториал сброшен'),
+                  action: SnackBarAction(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                    label: 'Закрыть',
+                  ),
+                ),
+              );
+          },
         ),
         const HorizontalDivider(),
       ],

@@ -6,6 +6,9 @@ import 'package:places/data/api/client_api.dart';
 import 'package:places/data/blocs/blocs.dart';
 import 'package:places/data/blocs/favorites/favorites_cubit.dart';
 import 'package:places/data/db/app_db.dart';
+import 'package:places/data/db/db_local_storage_provider.dart';
+import 'package:places/data/db/db_provider.dart';
+import 'package:places/data/db/db_repository.dart';
 import 'package:places/data/interactor/favorites_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/place_network_interactor.dart';
@@ -29,6 +32,10 @@ class App extends StatelessWidget {
       providers: [
         Provider<ClientApi>(create: (_) => ClientApi()),
         Provider<AppDb>(create: (_) => AppDb()),
+        Provider<DBProvider>(create: (_) => DBLocalStorageProvider()),
+        ProxyProvider<DBProvider, DBRepository>(
+          update: (_, dbProvider, __) => DBRepository(dbProvider),
+        ),
         ProxyProvider<AppDb, PlaceStorageRepository>(
           update: (_, appDb, __) => PlaceStorageRepository(appDb),
         ),
@@ -58,7 +65,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider<PreferencesCubit>(
             create: (BuildContext context) {
-              return PreferencesCubit(context.read<LocalRepository>())
+              return PreferencesCubit(context.read<DBRepository>())
                 ..loadPreferences();
             },
           ),

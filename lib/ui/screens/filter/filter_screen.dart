@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/blocs.dart';
+import 'package:places/data/db/db_provider.dart';
 import 'package:places/domain/app_constants.dart';
 import 'package:places/domain/app_strings.dart';
 import 'package:places/models/filter_option.dart';
@@ -253,6 +254,9 @@ class _FilterShowResultsButton extends StatelessWidget {
                           Navigator.of(context).pop();
                           context.read<PlacesBloc>().add(
                                 PlacesSet(state.places),
+                              );
+                          context.read<DBProvider>().setFilterOptions(
+                                context.read<FilterCubit>().getFilterString(),
                               );
                         }
                       : null,

@@ -88,8 +88,19 @@ class PlaceCategory {
   });
 
   factory PlaceCategory.fromJson(String engName) {
-    return localizeCategory(engName);
+    // return localizeCategory(engName);
+
+    return PlaceCategory(
+      name: localizeCategory(engName).name,
+      engName: engName,
+    );
   }
+
+  // to json
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'engName': engName,
+      };
 
   static PlaceCategory localizeCategory(String engName) {
     switch (engName) {

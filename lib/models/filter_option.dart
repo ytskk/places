@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:places/models/sight.dart';
 
 /// Class for describing and controls filter option.
@@ -31,5 +33,19 @@ class FilterOption {
   @override
   String toString() {
     return category.engName;
+  }
+
+  Map<String, dynamic> toJson() => {
+        'category': category.toJson(),
+        'isSelected': isSelected,
+      };
+
+  factory FilterOption.fromJson(Map<String, dynamic> json) {
+    log('incoming json: $json', name: 'FilterOption.fromJson');
+
+    return FilterOption(
+      category: PlaceCategory.fromJson(json['category']['engName']),
+      isSelected: json['isSelected'],
+    );
   }
 }
